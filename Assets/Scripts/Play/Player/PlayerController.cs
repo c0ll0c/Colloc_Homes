@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using UnityEngine;
 using Photon.Pun;
+
+// player movement control script
  public class PlayerController : MonoBehaviour
 {
     private Vector2 inputVec;
@@ -21,6 +23,7 @@ using Photon.Pun;
         player = GetComponent<GameObject>();
         speed = 3.0f;
 
+        // camera setting (focus on player)
         Camera cam = Camera.main;
         cam.transform.SetParent(transform);
         cam.transform.localPosition = new Vector3(0f, 0f, -5f);
