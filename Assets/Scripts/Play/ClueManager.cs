@@ -11,12 +11,24 @@ using UnityEngine;
 public class ClueManager : MonoBehaviour
 {
     public Clue Clue;
+    private GameObject ClueButton;
 
-    public void HideClue()
+    private void Start()
     {
-
+        ClueButton = transform.Find("ClueButton").gameObject;
     }
 
-    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Homes") && Clue.ClueType != ClueType.FAKE)
+        {
+            ClueButton.SetActive(true);
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        ClueButton.SetActive(false);
+    }
 
 }

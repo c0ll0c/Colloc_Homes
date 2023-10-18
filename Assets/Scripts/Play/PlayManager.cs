@@ -55,7 +55,6 @@ public class PlayManager : MonoBehaviour
             ClueManager cm = myInstance.GetComponent<ClueManager>();
             cm.Clue = new Clue(ClueType.FAKE);
             index++;
-            Debug.Log("layer 1 FAKE " + index);
         }
 
         for (int i = 0; i < 3; i++)             // layer1에 있는 CODE 3개
@@ -65,7 +64,6 @@ public class PlayManager : MonoBehaviour
             ClueManager cm = myInstance.GetComponent<ClueManager>();
             cm.Clue = new Clue(ClueType.CODE);
             index++;
-            Debug.Log("layer 1 CODE " + index);
         }
 
         for (int i = 0; i < currentPlayer / 2; i++)             // 현재 들어와 있는 플레이어의 숫자의 반
@@ -75,7 +73,6 @@ public class PlayManager : MonoBehaviour
             ClueManager cm = myInstance.GetComponent<ClueManager>();
             cm.Clue = new Clue(ClueType.USER);
             index++;
-            Debug.Log("layer 1 USER " + index);
         }
 
         // layer 2
@@ -89,7 +86,6 @@ public class PlayManager : MonoBehaviour
             ClueManager cm = myInstance.GetComponent<ClueManager>();
             cm.Clue = new Clue(ClueType.FAKE);
             index++;
-            Debug.Log("layer 2 FAKE "+ index);
         }
 
         for (int i = 0; i < 2; i++)             // layer2에 있는 CODE 2개
@@ -101,7 +97,6 @@ public class PlayManager : MonoBehaviour
             ClueManager cm = myInstance.GetComponent<ClueManager>();
             cm.Clue = new Clue(ClueType.CODE);
             index++;
-            Debug.Log("layer 2 CODE " + index);
         }
 
         for (int i = 0; i < currentPlayer - currentPlayer / 2; i++)             // 현재 들어와 있는 플레이어의 숫자의 반
@@ -113,7 +108,6 @@ public class PlayManager : MonoBehaviour
             ClueManager cm = myInstance.GetComponent<ClueManager>();
             cm.Clue = new Clue(ClueType.USER);
             index++;
-            Debug.Log("layer 2 USER " + index);
         }
 
     }
