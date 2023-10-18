@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ReadyManager : MonoBehaviour
 {
@@ -19,6 +17,11 @@ public class ReadyManager : MonoBehaviour
     {
         NetworkManager.Instance.ReadySceneManager = this;
         NetworkManager.Instance.SyncPlayersData();
+    }
+
+    private void OnDestroy()
+    {
+        NetworkManager.Instance.ReadySceneManager = null;
     }
 
     public void SetUI(List<PlayerData> _players, int _playerNum, bool _isMaster)

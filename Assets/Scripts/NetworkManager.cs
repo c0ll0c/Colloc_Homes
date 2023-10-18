@@ -39,6 +39,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         GameManager.Instance.ChangeScene(GameState.LOBBY);
     }
 
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        Debug.LogErrorFormat("Disconnected from server cause of {0}", cause);
+        GameManager.Instance.ChangeScene(GameState.INTRO);
+    }
+
     // 기본 게임룸(readyscene) 입장
     // [TODO] 추후에 방 생성 / 방 목록 보고 방 참가로 변경 예정
     public void JoinDefaultRoom()
@@ -68,6 +74,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // ReadySceneManager 관리
     public ReadyManager ReadySceneManager;
 
+    // PlayerData 변경 시마다 ReadyScene(or PlayScene)의 Manager Call
     [PunRPC]
     public void SyncPlayersData()
     {
@@ -93,5 +100,4 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             ReadySceneManager.SetUI(playersStatus, PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.IsMasterClient);
         }
     }
-
 }
