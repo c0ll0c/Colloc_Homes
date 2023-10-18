@@ -9,18 +9,17 @@ using Photon.Pun;
     private Vector2 inputVec;
     private Vector2 nextVec;
     private float speed;
+    private float moveY, moveX;
 
     private Rigidbody2D rigid;
     private SpriteRenderer spriter;
     private Animator anim;
-    private GameObject player;
 
     void Awake()
     {       
         rigid = GetComponent<Rigidbody2D>();
         spriter = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
-        player = GetComponent<GameObject>();
         speed = 3.0f;
 
         // camera setting (focus on player)
@@ -32,8 +31,8 @@ using Photon.Pun;
     // moving function
     void FixedUpdate()
     {
-        float moveY = Input.GetAxis("Vertical");
-        float moveX = Input.GetAxis("Horizontal");
+        moveY = Input.GetAxis("Vertical");
+        moveX = Input.GetAxis("Horizontal");
         inputVec = new Vector2(moveX, moveY);
         nextVec = inputVec.normalized * speed * Time.fixedDeltaTime;
         rigid.MovePosition(rigid.position + nextVec);
