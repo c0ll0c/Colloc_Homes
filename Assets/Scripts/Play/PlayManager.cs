@@ -12,7 +12,9 @@ public class PlayManager : MonoBehaviour
 
     private int[] randomDropTime = new int[3];
     private float time = 0f;
-    private int index = 0;
+    private int layerIndex = 0;
+    private int currentPlayer = 4;
+    private int index;
     private Vector2[] cluePosition_layer1 = {    
         new Vector2(4.0f, 4.0f),
         new Vector2(-0.2f, -3.0f),
@@ -36,8 +38,7 @@ public class PlayManager : MonoBehaviour
         new Vector2(-7.1f, -3.1f),
         new Vector2(5.0f, 7.7f),
     };    
-    private int currentPlayer = 4;
-    private int index;
+    
 
     private void Awake()
     {
@@ -132,11 +133,11 @@ public class PlayManager : MonoBehaviour
     private void Update()
     {
         time += Time.deltaTime;
-        if(index < 3 && time > randomDropTime[index])
+        if(layerIndex < 3 && time > randomDropTime[layerIndex])
         {
             var plane = ObjectPoolManager.Instance.GetObject("Plane");
             plane.transform.position = new Vector3(25.0f, Random.Range(-8.0f, 17.0f), 0f);
-            index++;
+            layerIndex++;
         }
     }
 
