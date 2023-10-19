@@ -51,7 +51,8 @@ public class PlayManager : MonoBehaviour
             GameObject myInstance = Instantiate(CluePrefab);
             myInstance.transform.position = cluePosition_layer1[index];
             ClueManager cm = myInstance.GetComponent<ClueManager>();
-            cm.Clue = new Clue(ClueType.FAKE);
+            cm.MakeClue(ClueType.FAKE);
+               // Clue = new Clue(ClueType.FAKE);
             index++;
         }
 
@@ -60,7 +61,7 @@ public class PlayManager : MonoBehaviour
             GameObject myInstance = Instantiate(CluePrefab);
             myInstance.transform.position = cluePosition_layer1[index];
             ClueManager cm = myInstance.GetComponent<ClueManager>();
-            cm.Clue = new Clue(ClueType.CODE);
+            cm.MakeClue(ClueType.CODE);
             index++;
         }
 
@@ -69,7 +70,7 @@ public class PlayManager : MonoBehaviour
             GameObject myInstance = Instantiate(CluePrefab);
             myInstance.transform.position = cluePosition_layer1[index];
             ClueManager cm = myInstance.GetComponent<ClueManager>();
-            cm.Clue = new Clue(ClueType.USER);
+            cm.MakeClue(ClueType.USER);
             index++;
         }
 
@@ -82,7 +83,7 @@ public class PlayManager : MonoBehaviour
             myInstance.layer = LayerMask.NameToLayer("Layer 2");
             myInstance.GetComponent<SpriteRenderer>().sortingLayerName = "Layer 2";
             ClueManager cm = myInstance.GetComponent<ClueManager>();
-            cm.Clue = new Clue(ClueType.FAKE);
+            cm.MakeClue(ClueType.FAKE);
             index++;
         }
 
@@ -93,7 +94,7 @@ public class PlayManager : MonoBehaviour
             myInstance.layer = LayerMask.NameToLayer("Layer 2");
             myInstance.GetComponent<SpriteRenderer>().sortingLayerName = "Layer 2";
             ClueManager cm = myInstance.GetComponent<ClueManager>();
-            cm.Clue = new Clue(ClueType.CODE);
+            cm.MakeClue(ClueType.CODE);
             index++;
         }
 
@@ -104,7 +105,7 @@ public class PlayManager : MonoBehaviour
             myInstance.layer = LayerMask.NameToLayer("Layer 2");
             myInstance.GetComponent<SpriteRenderer>().sortingLayerName = "Layer 2";
             ClueManager cm = myInstance.GetComponent<ClueManager>();
-            cm.Clue = new Clue(ClueType.USER);
+            cm.MakeClue(ClueType.USER);
             index++;
         }
 
