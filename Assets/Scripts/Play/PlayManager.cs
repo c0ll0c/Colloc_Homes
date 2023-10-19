@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 // 단서 인스턴스 생성 (CODE: layer1 - 3개 / layer2 - 2개, USER: 최대 6, FAKE: layer1 - 2개 / layer2 - 2개)
@@ -112,7 +110,7 @@ public class PlayManager : MonoBehaviour
 
     }
 
-    void ShufflePosition(Vector2[] position)
+    private void ShufflePosition(Vector2[] position)
     {
         System.Random rand = new System.Random();
 

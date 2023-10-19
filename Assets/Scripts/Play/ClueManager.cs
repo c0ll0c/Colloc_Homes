@@ -11,12 +11,7 @@ using UnityEngine;
 public class ClueManager : MonoBehaviour
 {
     public Clue Clue;
-    private GameObject ClueButton;
-
-    private void Start()
-    {
-        ClueButton = transform.Find("ClueButton").gameObject;
-    }
+    public GameObject ClueButton;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

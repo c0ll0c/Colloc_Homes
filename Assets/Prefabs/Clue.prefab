@@ -173,6 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 818ed06b0dd34034896f9b429a9b607d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ClueButton: {fileID: 2754329644925855268}
 --- !u!1 &2699822301598826478
 GameObject:
   m_ObjectHideFlags: 0
