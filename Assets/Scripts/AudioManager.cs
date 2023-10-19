@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public enum EffectAudioType
 {
@@ -12,6 +14,13 @@ public enum EffectAudioType
     LOSE
 }
 
+[Serializable]
+public struct EffectAudio
+{
+    public EffectAudioType EffectType;
+    public AudioClip Audio;
+}
+
 // 전체적인 음향 관리
 public class AudioManager: MonoSingleton<AudioManager>
 {
@@ -21,21 +30,18 @@ public class AudioManager: MonoSingleton<AudioManager>
     public AudioClip GameBGM;
     public AudioClip LobbyBGM;
 
-    public AudioClip DetoxAudio;
-    public AudioClip PortalAudio;
-    public AudioClip PlaneAudio;
-    public AudioClip VaccineAudio;
-
-    public AudioClip ButtonPopAudio;
-    public AudioClip ButtonClickAudio;
-
-    public AudioClip WinAudio;
-    public AudioClip LoseAudio;
+    public EffectAudio[] AudioClips;
+    private readonly Dictionary<EffectAudioType, AudioClip> audios = new();
 
     private void Start()
     {
         BgmPlayer.clip = LobbyBGM;
         BgmPlayer.Play();
+
+        foreach(EffectAudio effectAudio in AudioClips)
+        {
+            audios.Add(effectAudio.EffectType, effectAudio.Audio);
+        }
     }
 
     public void ChangeBGM(GameState _state)
@@ -49,26 +55,7 @@ public class AudioManager: MonoSingleton<AudioManager>
     // [MIGHTDO] Effect Play Queue?
     public void PlayEffect(EffectAudioType _effectType)
     {
-        switch (_effectType)
-        {
-            case EffectAudioType.DETOX:
-                EffectPlayer.clip = DetoxAudio; break;
-            case EffectAudioType.PORTAL:
-                EffectPlayer.clip = PortalAudio; break;
-            case EffectAudioType.PLANE:
-                EffectPlayer.clip = PlaneAudio; break;
-            case EffectAudioType.VACCINE:
-                EffectPlayer.clip = VaccineAudio; break;
-            case EffectAudioType.BTN_CLICK:
-                EffectPlayer.clip = ButtonClickAudio; break;
-            case EffectAudioType.BTN_POP:
-                EffectPlayer.clip = ButtonPopAudio; break;
-            case EffectAudioType.WIN:
-                EffectPlayer.clip = WinAudio; break;
-            case EffectAudioType.LOSE:
-                EffectPlayer.clip = LoseAudio; break;
-        }
-
+        EffectPlayer.clip = audios[_effectType];
         EffectPlayer.Play();
     }
 }

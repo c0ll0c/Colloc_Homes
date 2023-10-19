@@ -28,6 +28,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
+    // 게임 끝나고, 혹은 뒤로 가기 버튼으로 Intro Scene으로 다시 이동할 때 불린다
+    // PhotonView의 복제 방지 및 PhotonNetwork 연결 해제
+    public void DisconnectAndDestroy()
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.Disconnect();
+        }
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+        }
+    }
+
     // Master Server에 연결 후 lobby 입장
     public void Connect()
     {

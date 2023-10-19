@@ -17,6 +17,8 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if (gameState == _state) return;
 
+        if (_state == GameState.INTRO) { NetworkManager.Instance.DisconnectAndDestroy(); }
+
         AudioManager.Instance.ChangeBGM(_state);
 
         gameState = _state;
