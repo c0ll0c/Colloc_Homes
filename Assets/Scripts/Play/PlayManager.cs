@@ -28,7 +28,7 @@ public class PlayManager : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            randomDropTime[i] = Random.Range(0, 30);
+            randomDropTime[i] = Random.Range(0, 10);
         }
     }
 

@@ -15,7 +15,7 @@ public class HandleVaccine : PoolAble
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        ReleaseObject();
+        //ReleaseObject();
     }
 
     // sprite renderer setting
