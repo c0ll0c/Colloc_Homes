@@ -1,8 +1,7 @@
-using System.Collections;
 using UnityEngine;
 using TMPro;
 
-public class PlayerSlotController : MonoBehaviour
+public class HandlePlayerSlot : MonoBehaviour
 {
     public TMP_Text PlayerNameText;
     public GameObject IsLeaderObj;

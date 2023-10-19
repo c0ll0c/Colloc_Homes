@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
-public class LoadingText : MonoBehaviour
+public class LoadingTextUI : MonoBehaviour
 {
     public TMP_Text Loading;
     private void OnEnable()
@@ -18,10 +18,13 @@ public class LoadingText : MonoBehaviour
     private readonly string[] loadingText = { "Loading", "Loading.", "Loading..", "Loading..." };
     private IEnumerator StartTextAnimation()
     {
-        foreach(string _text in loadingText)
+        while (true)
         {
-            Loading.text = _text;
-            yield return halfSec;
+            foreach (string _text in loadingText)
+            {
+                Loading.text = _text;
+                yield return halfSec;
+            }
         }
     }
 }

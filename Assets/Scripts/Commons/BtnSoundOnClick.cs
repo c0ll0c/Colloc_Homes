@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ButtonClickSound : MonoBehaviour
+public class BtnSoundOnClick : MonoBehaviour
 {
     public void ButtonClickAudio()
     {

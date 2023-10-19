@@ -9,7 +9,7 @@ public enum LobbyBtnType
     CLOSE_PANEL
 }
 
-public class LobbySceneBtns : MonoBehaviour
+public class LobbyBtnsOnClick : MonoBehaviour
 {
     public LobbyBtnType BtnType;
     public void OnClickBtn()
@@ -21,7 +21,7 @@ public class LobbySceneBtns : MonoBehaviour
             case LobbyBtnType.BACK:
                 GameManager.Instance.ChangeScene(GameState.INTRO); break;
             case LobbyBtnType.SAVE_NAME:
-                transform.parent.GetComponent<NicknameInputField>().SaveNickname(); break;
+                transform.parent.GetComponent<NicknameInputFieldUI>().SaveNickname(); break;
             case LobbyBtnType.SET_NAME:
                 transform.parent.GetChild(1).gameObject.SetActive(true);
                 break;

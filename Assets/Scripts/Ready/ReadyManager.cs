@@ -4,13 +4,13 @@ using UnityEngine;
 public class ReadyManager : MonoBehaviour
 {
     public GameObject PlayerSlotsObj;
-    private PlayerSlotController[] playerSlots = new PlayerSlotController[6];
+    private HandlePlayerSlot[] playerSlots = new HandlePlayerSlot[6];
 
     public GameObject StartBtnObj;
 
     private void Awake()
     { 
-        playerSlots = PlayerSlotsObj.transform.GetComponentsInChildren<PlayerSlotController>();
+        playerSlots = PlayerSlotsObj.transform.GetComponentsInChildren<HandlePlayerSlot>();
     }
 
     private void Start()

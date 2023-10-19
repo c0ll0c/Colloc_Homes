@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class NicknameInputField : MonoBehaviour
+public class NicknameInputFieldUI : MonoBehaviour
 {
     public TMP_InputField NicknameField;
 

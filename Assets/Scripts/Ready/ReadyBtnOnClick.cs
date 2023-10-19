@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ReadySceneBtns : MonoBehaviour
+public class ReadyBtnOnClick : MonoBehaviour
 {
     public void OnClickStartBtn()
     {
