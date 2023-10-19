@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 250
+  spritePixelsToUnits: 300
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -115,7 +115,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 192
+        width: 161
         height: 238
       alignment: 7
       pivot: {x: 0.5, y: 0}
@@ -134,9 +134,9 @@ TextureImporter:
       name: vaccine_1
       rect:
         serializedVersion: 2
-        x: 192
+        x: 193
         y: 0
-        width: 187
+        width: 160
         height: 238
       alignment: 7
       pivot: {x: 0.5, y: 0}
@@ -157,7 +157,7 @@ TextureImporter:
         serializedVersion: 2
         x: 379
         y: 0
-        width: 182
+        width: 159
         height: 238
       alignment: 7
       pivot: {x: 0.5, y: 0}
