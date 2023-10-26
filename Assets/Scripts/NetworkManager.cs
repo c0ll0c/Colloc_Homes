@@ -72,12 +72,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             MaxPlayers = maxPlayersPerRoom
         };
         PhotonNetwork.JoinOrCreateRoom("∞‘¿”∑Î", roomOptions, TypedLobby.Default);
-        
-        string playerCode = StaticFuncs.GeneratePlayerCode();
-
-        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-        properties.Add("PlayerCode", playerCode);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
     }
     public override void OnJoinedRoom()
     {

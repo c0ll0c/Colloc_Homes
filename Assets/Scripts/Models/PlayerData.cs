@@ -4,7 +4,7 @@ public class PlayerData
     public int Id { get; set; }
     public bool IsMaster { get; set; }
     //public bool IsReady { get; set; }
-    public PlayerStatus Status { get; set; } = PlayerStatus.PLAYER;
+    public PlayerStatus Status { get; set; } = PlayerStatus.HOMES;
     public float Speed { get; set; } = 3;
     public string Code { get; set; } = "00000";
     public bool Vaccinated { get; set; } = false;
@@ -37,7 +37,7 @@ public class PlayerData
 
 public enum PlayerStatus
 {
-    PLAYER,
-    VIRUS,
+    HOMES,
+    COLLOC,
     INFECT
 }
