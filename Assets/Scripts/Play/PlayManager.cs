@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-// game manage script
+// game manage & photon communication script
 public class PlayManager : MonoBehaviour
 {
     public static PlayManager Instance;
