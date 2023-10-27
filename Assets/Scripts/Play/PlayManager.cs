@@ -4,15 +4,16 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 // game manage & photon communication script
-public class PlayManager : MonoBehaviour
+public class PlayManager : MonoSingleton<PlayManager>
 {
-    public static PlayManager Instance;
-    public Tilemap[] layer;
+    public Tilemap[] layerGrass;
+    public Tilemap[] layerWall;
     public GameObject CluePrefab;
 
-    private int[] randomDropTime = new int[3];
+    private int randomDropTime;
+    private Vector3 randomDropPos;
     private float time = 0f;
-    private int layerIndex = 0;
+    private int dropNum = 0;
     private int currentPlayer = 4;
     private int index;
     private Vector2[] cluePosition_layer1 = {    
@@ -39,19 +40,11 @@ public class PlayManager : MonoBehaviour
         new Vector2(5.0f, 7.7f),
     };    
     
-
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(this.gameObject);
-
-        Init();
-    }
-
     private void Start()
     {
+        randomDropTime = Random.Range(0, 10);
+        SetDropPos();
+
         ShufflePosition(cluePosition_layer1);
         ShufflePosition(cluePosition_layer2);
 
@@ -119,25 +112,31 @@ public class PlayManager : MonoBehaviour
             cm.MakeClue(ClueType.USER);
             index++;
         }
-
-    }
-
-    private void Init()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            randomDropTime[i] = Random.Range(0, 10);
-        }
     }
 
     private void Update()
     {
         time += Time.deltaTime;
-        if(layerIndex < 3 && time > randomDropTime[layerIndex])
+
+        if(dropNum < 3 && time > randomDropTime)
         {
             var plane = ObjectPoolManager.Instance.GetObject("Plane");
-            plane.transform.position = new Vector3(25.0f, Random.Range(-8.0f, 17.0f), 0f);
-            layerIndex++;
+            plane.transform.position = new Vector3(25.0f, randomDropPos.y, 0f);
+            plane.GetComponent<Plane>().dropPos = randomDropPos;
+
+            dropNum++;
+            randomDropTime += 60;
+            SetDropPos();
+        }
+    }
+
+    private void SetDropPos()
+    {
+        randomDropPos = new Vector3(Random.Range(-3f, 10f), Random.Range(-8f, 17f), 0f);
+        Debug.Log(randomDropPos);
+        if (StaticFuncs.CheckOnWall(randomDropPos))
+        {
+            SetDropPos();
         }
     }
 

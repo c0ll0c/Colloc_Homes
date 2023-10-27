@@ -8,26 +8,24 @@ using UnityEngine.Tilemaps;
 // plane movement & drop vaccine
 public class Plane : PoolAble
 {
+    public Vector3 dropPos;
+
     private Vector3 direction = new Vector3(-1, 0, 0);
     private float speed = 5.0f;
-    private float time = 0f;
-    private float dropTime = 3.0f;
     private bool alreadyDrop = false;
 
     private void Update()
     {
-        gameObject.transform.Translate(direction * speed * Time.deltaTime);
-        time += Time.deltaTime;
+        transform.Translate(direction * speed * Time.deltaTime);
 
-        if (!alreadyDrop && time > dropTime)
+        if (!alreadyDrop && transform.position.x < dropPos.x)
         {
             DropVaccine();
             alreadyDrop = true;
         }
 
-        if(gameObject.transform.position.x < -20.0f)
+        if(transform.position.x < -20.0f)
         {
-            time = 0f;
             alreadyDrop = false;
             ReleaseObject();
         }
