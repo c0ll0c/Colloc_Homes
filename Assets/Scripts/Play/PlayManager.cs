@@ -133,7 +133,6 @@ public class PlayManager : MonoSingleton<PlayManager>
     private void SetDropPos()
     {
         randomDropPos = new Vector3(Random.Range(-3f, 10f), Random.Range(-8f, 17f), 0f);
-        Debug.Log(randomDropPos);
         if (StaticFuncs.CheckOnWall(randomDropPos))
         {
             SetDropPos();

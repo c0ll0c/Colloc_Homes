@@ -33941,10 +33941,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4fa53cf6bae0e5419fd934f69987895, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layer:
+  layerGrass:
   - {fileID: 492707120}
   - {fileID: 533086029}
   - {fileID: 343762857}
+  layerWall:
+  - {fileID: 800246764}
+  - {fileID: 103177247}
+  - {fileID: 1029508809}
   CluePrefab: {fileID: 637856220614848185, guid: d288bc1d71375864c81282bc51b841ea,
     type: 3}
 --- !u!114 &1795936200
