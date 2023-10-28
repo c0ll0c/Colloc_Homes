@@ -1,125 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 // game manage & photon communication script
-public class PlayManager : MonoBehaviour
+public class PlayManager : MonoSingleton<PlayManager>
 {
     public static PlayManager Instance;
+    public GameObject ClueManager;
     public Tilemap[] layer;
     public GameObject CluePrefab;
+
+    private Vector2[] cluePosition_layer1 = StaticVars.cluePosition_layer1;
+    private Vector2[] cluePosition_layer2 = StaticVars.cluePosition_layer2;
+
+    public GameObject[] ClueInstances = new GameObject[16];
+    public GameObject[] CodeClueInstances = new GameObject[5];
+    public GameObject[] UserClueInstances = new GameObject[4];
 
     private int[] randomDropTime = new int[3];
     private float time = 0f;
     private int layerIndex = 0;
     private int currentPlayer = 4;
-    private int index;
-    private Vector2[] cluePosition_layer1 = {    
-        new Vector2(4.0f, 4.0f),
-        new Vector2(-0.2f, -3.0f),
-        new Vector2(4.0f, -10.0f),
-        new Vector2(15.0f, 4.0f),
-        new Vector2(-2.5f, 16.0f),
-        new Vector2(-3.4f, -3.0f),
-        new Vector2(-1.2f, 4.0f),
-        new Vector2(12.0f, -9.0f),
-        new Vector2(-8.4f, -6.0f),
-        new Vector2(7.0f, -1.1f),
-        new Vector2(1.8f, 1.3f),
-    };
-    private Vector2[] cluePosition_layer2 = { 
-        new Vector2(-6.0f, 8.0f),
-        new Vector2(-4.0f, 6.0f),
-        new Vector2(-4.5f, -4.6f),
-        new Vector2(9.3f, 7.2f),
-        new Vector2(13.3f, 4.4f),
-        new Vector2(6.2f, 18.4f),
-        new Vector2(-7.1f, -3.1f),
-        new Vector2(5.0f, 7.7f),
-    };    
+    private int layerNum;  
     
+    private int index;             
+    private int codeIndex = 0;              
+    private int userIndex = 0;              
 
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(this.gameObject);
-
-        Init();
-    }
-
+    // [TODO] Syncronize Make Clue Instace exclude ShufflePosition : Move to GameSetting
     private void Start()
     {
         ShufflePosition(cluePosition_layer1);
         ShufflePosition(cluePosition_layer2);
 
         // layer 1
-        index = 0;
-        for (int i = 0; i < 2; i++)             // layer1�� �ִ� FAKE 2��
-        {
-            GameObject myInstance = Instantiate(CluePrefab);
-            myInstance.transform.position = cluePosition_layer1[index];
-            ClueManager cm = myInstance.GetComponent<ClueManager>();
-            cm.MakeClue(ClueType.FAKE);
-               // Clue = new Clue(ClueType.FAKE);
-            index++;
-        }
-
-        for (int i = 0; i < 3; i++)             // layer1�� �ִ� CODE 3��
-        {
-            GameObject myInstance = Instantiate(CluePrefab);
-            myInstance.transform.position = cluePosition_layer1[index];
-            ClueManager cm = myInstance.GetComponent<ClueManager>();
-            cm.MakeClue(ClueType.CODE);
-            index++;
-        }
-
-        for (int i = 0; i < currentPlayer / 2; i++)             // ���� ���� �ִ� �÷��̾��� ������ ��
-        {
-            GameObject myInstance = Instantiate(CluePrefab);
-            myInstance.transform.position = cluePosition_layer1[index];
-            ClueManager cm = myInstance.GetComponent<ClueManager>();
-            cm.MakeClue(ClueType.USER);
-            index++;
-        }
+        layerNum = 0;
+        MakeClueInstance(cluePosition_layer1, ClueType.FAKE, 2, "Layer 1");
+        MakeClueInstance(cluePosition_layer1, ClueType.CODE, 3, "Layer 1");
+        MakeClueInstance(cluePosition_layer1, ClueType.USER, currentPlayer/2, "Layer 1");
 
         // layer 2
-        index = 0;
-        for (int i = 0; i < 2; i++)             // layer2�� �ִ� FAKE 2��
-        {
-            GameObject myInstance = Instantiate(CluePrefab);
-            myInstance.transform.position = cluePosition_layer2[index];
-            myInstance.layer = LayerMask.NameToLayer("Layer 2");
-            myInstance.GetComponent<SpriteRenderer>().sortingLayerName = "Layer 2";
-            ClueManager cm = myInstance.GetComponent<ClueManager>();
-            cm.MakeClue(ClueType.FAKE);
-            index++;
-        }
-
-        for (int i = 0; i < 2; i++)             // layer2�� �ִ� CODE 2��
-        {
-            GameObject myInstance = Instantiate(CluePrefab);
-            myInstance.transform.position = cluePosition_layer2[index];
-            myInstance.layer = LayerMask.NameToLayer("Layer 2");
-            myInstance.GetComponent<SpriteRenderer>().sortingLayerName = "Layer 2";
-            ClueManager cm = myInstance.GetComponent<ClueManager>();
-            cm.MakeClue(ClueType.CODE);
-            index++;
-        }
-
-        for (int i = 0; i < currentPlayer - currentPlayer / 2; i++)             // ���� ���� �ִ� �÷��̾��� ������ ��
-        {
-            GameObject myInstance = Instantiate(CluePrefab);
-            myInstance.transform.position = cluePosition_layer2[index];
-            myInstance.layer = LayerMask.NameToLayer("Layer 2");
-            myInstance.GetComponent<SpriteRenderer>().sortingLayerName = "Layer 2";
-            ClueManager cm = myInstance.GetComponent<ClueManager>();
-            cm.MakeClue(ClueType.USER);
-            index++;
-        }
-
+        layerNum = 0;
+        MakeClueInstance(cluePosition_layer2, ClueType.FAKE, 2, "Layer 2");
+        MakeClueInstance(cluePosition_layer2, ClueType.CODE, 2, "Layer 2");
+        MakeClueInstance(cluePosition_layer2, ClueType.USER, currentPlayer/2, "Layer 2");
     }
 
     private void Init()
@@ -154,5 +77,36 @@ public class PlayManager : MonoBehaviour
             position[i] = temp;
         }
     }
-}
 
+    void MakeClueInstance(Vector2[] position, ClueType clueType, int N, string Layer)
+    {
+        for (int i = 0; i < N; i++)
+        {
+            GameObject myInstance = Instantiate(CluePrefab);     
+            myInstance.transform.position = position[layerNum];           
+            myInstance.layer = LayerMask.NameToLayer(Layer);     
+            myInstance.GetComponent<SpriteRenderer>().sortingLayerName = Layer;
+            myInstance.transform.SetParent(ClueManager.transform);              
+            HandleClue hc = myInstance.GetComponent<HandleClue>(); 
+            hc.MakeClue(clueType);
+            layerNum++;
+
+            ClueInstances[index] = myInstance;
+            index++;
+
+            if (clueType == ClueType.CODE)
+            {
+                CodeClueInstances[codeIndex] = myInstance;
+                codeIndex++;
+                Debug.Log("code" + codeIndex);
+            }
+
+            else if (clueType == ClueType.USER)
+            {
+                UserClueInstances[userIndex] = myInstance;
+                userIndex++;
+                Debug.Log("user" + userIndex);
+            }
+        }
+    }
+}
