@@ -7,6 +7,7 @@ public class ReadyManager : MonoBehaviour
     private HandlePlayerSlot[] playerSlots = new HandlePlayerSlot[6];
 
     public GameObject StartBtnObj;
+    public GameObject ReadyBtnObj;
 
     private void Awake()
     { 
@@ -36,5 +37,6 @@ public class ReadyManager : MonoBehaviour
         }
 
         StartBtnObj.SetActive(_isMaster);
+        ReadyBtnObj.SetActive(!_isMaster);
     }
 }

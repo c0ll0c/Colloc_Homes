@@ -1,8 +1,8 @@
-
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
+using System;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -48,6 +48,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
         PhotonNetwork.ConnectUsingSettings();
     }
+
     public override void OnConnectedToMaster()
     {
         GameManager.Instance.ChangeScene(GameState.LOBBY);
@@ -58,6 +59,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.LogErrorFormat("Disconnected from server cause of {0}", cause);
         GameManager.Instance.ChangeScene(GameState.INTRO);
     }
+
 
     // 기본 게임룸(readyscene) 입장
     // [TODO] 추후에 방 생성 / 방 목록 보고 방 참가로 변경 예정
@@ -71,13 +73,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             IsVisible = true,
             MaxPlayers = maxPlayersPerRoom
         };
-        PhotonNetwork.JoinOrCreateRoom("게임룸", roomOptions, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom("gameroom", roomOptions, TypedLobby.Default);
     }
+
     public override void OnJoinedRoom()
     {
         GameManager.Instance.ChangeScene(GameState.READY);
         PV.RPC("SyncPlayersData", RpcTarget.OthersBuffered);
     }
+
 
     // ReadySceneManager 관리
     public ReadyManager ReadySceneManager;
@@ -107,5 +111,95 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             ReadySceneManager.SetUI(playersStatus, PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.IsMasterClient);
         }
+    }
+
+    // Player Ready
+    public void SetPlayerReady(bool IsReady)
+    {
+        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
+        properties.Add("IsReady", IsReady);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+    }
+
+    // Start Game by Master
+    public void StartGame()
+    {
+        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            object IsReady;
+            // Check if player is ready
+            if (!player.IsMasterClient && player.CustomProperties.TryGetValue("IsReady", out IsReady))
+            {
+                if ((bool)IsReady == false) return;
+            }
+            else if (!player.IsMasterClient) return;
+        }
+
+        PhotonNetwork.LoadLevel("PlayScene");
+    }
+
+
+    // PlaySceneManager
+    public PlayManager PlaySceneManager;
+
+    // Generate players, codes, items(drop time, position): called by MasterClient
+    public void GameSetting()
+    {
+        int i = 0;
+        int colloc = UnityEngine.Random.Range(0, PhotonNetwork.CurrentRoom.PlayerCount + 1);
+        bool isColloc = false;
+        string code;
+        Dictionary<string, string> codes = new Dictionary<string, string>();
+
+        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values )
+        {
+            code = StaticFuncs.GeneratePlayerCode();
+            codes.Add(player.NickName, code);
+            if (i == colloc)
+            {
+                isColloc = true;
+                ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
+                properties.Add("CollocCode", code);
+                PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+            }
+            PV.RPC("SetPlayer", player, isColloc, i);
+            i++; isColloc = false;
+        }
+
+        int randomDropTime = UnityEngine.Random.Range(0, 10);
+        Vector3[] randomDropPos = new Vector3[3];
+        for (i = 0; i < 3; i++)
+        {
+            randomDropPos[i] = SetDropPos();
+        }
+
+        PV.RPC("SetItems", RpcTarget.AllBuffered, codes, randomDropTime, randomDropPos);
+    }
+
+    // Set where item will drop
+    private Vector3 SetDropPos()
+    {
+        Vector3 randomDropPos = new Vector3(UnityEngine.Random.Range(-3f, 10f), UnityEngine.Random.Range(-8f, 17f), 0f);
+        if (StaticFuncs.CheckOnWall(randomDropPos))
+        {
+            return SetDropPos();
+        }
+        return randomDropPos;
+    }
+
+    // Set each player status, spawn position
+    [PunRPC]
+    public void SetPlayer(Boolean isColloc, int idx)
+    {
+        PlaySceneManager.SpawnHomes(isColloc, idx);
+    }
+
+    // Inform game item setting to all players (clue code, item time & position)
+    [PunRPC]
+    public void SetItems(Dictionary<string, string> codes, int dropTime, Vector3[] dropPos)
+    {
+        PlaySceneManager.randomDropTime = dropTime;
+        PlaySceneManager.randomDropPos = dropPos;
+        PlaySceneManager.gameReady = true;
     }
 }

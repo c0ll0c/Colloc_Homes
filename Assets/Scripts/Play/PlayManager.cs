@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,12 +7,14 @@ using UnityEngine.Tilemaps;
 // game manage & photon communication script
 public class PlayManager : MonoSingleton<PlayManager>
 {
-    public Tilemap[] layerGrass;
-    public Tilemap[] layerWall;
+    public Tilemap[] LayerGrass;
+    public Tilemap[] LayerWall;
     public GameObject CluePrefab;
+    public GameObject GamePlayer;
+    public int randomDropTime;
+    public Vector3[] randomDropPos;
+    public bool gameReady = false;
 
-    private int randomDropTime;
-    private Vector3 randomDropPos;
     private float time = 0f;
     private int dropNum = 0;
     private int currentPlayer = 4;
@@ -38,13 +41,21 @@ public class PlayManager : MonoSingleton<PlayManager>
         new Vector2(6.2f, 18.4f),
         new Vector2(-7.1f, -3.1f),
         new Vector2(5.0f, 7.7f),
-    };    
-    
+    };
+    protected override void Awake()
+    {
+        base.Awake();
+
+        NetworkManager.Instance.PlaySceneManager = this;
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            NetworkManager.Instance.GameSetting();
+        }
+    }
+
     private void Start()
     {
-        randomDropTime = Random.Range(0, 10);
-        SetDropPos();
-
         ShufflePosition(cluePosition_layer1);
         ShufflePosition(cluePosition_layer2);
 
@@ -116,27 +127,25 @@ public class PlayManager : MonoSingleton<PlayManager>
 
     private void Update()
     {
+        if (!gameReady) return;
+
         time += Time.deltaTime;
 
         if(dropNum < 3 && time > randomDropTime)
         {
             var plane = ObjectPoolManager.Instance.GetObject("Plane");
-            plane.transform.position = new Vector3(25.0f, randomDropPos.y, 0f);
-            plane.GetComponent<Plane>().dropPos = randomDropPos;
+            plane.transform.position = new Vector3(25.0f, randomDropPos[dropNum].y, 0f);
+            plane.GetComponent<Plane>().dropPos = randomDropPos[dropNum];
 
             dropNum++;
             randomDropTime += 60;
-            SetDropPos();
         }
     }
 
-    private void SetDropPos()
+    public void SpawnHomes(bool isColloc, int idx)
     {
-        randomDropPos = new Vector3(Random.Range(-3f, 10f), Random.Range(-8f, 17f), 0f);
-        if (StaticFuncs.CheckOnWall(randomDropPos))
-        {
-            SetDropPos();
-        }
+        GamePlayer = PhotonNetwork.Instantiate("PhotonHomes", StaticVars.SpawnPosition[idx], Quaternion.identity) as GameObject;
+        if (isColloc) GamePlayer.tag = "Colloc";
     }
 
     private void ShufflePosition(Vector2[] position)
@@ -151,6 +160,11 @@ public class PlayManager : MonoSingleton<PlayManager>
             position[index] = position[i];
             position[i] = temp;
         }
+    }
+
+    private void OnDestroy()
+    {
+        NetworkManager.Instance.PlaySceneManager = null;
     }
 }
 

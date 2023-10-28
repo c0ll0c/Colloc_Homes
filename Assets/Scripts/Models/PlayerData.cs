@@ -3,11 +3,11 @@ public class PlayerData
     public string Name { get; set; }
     public int Id { get; set; }
     public bool IsMaster { get; set; }
-    //public bool IsReady { get; set; }
     public PlayerStatus Status { get; set; } = PlayerStatus.HOMES;
     public float Speed { get; set; } = 3;
     public string Code { get; set; } = "00000";
     public bool Vaccinated { get; set; } = false;
+    public bool IsReady { get; set; } = false;
 
     public PlayerData(Photon.Realtime.Player _player)
     {
@@ -30,6 +30,10 @@ public class PlayerData
             if (_player.CustomProperties.ContainsKey("Vaccinated"))
             {
                 Vaccinated = (bool)_player.CustomProperties["Vaccinated"];
+            }
+            if (_player.CustomProperties.ContainsKey("IsReady"))
+            {
+                IsReady = (bool)_player.CustomProperties["IsReady"];
             }
         }
     }
