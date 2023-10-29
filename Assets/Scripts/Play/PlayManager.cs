@@ -4,8 +4,7 @@ using UnityEngine.Tilemaps;
 // game manage & photon communication script
 public class PlayManager : MonoSingleton<PlayManager>
 {
-    public static PlayManager Instance;
-    public GameObject ClueManager;
+    public GameObject ObjectManager;
     public Tilemap[] layer;
     public GameObject CluePrefab;
 
@@ -15,6 +14,7 @@ public class PlayManager : MonoSingleton<PlayManager>
     public GameObject[] ClueInstances = new GameObject[16];
     public GameObject[] CodeClueInstances = new GameObject[5];
     public GameObject[] UserClueInstances = new GameObject[4];
+    public GameObject[] FakeClueInstances = new GameObject[4];
 
     private int[] randomDropTime = new int[3];
     private float time = 0f;
@@ -25,6 +25,7 @@ public class PlayManager : MonoSingleton<PlayManager>
     private int index;             
     private int codeIndex = 0;              
     private int userIndex = 0;              
+    private int fakeIndex = 0;              
 
     // [TODO] Syncronize Make Clue Instace exclude ShufflePosition : Move to GameSetting
     private void Start()
@@ -86,16 +87,14 @@ public class PlayManager : MonoSingleton<PlayManager>
             myInstance.transform.position = position[layerNum];           
             myInstance.layer = LayerMask.NameToLayer(Layer);     
             myInstance.GetComponent<SpriteRenderer>().sortingLayerName = Layer;
-            myInstance.transform.SetParent(ClueManager.transform);              
+            myInstance.transform.SetParent(ObjectManager.transform);              
             HandleClue hc = myInstance.GetComponent<HandleClue>(); 
-            hc.MakeClue(clueType);
             layerNum++;
-
-            ClueInstances[index] = myInstance;
-            index++;
 
             if (clueType == ClueType.CODE)
             {
+                hc.MakeClue(clueType, index, codeIndex);
+
                 CodeClueInstances[codeIndex] = myInstance;
                 codeIndex++;
                 Debug.Log("code" + codeIndex);
@@ -103,10 +102,24 @@ public class PlayManager : MonoSingleton<PlayManager>
 
             else if (clueType == ClueType.USER)
             {
+                hc.MakeClue(clueType, index, userIndex);
+
                 UserClueInstances[userIndex] = myInstance;
                 userIndex++;
                 Debug.Log("user" + userIndex);
             }
+
+            else if (clueType == ClueType.FAKE)
+            {
+                hc.MakeClue(clueType, index, fakeIndex);
+
+                FakeClueInstances[fakeIndex] = myInstance;
+                fakeIndex++;
+                Debug.Log("user" + userIndex);
+            }
+
+            ClueInstances[index] = myInstance;
+            index++;
         }
     }
 }

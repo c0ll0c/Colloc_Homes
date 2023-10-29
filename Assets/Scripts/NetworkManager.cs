@@ -112,7 +112,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void syncHiddenCode(bool IsHidden, bool state)
+    public void SyncHiddenCode(bool IsHidden, bool state)
     {
         IsHidden = state;
         StartCoroutine(UnHiddenClue());
