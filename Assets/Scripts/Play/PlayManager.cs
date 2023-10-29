@@ -8,9 +8,6 @@ public class PlayManager : MonoSingleton<PlayManager>
     public Tilemap[] layer;
     public GameObject CluePrefab;
 
-    private Vector2[] cluePosition_layer1 = StaticVars.cluePosition_layer1;
-    private Vector2[] cluePosition_layer2 = StaticVars.cluePosition_layer2;
-
     public GameObject[] ClueInstances = new GameObject[16];
     public GameObject[] CodeClueInstances = new GameObject[5];
     public GameObject[] UserClueInstances = new GameObject[4];
@@ -30,20 +27,20 @@ public class PlayManager : MonoSingleton<PlayManager>
     // [TODO] Syncronize Make Clue Instace exclude ShufflePosition : Move to GameSetting
     private void Start()
     {
-        ShufflePosition(cluePosition_layer1);
-        ShufflePosition(cluePosition_layer2);
+        ShufflePosition(StaticVars.cluePosition_layer1);
+        ShufflePosition(StaticVars.cluePosition_layer2);
 
         // layer 1
         layerNum = 0;
-        MakeClueInstance(cluePosition_layer1, ClueType.FAKE, 2, "Layer 1");
-        MakeClueInstance(cluePosition_layer1, ClueType.CODE, 3, "Layer 1");
-        MakeClueInstance(cluePosition_layer1, ClueType.USER, currentPlayer/2, "Layer 1");
+        MakeClueInstance(StaticVars.cluePosition_layer1, ClueType.FAKE, 2, "Layer 1");
+        MakeClueInstance(StaticVars.cluePosition_layer1, ClueType.CODE, 3, "Layer 1");
+        MakeClueInstance(StaticVars.cluePosition_layer1, ClueType.USER, currentPlayer/2, "Layer 1");
 
         // layer 2
         layerNum = 0;
-        MakeClueInstance(cluePosition_layer2, ClueType.FAKE, 2, "Layer 2");
-        MakeClueInstance(cluePosition_layer2, ClueType.CODE, 2, "Layer 2");
-        MakeClueInstance(cluePosition_layer2, ClueType.USER, currentPlayer/2, "Layer 2");
+        MakeClueInstance(StaticVars.cluePosition_layer2, ClueType.FAKE, 2, "Layer 2");
+        MakeClueInstance(StaticVars.cluePosition_layer2, ClueType.CODE, 2, "Layer 2");
+        MakeClueInstance(StaticVars.cluePosition_layer2, ClueType.USER, currentPlayer/2, "Layer 2");
     }
 
     private void Init()
