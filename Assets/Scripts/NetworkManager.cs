@@ -114,10 +114,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     // Player Ready
-    public void SetPlayerReady(bool IsReady)
+    public void SetPlayerReady(bool _isReady)
     {
         ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-        properties.Add("IsReady", IsReady);
+        properties.Add("IsReady", _isReady);
         PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
     }
 
@@ -189,17 +189,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     // Set each player status, spawn position
     [PunRPC]
-    public void SetPlayer(Boolean isColloc, int idx)
+    public void SetPlayer(bool _isColloc, int _idx)
     {
-        PlaySceneManager.SpawnHomes(isColloc, idx);
+        PlaySceneManager.SpawnHomes(_isColloc, _idx);
     }
 
     // Inform game item setting to all players (clue code, item time & position)
     [PunRPC]
-    public void SetItems(Dictionary<string, string> codes, int dropTime, Vector3[] dropPos)
+    public void SetItems(Dictionary<string, string> _codes, int _dropTime, Vector3[] _dropPos)
     {
-        PlaySceneManager.randomDropTime = dropTime;
-        PlaySceneManager.randomDropPos = dropPos;
-        PlaySceneManager.gameReady = true;
+        PlaySceneManager.SetGame(_codes, _dropTime, _dropPos);
     }
 }

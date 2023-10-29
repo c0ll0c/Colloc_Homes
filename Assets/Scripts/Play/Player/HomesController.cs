@@ -12,30 +12,29 @@ public class HomesController : MonoBehaviour
     private float moveY, moveX;
     private PhotonView pv;
     private Rigidbody2D rigid;
-    private SpriteRenderer spriter;
     private Animator anim;
 
     private void Awake()
     {
-        pv = GetComponent<PhotonView>();
-        rigid = GetComponent<Rigidbody2D>();
-        spriter = GetComponent<SpriteRenderer>();
-        anim = GetComponent<Animator>();
+        pv = transform.parent.GetComponent<PhotonView>();
+        rigid = transform.parent.GetComponent<Rigidbody2D>();
+        anim = transform.parent.GetComponent<Animator>();
         speed = 3.0f;
 
+
+        if (!pv.IsMine) { gameObject.SetActive(false); return; }
+
         // camera setting (focus on my player)
-        if (pv.IsMine)
-        {
-            Camera cam = Camera.main;
-            cam.transform.SetParent(transform);
-            cam.transform.localPosition = new Vector3(0f, 0f, -5f);
-        }
+        Camera cam = Camera.main;
+        cam.transform.SetParent(transform.parent);
+        cam.transform.localPosition = new Vector3(0f, 0f, -5f);
+        
     }
 
     // moving & animation function
     private void FixedUpdate()
     {
-        if (!pv.IsMine || !PhotonNetwork.IsConnected) return; // can control only mine
+        //if (!pv.IsMine || !PhotonNetwork.IsConnected) return; // can control only mine
 
         moveY = Input.GetAxis("Vertical");
         moveX = Input.GetAxis("Horizontal");
@@ -46,12 +45,4 @@ public class HomesController : MonoBehaviour
         anim.SetFloat("Speed", inputVec.magnitude);
         if (inputVec.x != 0) pv.RPC("FlipX", RpcTarget.All, inputVec.x);
     }
-
-    // sync player direction
-    [PunRPC]
-    void FlipX(float axis)  
-    {
-        spriter.flipX = axis < 0;
-    }
-
 }

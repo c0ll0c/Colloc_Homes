@@ -21,26 +21,26 @@ public static class StaticFuncs
     }
 
     // sprite renderer setting
-    public static void SpriteRendering(GameObject gameObject)
+    public static void SpriteRendering(GameObject _gameObject)
     {
         for (int i = 1; i <= PlayManager.Instance.LayerGrass.Length; i++)
         {
-            Vector3Int cellPosition = PlayManager.Instance.LayerGrass[i - 1].WorldToCell(gameObject.transform.position);
+            Vector3Int cellPosition = PlayManager.Instance.LayerGrass[i - 1].WorldToCell(_gameObject.transform.position);
             TileBase tile = PlayManager.Instance.LayerGrass[i - 1].GetTile(cellPosition);
 
             if (tile != null)
             {
-                gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Layer " + i;
+                _gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Layer " + i;
             }
         }
     }
 
    // check position on wall
-   public static bool CheckOnWall(Vector3 pos)
+   public static bool CheckOnWall(Vector3 _pos)
     {
         for (int i = 1; i <= PlayManager.Instance.LayerWall.Length; i++)
         {
-            Vector3Int cellPosition = PlayManager.Instance.LayerWall[i - 1].WorldToCell(pos);
+            Vector3Int cellPosition = PlayManager.Instance.LayerWall[i - 1].WorldToCell(_pos);
             TileBase tile = PlayManager.Instance.LayerWall[i - 1].GetTile(cellPosition);
 
             if (tile != null)

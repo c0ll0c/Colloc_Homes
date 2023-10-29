@@ -1,5 +1,4 @@
 using Photon.Pun;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -10,13 +9,12 @@ public class PlayManager : MonoSingleton<PlayManager>
     public Tilemap[] LayerGrass;
     public Tilemap[] LayerWall;
     public GameObject CluePrefab;
-    public GameObject GamePlayer;
-    public int randomDropTime;
-    public Vector3[] randomDropPos;
-    public bool gameReady = false;
 
-    private float time = 0f;
+    private bool gameReady = false;
+    private int randomDropTime;
+    private Vector3[] randomDropPos;
     private int dropNum = 0;
+    private float time = 0f;
     private int currentPlayer = 4;
     private int index;
     private Vector2[] cluePosition_layer1 = {    
@@ -47,6 +45,7 @@ public class PlayManager : MonoSingleton<PlayManager>
         base.Awake();
 
         NetworkManager.Instance.PlaySceneManager = this;
+        GameManager.Instance.EnterGame();
 
         if (PhotonNetwork.IsMasterClient)
         {
@@ -142,23 +141,30 @@ public class PlayManager : MonoSingleton<PlayManager>
         }
     }
 
-    public void SpawnHomes(bool isColloc, int idx)
+    public void SpawnHomes(bool _isColloc, int _idx)
     {
-        GamePlayer = PhotonNetwork.Instantiate("PhotonHomes", StaticVars.SpawnPosition[idx], Quaternion.identity) as GameObject;
-        if (isColloc) GamePlayer.tag = "Colloc";
+        GameObject gamePlayer = PhotonNetwork.Instantiate("PhotonHomes", StaticVars.SpawnPosition[_idx], Quaternion.identity) as GameObject;
+        if (_isColloc) gamePlayer.tag = "Colloc";
     }
 
-    private void ShufflePosition(Vector2[] position)
+    public void SetGame(Dictionary<string, string> _codes, int _dropTime, Vector3[] _dropPos)
+    {
+        randomDropTime = _dropTime;
+        randomDropPos = _dropPos;
+        gameReady = true;
+    }
+
+    private void ShufflePosition(Vector2[] _position)
     {
         System.Random rand = new System.Random();
 
-        for (int i = position.Length - 1; i > 0; i--)
+        for (int i = _position.Length - 1; i > 0; i--)
         {
             int index = rand.Next(i + 1);
 
-            Vector2 temp = position[index];
-            position[index] = position[i];
-            position[i] = temp;
+            Vector2 temp = _position[index];
+            _position[index] = _position[i];
+            _position[i] = temp;
         }
     }
 
