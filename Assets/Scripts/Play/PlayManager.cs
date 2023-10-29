@@ -22,7 +22,11 @@ public class PlayManager : MonoSingleton<PlayManager>
     private float time = 0f;
     private int currentPlayer = 4;
     private int index;
-    
+    private int layerNum;
+    private int codeIndex = 0;
+    private int userIndex = 0;
+    private int fakeIndex = 0;
+
     protected override void Awake()
     {
         base.Awake();
@@ -35,13 +39,6 @@ public class PlayManager : MonoSingleton<PlayManager>
             NetworkManager.Instance.GameSetting();
         }
     }
-
-    private int layerNum;  
-    
-    private int index;             
-    private int codeIndex = 0;              
-    private int userIndex = 0;              
-    private int fakeIndex = 0;              
 
     // [TODO] Syncronize Make Clue Instace exclude ShufflePosition : Move to GameSetting
     private void Start()
