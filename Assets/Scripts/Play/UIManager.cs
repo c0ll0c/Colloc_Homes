@@ -31,8 +31,8 @@ public class UIManager : MonoSingleton<UIManager>
 
     public void ChangeClueStatusUIText(string _status)
     {
-        CluePanelCanvas.GetChild(3).GetChild(0).GetComponent<Text>().text = _status;
-        CluePanelCanvas.GetChild(3).gameObject.SetActive(true);
+        CluePanelCanvas.GetChild(2).GetChild(0).GetComponent<Text>().text = _status;
+        CluePanelCanvas.GetChild(2).gameObject.SetActive(true);
     }
 
     public void UnactivePanel(int _index)

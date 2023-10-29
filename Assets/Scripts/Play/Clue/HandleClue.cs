@@ -55,13 +55,13 @@ public class HandleClue : MonoBehaviour
         {
             UIManager.Instance.ChangeClueStatusUIText("ÀÌ¹Ì È¹µæÇÑ ´Ü¼­!");
 
-            StartCoroutine(UnactivePanel(3));
+            StartCoroutine(UnactivePanel(2));
         }
         else if (clue.IsHidden)
         {
             UIManager.Instance.ChangeClueStatusUIText("¼û°ÜÁø ´Ü¼­!");
 
-            StartCoroutine(UnactivePanel(3));
+            StartCoroutine(UnactivePanel(2));
         }
     }
 
