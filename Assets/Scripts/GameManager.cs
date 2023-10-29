@@ -34,6 +34,6 @@ public class GameManager : MonoSingleton<GameManager>
     // 방장이 레디씬에서 게임 시작 버튼을 누를 때 불리는 함수
     public void EnterGame()
     {
-        
+        gameState = GameState.PLAY;
     }
 }

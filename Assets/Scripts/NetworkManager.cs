@@ -2,6 +2,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
+using System;
 using System.Collections;
 
 
@@ -12,7 +13,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public PhotonView PV;
 
-    // Singleton ¼±¾ð
+    // Singleton ï¿½ï¿½ï¿½ï¿½
     public static NetworkManager Instance;
 
     private void Awake()
@@ -30,8 +31,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
-    // °ÔÀÓ ³¡³ª°í, È¤Àº µÚ·Î °¡±â ¹öÆ°À¸·Î Intro SceneÀ¸·Î ´Ù½Ã ÀÌµ¿ÇÒ ¶§ ºÒ¸°´Ù
-    // PhotonViewÀÇ º¹Á¦ ¹æÁö ¹× PhotonNetwork ¿¬°á ÇØÁ¦
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, È¤ï¿½ï¿½ ï¿½Ú·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ï¿½ Intro Sceneï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ò¸ï¿½ï¿½ï¿½
+    // PhotonViewï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ PhotonNetwork ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void DisconnectAndDestroy()
     {
         if (PhotonNetwork.IsConnected)
@@ -44,12 +45,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
-    // Master Server¿¡ ¿¬°á ÈÄ lobby ÀÔÀå
+    // Master Serverï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ lobby ï¿½ï¿½ï¿½ï¿½
     public void Connect()
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
         PhotonNetwork.ConnectUsingSettings();
     }
+
     public override void OnConnectedToMaster()
     {
         GameManager.Instance.ChangeScene(GameState.LOBBY);
@@ -61,8 +63,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         GameManager.Instance.ChangeScene(GameState.INTRO);
     }
 
-    // ±âº» °ÔÀÓ·ë(readyscene) ÀÔÀå
-    // [TODO] ÃßÈÄ¿¡ ¹æ »ý¼º / ¹æ ¸ñ·Ï º¸°í ¹æ Âü°¡·Î º¯°æ ¿¹Á¤
+
+    // ï¿½âº» ï¿½ï¿½ï¿½Ó·ï¿½(readyscene) ï¿½ï¿½ï¿½ï¿½
+    // [TODO] ï¿½ï¿½ï¿½Ä¿ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ / ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void JoinDefaultRoom()
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
@@ -73,18 +76,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             IsVisible = true,
             MaxPlayers = maxPlayersPerRoom
         };
-        PhotonNetwork.JoinOrCreateRoom("°ÔÀÓ·ë", roomOptions, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom("gameroom", roomOptions, TypedLobby.Default);
     }
+
     public override void OnJoinedRoom()
     {
         GameManager.Instance.ChangeScene(GameState.READY);
         PV.RPC("SyncPlayersData", RpcTarget.OthersBuffered);
     }
 
-    // ReadySceneManager °ü¸®
+
+    // ReadySceneManager ï¿½ï¿½ï¿½ï¿½
     public ReadyManager ReadySceneManager;
 
-    // PlayerData º¯°æ ½Ã¸¶´Ù ReadyScene(or PlayScene)ÀÇ Manager Call
+    // PlayerData ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¸ï¿½ï¿½ï¿½ ReadyScene(or PlayScene)ï¿½ï¿½ Manager Call
     [PunRPC]
     public void SyncPlayersData()
     {
@@ -111,10 +116,99 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
-    [PunRPC]
-    public void SyncHiddenCode(bool IsHidden, bool state)
+    // Player Ready
+    public void SetPlayerReady(bool _isReady)
     {
-        IsHidden = state;
+        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
+        properties.Add("IsReady", _isReady);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+    }
+
+    // Start Game by Master
+    public void StartGame()
+    {
+        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            object IsReady;
+            // Check if player is ready
+            if (!player.IsMasterClient && player.CustomProperties.TryGetValue("IsReady", out IsReady))
+            {
+                if ((bool)IsReady == false) return;
+            }
+            else if (!player.IsMasterClient) return;
+        }
+
+        PhotonNetwork.LoadLevel("PlayScene");
+    }
+
+
+    // PlaySceneManager
+    public PlayManager PlaySceneManager;
+
+    // Generate players, codes, items(drop time, position): called by MasterClient
+    public void GameSetting()
+    {
+        int i = 0;
+        int colloc = UnityEngine.Random.Range(0, PhotonNetwork.CurrentRoom.PlayerCount + 1);
+        bool isColloc = false;
+        string code;
+        Dictionary<string, string> codes = new Dictionary<string, string>();
+
+        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values )
+        {
+            code = StaticFuncs.GeneratePlayerCode();
+            codes.Add(player.NickName, code);
+            if (i == colloc)
+            {
+                isColloc = true;
+                ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
+                properties.Add("CollocCode", code);
+                PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
+            }
+            PV.RPC("SetPlayer", player, isColloc, i);
+            i++; isColloc = false;
+        }
+
+        int randomDropTime = UnityEngine.Random.Range(0, 10);
+        Vector3[] randomDropPos = new Vector3[3];
+        for (i = 0; i < 3; i++)
+        {
+            randomDropPos[i] = SetDropPos();
+        }
+
+        PV.RPC("SetItems", RpcTarget.AllBuffered, codes, randomDropTime, randomDropPos);
+    }
+
+    // Set where item will drop
+    private Vector3 SetDropPos()
+    {
+        Vector3 randomDropPos = new Vector3(UnityEngine.Random.Range(-3f, 10f), UnityEngine.Random.Range(-8f, 17f), 0f);
+        if (StaticFuncs.CheckOnWall(randomDropPos))
+        {
+            return SetDropPos();
+        }
+        return randomDropPos;
+    }
+
+    // Set each player status, spawn position
+    [PunRPC]
+    public void SetPlayer(bool _isColloc, int _idx)
+    {
+        PlaySceneManager.SpawnHomes(_isColloc, _idx);
+    }
+
+    // Inform game item setting to all players (clue code, item time & position)
+    [PunRPC]
+    public void SetItems(Dictionary<string, string> _codes, int _dropTime, Vector3[] _dropPos)
+    {
+        PlaySceneManager.SetGame(_codes, _dropTime, _dropPos);
+    }
+
+    // To modify
+    [PunRPC]
+    public void SyncHiddenCode(bool _isHidden, bool _state)
+    {
+        _isHidden = _state;
         StartCoroutine(UnHiddenClue());
     }
 

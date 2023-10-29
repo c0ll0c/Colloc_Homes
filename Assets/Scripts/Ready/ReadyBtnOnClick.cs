@@ -1,8 +1,33 @@
 using UnityEngine;
 
+public enum ReadyBtnType
+{
+    BACK,
+    READY,
+    START
+}
+
 public class ReadyBtnOnClick : MonoBehaviour
 {
-    public void OnClickStartBtn()
+    public ReadyBtnType BtnType;
+
+    private bool isReady = false;
+    public void OnClickBtn()
     {
+        switch (BtnType)
+        {
+            case ReadyBtnType.READY:
+                isReady = !isReady;
+                NetworkManager.Instance.SetPlayerReady(isReady);
+                break;
+
+            case ReadyBtnType.START:
+                NetworkManager.Instance.StartGame();
+                break;
+
+            case ReadyBtnType.BACK:
+                GameManager.Instance.ChangeScene(GameState.LOBBY); break;
+        }
     }
+
 }
