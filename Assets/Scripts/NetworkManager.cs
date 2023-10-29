@@ -3,6 +3,8 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using System;
+using System.Collections;
+
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -11,8 +13,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public PhotonView PV;
 
-    // Singleton ¼±¾ð
+    // Singleton ï¿½ï¿½ï¿½ï¿½
     public static NetworkManager Instance;
+
     private void Awake()
     {
         if (Instance == null)
@@ -28,8 +31,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
-    // °ÔÀÓ ³¡³ª°í, È¤Àº µÚ·Î °¡±â ¹öÆ°À¸·Î Intro SceneÀ¸·Î ´Ù½Ã ÀÌµ¿ÇÒ ¶§ ºÒ¸°´Ù
-    // PhotonViewÀÇ º¹Á¦ ¹æÁö ¹× PhotonNetwork ¿¬°á ÇØÁ¦
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, È¤ï¿½ï¿½ ï¿½Ú·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ï¿½ Intro Sceneï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ò¸ï¿½ï¿½ï¿½
+    // PhotonViewï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ PhotonNetwork ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void DisconnectAndDestroy()
     {
         if (PhotonNetwork.IsConnected)
@@ -42,7 +45,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
-    // Master Server¿¡ ¿¬°á ÈÄ lobby ÀÔÀå
+    // Master Serverï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ lobby ï¿½ï¿½ï¿½ï¿½
     public void Connect()
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
@@ -61,8 +64,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
 
-    // ±âº» °ÔÀÓ·ë(readyscene) ÀÔÀå
-    // [TODO] ÃßÈÄ¿¡ ¹æ »ý¼º / ¹æ ¸ñ·Ï º¸°í ¹æ Âü°¡·Î º¯°æ ¿¹Á¤
+    // ï¿½âº» ï¿½ï¿½ï¿½Ó·ï¿½(readyscene) ï¿½ï¿½ï¿½ï¿½
+    // [TODO] ï¿½ï¿½ï¿½Ä¿ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ / ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void JoinDefaultRoom()
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
@@ -83,10 +86,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
 
-    // ReadySceneManager °ü¸®
+    // ReadySceneManager ï¿½ï¿½ï¿½ï¿½
     public ReadyManager ReadySceneManager;
 
-    // PlayerData º¯°æ ½Ã¸¶´Ù ReadyScene(or PlayScene)ÀÇ Manager Call
+    // PlayerData ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¸ï¿½ï¿½ï¿½ ReadyScene(or PlayScene)ï¿½ï¿½ Manager Call
     [PunRPC]
     public void SyncPlayersData()
     {
@@ -199,5 +202,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void SetItems(Dictionary<string, string> _codes, int _dropTime, Vector3[] _dropPos)
     {
         PlaySceneManager.SetGame(_codes, _dropTime, _dropPos);
+    }
+
+    // To modify
+    [PunRPC]
+    public void SyncHiddenCode(bool _isHidden, bool _state)
+    {
+        _isHidden = _state;
+        StartCoroutine(UnHiddenClue());
+    }
+
+    IEnumerator UnHiddenClue()
+    {
+        yield return new WaitForSeconds(15.0f);
+        // IsHidden = false;
     }
 }
