@@ -1,8 +1,9 @@
-
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
+using System.Collections;
+
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -13,6 +14,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     // Singleton ¼±¾ð
     public static NetworkManager Instance;
+
     private void Awake()
     {
         if (Instance == null)
@@ -107,5 +109,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             ReadySceneManager.SetUI(playersStatus, PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.IsMasterClient);
         }
+    }
+
+    [PunRPC]
+    public void SyncHiddenCode(bool IsHidden, bool state)
+    {
+        IsHidden = state;
+        StartCoroutine(UnHiddenClue());
+    }
+
+    IEnumerator UnHiddenClue()
+    {
+        yield return new WaitForSeconds(15.0f);
+        // IsHidden = false;
     }
 }
