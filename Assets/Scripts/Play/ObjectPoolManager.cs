@@ -59,26 +59,26 @@ public class ObjectPoolManager : MonoBehaviour
     }
 
     // 사용
-    private void OnTakeFromPool(GameObject poolGo)
+    private void OnTakeFromPool(GameObject _poolGo)
     {
-        poolGo.SetActive(true);
+        _poolGo.SetActive(true);
     }
 
     // 반환
-    private void OnReturnedToPool(GameObject poolGo)
+    private void OnReturnedToPool(GameObject _poolGo)
     {
-        poolGo.SetActive(false);
+        _poolGo.SetActive(false);
     }
 
     // 삭제
-    private void OnDestroyPoolObject(GameObject poolGo)
+    private void OnDestroyPoolObject(GameObject _poolGo)
     {
-        Destroy(poolGo);
+        Destroy(_poolGo);
     }
 
-    public GameObject GetObject(string name)
+    public GameObject GetObject(string _name)
     {
-        objectName = name;
-        return poolDic[name].Get();
+        objectName = _name;
+        return poolDic[_name].Get();
     }
 }

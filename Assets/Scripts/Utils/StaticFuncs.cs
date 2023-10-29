@@ -1,5 +1,6 @@
 using System.Text;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public static class StaticFuncs 
 {
@@ -17,5 +18,36 @@ public static class StaticFuncs
         }
 
         return result.ToString();
+    }
+
+    // sprite renderer setting
+    public static void SpriteRendering(GameObject _gameObject)
+    {
+        for (int i = 1; i <= PlayManager.Instance.LayerGrass.Length; i++)
+        {
+            Vector3Int cellPosition = PlayManager.Instance.LayerGrass[i - 1].WorldToCell(_gameObject.transform.position);
+            TileBase tile = PlayManager.Instance.LayerGrass[i - 1].GetTile(cellPosition);
+
+            if (tile != null)
+            {
+                _gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Layer " + i;
+            }
+        }
+    }
+
+   // check position on wall
+   public static bool CheckOnWall(Vector3 _pos)
+    {
+        for (int i = 1; i <= PlayManager.Instance.LayerWall.Length; i++)
+        {
+            Vector3Int cellPosition = PlayManager.Instance.LayerWall[i - 1].WorldToCell(_pos);
+            TileBase tile = PlayManager.Instance.LayerWall[i - 1].GetTile(cellPosition);
+
+            if (tile != null)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
