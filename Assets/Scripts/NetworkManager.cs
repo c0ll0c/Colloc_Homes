@@ -16,6 +16,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     // Singleton ����
     public static NetworkManager Instance;
+    public    Dictionary<string, string> codes = new Dictionary<string, string>();
 
     private void Awake()
     {
@@ -153,9 +154,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         int colloc = UnityEngine.Random.Range(0, PhotonNetwork.CurrentRoom.PlayerCount + 1);
         bool isColloc = false;
         string code;
-        Dictionary<string, string> codes = new Dictionary<string, string>();
+        Vector2[] randomCluePosition = ShufflePosition(StaticVars.CluePosition);
 
-        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values )
+        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
             code = StaticFuncs.GeneratePlayerCode();
             codes.Add(player.NickName, code);
@@ -168,7 +169,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             }
             PV.RPC("SetPlayer", player, isColloc, i);
             i++; isColloc = false;
+
+            PV.RPC("SetUserClues", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code);
+
+            Debug.Log(player.NickName + code);
         }
+
+        PV.RPC("SetOtherClues", RpcTarget.AllBuffered, randomCluePosition);
 
         int randomDropTime = UnityEngine.Random.Range(0, 10);
         Vector3[] randomDropPos = new Vector3[3];
@@ -177,11 +184,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             randomDropPos[i] = SetDropPos();
         }
 
-        Vector2[] randomCluePosition = ShufflePosition(StaticVars.CluePosition);
 
-
+        // [TODO] add codes and Nickname to clue
         PV.RPC("SetItems", RpcTarget.AllBuffered, codes, randomDropTime, randomDropPos);
-        PV.RPC("SetClues", RpcTarget.AllBuffered, randomCluePosition);
     }
 
     // Set where clue will spawn
@@ -227,13 +232,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void SetClues(Vector2[] _position)
+    public void SetOtherClues(Vector2[] _position)
     {
         _currentPlayer = PhotonNetwork.CurrentRoom.PlayerCount;
 
-        PlaySceneManager.MakeClueInstance(_position, ClueType.FAKE, 4);
-        PlaySceneManager.MakeClueInstance(_position, ClueType.USER, _currentPlayer);
-        PlaySceneManager.MakeClueInstance(_position, ClueType.CODE, 5);
+        PlaySceneManager.MakeOtherClueInstance(_position, ClueType.FAKE, 4);
+        PlaySceneManager.MakeOtherClueInstance(_position, ClueType.CODE, 5);
+    }
+
+    [PunRPC]
+    public void SetUserClues(Vector2[] _position, string _nickname, string _code)
+    {
+        _currentPlayer = PhotonNetwork.CurrentRoom.PlayerCount;
+
+        PlaySceneManager.MakeUserClueInstance(_position, ClueType.USER, _currentPlayer, _nickname, _code);
     }
 
     // To modify

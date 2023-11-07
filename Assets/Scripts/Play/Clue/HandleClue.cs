@@ -37,26 +37,29 @@ public class HandleClue : MonoBehaviour
         }
     }
 
-    public void MakeClue(ClueType _clueType, int _index, int _typeIndex)
+    public void MakeClue(ClueType _clueType, int _index, int _typeIndex, string _nickname, string _code)
     {
-        clue = new Clue(_clueType, _index, _typeIndex);
+        clue = new Clue(_clueType, _index, _typeIndex, _nickname, _code);
     }
 
     public void GetClue()
     {
+        Debug.Log(clue.TypeIndex);
+
         if (!clue.IsHidden && !clue.IsGot)
         {
             if (clue.ClueType == ClueType.USER)
             {
-                UIManager.Instance.ChangeUserClueUIText("User Name: " + clue.TypeIndex,
-                     "User Code: " + clue.TypeIndex, clue.TypeIndex);
-                
+                UIManager.Instance.ChangeUserClueUIText(clue.UserNickName,
+                     clue.UserCode, clue.TypeIndex);
+
                 StartCoroutine(UnactivePanel(0));
             }
 
-            else if (clue.ClueType == ClueType.CODE)
+            else if (clue.ClueType == ClueType.CODE)                // Colloc's code
             {
-                UIManager.Instance.ChangeCodeClueUIText("Code " + clue.TypeIndex, clue.TypeIndex);
+                string collocCode = PhotonNetwork.CurrentRoom.CustomProperties["CollocCode"].ToString();
+                UIManager.Instance.ChangeCodeClueUIText(collocCode[clue.TypeIndex], clue.TypeIndex);
 
                 StartCoroutine(UnactivePanel(1));
             }

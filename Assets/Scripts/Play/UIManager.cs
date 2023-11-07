@@ -23,10 +23,10 @@ public class UIManager : MonoSingleton<UIManager>
         CluePanelCanvas.GetChild(0).gameObject.SetActive(true);
     }
 
-    public void ChangeCodeClueUIText(string _usercode, int _index)
+    public void ChangeCodeClueUIText(char _usercode, int _index)
     {
-        CluePanelCanvas.GetChild(1).GetChild(0).GetComponent<Text>().text = _usercode;
-        CollocClueUI.transform.GetChild(0).GetChild(_index).GetChild(0).GetComponent<Text>().text = _usercode;
+        CluePanelCanvas.GetChild(1).GetChild(0).GetComponent<Text>().text = _usercode.ToString();
+        CollocClueUI.transform.GetChild(0).GetChild(_index).GetChild(0).GetComponent<Text>().text = _usercode.ToString();
 
         CluePanelCanvas.GetChild(1).gameObject.SetActive(true);
     }

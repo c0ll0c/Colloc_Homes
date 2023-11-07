@@ -69,7 +69,7 @@ public class PlayManager : MonoSingleton<PlayManager>
         gameReady = true;
     }
 
-    public void MakeClueInstance(Vector2[] position, ClueType clueType, int N)
+    public void MakeOtherClueInstance(Vector2[] position, ClueType clueType, int N)
     {
         for (int i = 0; i < N; i++)
         {
@@ -81,26 +81,41 @@ public class PlayManager : MonoSingleton<PlayManager>
 
             if (clueType == ClueType.CODE)
             {
-                hc.MakeClue(clueType, index, codeIndex);
+                hc.MakeClue(clueType, index, codeIndex, " ", " ");
 
                 CodeClueInstances[codeIndex] = myInstance;
                 codeIndex++;
             }
 
-            else if (clueType == ClueType.USER)
-            {
-                hc.MakeClue(clueType, index, userIndex);
-
-                UserClueInstances[userIndex] = myInstance;
-                userIndex++;
-            }
-
             else if (clueType == ClueType.FAKE)
             {
-                hc.MakeClue(clueType, index, fakeIndex);
+                hc.MakeClue(clueType, index, fakeIndex, " ", " ");
 
                 FakeClueInstances[fakeIndex] = myInstance;
                 fakeIndex++;
+            }
+
+            ClueInstances[index] = myInstance;
+            index++;
+        }
+    }
+
+    public void MakeUserClueInstance(Vector2[] position, ClueType clueType, int N, string _nickname, string _code)
+    {
+        for (int i = 0; i < N; i++)
+        {
+            GameObject myInstance = Instantiate(CluePrefab);     
+            myInstance.transform.position = position[posIndex];           
+            myInstance.transform.SetParent(ObjectManager.transform);              
+            HandleClue hc = myInstance.GetComponent<HandleClue>();
+            posIndex++;
+
+            if (clueType == ClueType.USER)
+            {
+                hc.MakeClue(clueType, index, userIndex, _nickname, _code);
+
+                CodeClueInstances[userIndex] = myInstance;
+                userIndex++;
             }
 
             ClueInstances[index] = myInstance;
