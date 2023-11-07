@@ -149,7 +149,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void GameSetting()
     {
         int i = 0;
-        int colloc = UnityEngine.Random.Range(0, PhotonNetwork.CurrentRoom.PlayerCount + 1);
+        int colloc = UnityEngine.Random.Range(0, PhotonNetwork.CurrentRoom.PlayerCount);
         bool isColloc = false;
         string code;
         Dictionary<string, string> codes = new Dictionary<string, string>();
