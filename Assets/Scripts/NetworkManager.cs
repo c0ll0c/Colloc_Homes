@@ -2,7 +2,6 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
-using System;
 using System.Collections;
 
 
@@ -12,6 +11,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     private byte maxPlayersPerRoom = 6;
 
     public PhotonView PV;
+
+    static public int _currentPlayer;
 
     // Singleton ����
     public static NetworkManager Instance;
@@ -176,7 +177,28 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             randomDropPos[i] = SetDropPos();
         }
 
+        Vector2[] randomCluePosition = ShufflePosition(StaticVars.CluePosition);
+
+
         PV.RPC("SetItems", RpcTarget.AllBuffered, codes, randomDropTime, randomDropPos);
+        PV.RPC("SetClues", RpcTarget.AllBuffered, randomCluePosition);
+    }
+
+    // Set where clue will spawn
+    public Vector2[] ShufflePosition(Vector2[] _position)
+    {
+        System.Random rand = new System.Random();
+
+        for (int i = _position.Length - 1; i > 0; i--)
+        {
+            int index = rand.Next(i + 1);
+
+            Vector2 temp = _position[index];
+            _position[index] = _position[i];
+            _position[i] = temp;
+        }
+
+        return _position;
     }
 
     // Set where item will drop
@@ -204,17 +226,30 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PlaySceneManager.SetGame(_codes, _dropTime, _dropPos);
     }
 
-    // To modify
     [PunRPC]
-    public void SyncHiddenCode(bool _isHidden, bool _state)
+    public void SetClues(Vector2[] _position)
     {
-        _isHidden = _state;
-        StartCoroutine(UnHiddenClue());
+        _currentPlayer = PhotonNetwork.CurrentRoom.PlayerCount;
+
+        PlaySceneManager.MakeClueInstance(_position, ClueType.FAKE, 4);
+        PlaySceneManager.MakeClueInstance(_position, ClueType.USER, _currentPlayer);
+        PlaySceneManager.MakeClueInstance(_position, ClueType.CODE, 5);
     }
 
-    IEnumerator UnHiddenClue()
+    // To modify
+    [PunRPC]
+    public void SyncHiddenCode(int _index)
+    {
+        Clue clue = PlayManager.Instance.ClueInstances[_index].GetComponent<HandleClue>().clue;
+
+        clue.IsHidden = true;
+
+        StartCoroutine(UnHiddenClue(clue));
+    }
+
+    IEnumerator UnHiddenClue(Clue clue)
     {
         yield return new WaitForSeconds(15.0f);
-        // IsHidden = false;
+        clue.IsHidden = false;
     }
 }

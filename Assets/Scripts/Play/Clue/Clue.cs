@@ -15,9 +15,9 @@ public class Clue
     public int Index;
     public int TypeIndex;
 
-    public Clue (ClueType type, int _index, int _typeIndex)
+    public Clue (ClueType _type, int _index, int _typeIndex)
     {
-        ClueType = type;
+        ClueType = _type;
         Index = _index;
         TypeIndex = _typeIndex;
     }
