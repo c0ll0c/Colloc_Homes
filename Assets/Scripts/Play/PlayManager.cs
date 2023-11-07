@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 public class PlayManager : MonoSingleton<PlayManager>
 {
     public GameObject ObjectManager;
+    public GameObject gamePlayer;
     public Tilemap[] LayerGrass;
     public Tilemap[] LayerWall;
     public GameObject CluePrefab;
@@ -78,8 +79,9 @@ public class PlayManager : MonoSingleton<PlayManager>
 
     public void SpawnHomes(bool _isColloc, int _idx)
     {
-        GameObject gamePlayer = PhotonNetwork.Instantiate("PhotonHomes", StaticVars.SpawnPosition[_idx], Quaternion.identity) as GameObject;
+        gamePlayer = PhotonNetwork.Instantiate("PhotonHomes", StaticVars.SpawnPosition[_idx], Quaternion.identity) as GameObject;
         if (_isColloc) gamePlayer.tag = "Colloc";
+        else gamePlayer.tag = "Homes";
     }
 
     public void SetGame(Dictionary<string, string> _codes, int _dropTime, Vector3[] _dropPos)
@@ -121,7 +123,6 @@ public class PlayManager : MonoSingleton<PlayManager>
 
                 CodeClueInstances[codeIndex] = myInstance;
                 codeIndex++;
-                Debug.Log("code" + codeIndex);
             }
 
             else if (clueType == ClueType.USER)
@@ -130,7 +131,6 @@ public class PlayManager : MonoSingleton<PlayManager>
 
                 UserClueInstances[userIndex] = myInstance;
                 userIndex++;
-                Debug.Log("user" + userIndex);
             }
 
             else if (clueType == ClueType.FAKE)
@@ -139,7 +139,6 @@ public class PlayManager : MonoSingleton<PlayManager>
 
                 FakeClueInstances[fakeIndex] = myInstance;
                 fakeIndex++;
-                Debug.Log("user" + userIndex);
             }
 
             ClueInstances[index] = myInstance;
