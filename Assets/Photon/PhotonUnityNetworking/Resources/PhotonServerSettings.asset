@@ -45,6 +45,7 @@ MonoBehaviour:
   - SetItems
   - FlipX
   - SyncHiddenCode
+  - DeactivateDetox
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

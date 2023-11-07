@@ -15,11 +15,13 @@ public class PlayManager : MonoSingleton<PlayManager>
     public GameObject[] UserClueInstances = new GameObject[4];
     public GameObject[] FakeClueInstances = new GameObject[4];
 
-    private bool gameReady = false;
-    private int randomDropTime;
-    private Vector3[] randomDropPos;
-    private int dropNum = 0;
-    private float time = 0f;
+    public GameObject DetoxObj;
+    private HandleDetox[] detoxHandlers = new HandleDetox[2];
+
+    public TimeManager TimeManager;
+
+    public Vector3[] RandomDropPos;
+
     private int currentPlayer = 4;
     private int index;
     private int layerNum;
@@ -27,13 +29,15 @@ public class PlayManager : MonoSingleton<PlayManager>
     private int userIndex = 0;
     private int fakeIndex = 0;
 
+    // private double gameEndTime;
+
     protected override void Awake()
     {
         base.Awake();
 
         NetworkManager.Instance.PlaySceneManager = this;
         GameManager.Instance.EnterGame();
-
+        
         if (PhotonNetwork.IsMasterClient)
         {
             NetworkManager.Instance.GameSetting();
@@ -57,23 +61,8 @@ public class PlayManager : MonoSingleton<PlayManager>
         MakeClueInstance(StaticVars.cluePosition_layer2, ClueType.FAKE, 2, "Layer 2");
         MakeClueInstance(StaticVars.cluePosition_layer2, ClueType.CODE, 2, "Layer 2");
         MakeClueInstance(StaticVars.cluePosition_layer2, ClueType.USER, currentPlayer/2, "Layer 2");
-    }
 
-    private void Update()
-    {
-        if (!gameReady) return;
-
-        time += Time.deltaTime;
-
-        if(dropNum < 3 && time > randomDropTime)
-        {
-            var plane = ObjectPoolManager.Instance.GetObject("Plane");
-            plane.transform.position = new Vector3(25.0f, randomDropPos[dropNum].y, 0f);
-            plane.GetComponent<Plane>().dropPos = randomDropPos[dropNum];
-
-            dropNum++;
-            randomDropTime += 60;
-        }
+        detoxHandlers = DetoxObj.GetComponentsInChildren<HandleDetox>();
     }
 
     public void SpawnHomes(bool _isColloc, int _idx)
@@ -82,11 +71,10 @@ public class PlayManager : MonoSingleton<PlayManager>
         if (_isColloc) gamePlayer.tag = "Colloc";
     }
 
-    public void SetGame(Dictionary<string, string> _codes, int _dropTime, Vector3[] _dropPos)
+    public void SetGame(Dictionary<string, string> _codes, int _dropTime, Vector3[] _dropPos, double _endTime)
     {
-        randomDropTime = _dropTime;
-        randomDropPos = _dropPos;
-        gameReady = true;
+        RandomDropPos = _dropPos;
+        TimeManager.SetPlayTime(_endTime, _dropTime);
     }
 
     private void ShufflePosition(Vector2[] _position)
@@ -150,5 +138,10 @@ public class PlayManager : MonoSingleton<PlayManager>
     private void OnDestroy()
     {
         NetworkManager.Instance.PlaySceneManager = null;
+    }
+
+    public void UseOrDeactivateDetox(int _index)
+    {
+        detoxHandlers[_index-1].UseOrDeactivate();
     }
 }
