@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 4599290826068683403}
   - component: {fileID: 4557450143691562368}
   - component: {fileID: 3390692686948355927}
-  m_Layer: 20
+  m_Layer: 7
   m_Name: Clue
-  m_TagString: Untagged
+  m_TagString: Clue
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -175,8 +175,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ClueGetButton: {fileID: 288355484433572686}
   ClueHideButton: {fileID: 3844723224029381295}
-  CluePanelCanvas: {fileID: 3184380803455348952, guid: f0ac1d61fe0f58c479a413d67db49ebe,
-    type: 3}
 --- !u!1 &2754329644925855268
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,7 +187,7 @@ GameObject:
   - component: {fileID: 7404813180298405792}
   - component: {fileID: 9043398556821123405}
   - component: {fileID: 3662595666008795783}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: ClueButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -290,7 +288,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3032412579582297951}
   - component: {fileID: 4874301178087703754}
-  m_Layer: 20
+  m_Layer: 7
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -376,6 +374,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ClueButton_Get
+      objectReference: {fileID: 0}
+    - target: {fileID: 18661429914039455, guid: dcff01d70d3697a4c838083967d38ae0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 18661429914039455, guid: dcff01d70d3697a4c838083967d38ae0,
         type: 3}
@@ -482,6 +485,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5495716731495892313, guid: dcff01d70d3697a4c838083967d38ae0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7832317761681859581, guid: dcff01d70d3697a4c838083967d38ae0,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -519,6 +527,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3058940130283889920, guid: 78cb078984e7ad74bbb75791d271e8c2,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3058940130283889920, guid: 78cb078984e7ad74bbb75791d271e8c2,
+        type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -527,6 +540,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 3390692686948355927}
+    - target: {fileID: 7382930928948942022, guid: 78cb078984e7ad74bbb75791d271e8c2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7646456231534664348, guid: 78cb078984e7ad74bbb75791d271e8c2,
         type: 3}
       propertyPath: m_Pivot.x

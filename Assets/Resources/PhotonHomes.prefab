@@ -332,6 +332,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94eda98bcc99ab544af8ce55b373e8fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ClueGetButton: {fileID: 0}
+  ClueHideButton: {fileID: 0}
 --- !u!1 &7864608580262559776
 GameObject:
   m_ObjectHideFlags: 0
