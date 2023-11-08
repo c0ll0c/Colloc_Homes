@@ -41,7 +41,7 @@ public class HomesController : MonoBehaviour
         anim.SetFloat("Speed", inputVec.magnitude);
         if (inputVec.x != 0) pv.RPC("FlipX", RpcTarget.All, inputVec.x);
     }
-
+    
     // change speed after attack
     public void SetSpeed(float _speed)
     {

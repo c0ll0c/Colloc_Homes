@@ -21,9 +21,8 @@ public class PlayManager : MonoSingleton<PlayManager>
     private Vector3[] randomDropPos;
     private int dropNum = 0;
     private float time = 0f;
-    private int currentPlayer = 4;
     private int index;
-    private int layerNum;
+    private int posIndex = 0;
     private int codeIndex = 0;
     private int userIndex = 0;
     private int fakeIndex = 0;
@@ -39,25 +38,6 @@ public class PlayManager : MonoSingleton<PlayManager>
         {
             NetworkManager.Instance.GameSetting();
         }
-    }
-
-    // [TODO] Syncronize Make Clue Instace exclude ShufflePosition : Move to GameSetting
-    private void Start()
-    {
-        ShufflePosition(StaticVars.cluePosition_layer1);
-        ShufflePosition(StaticVars.cluePosition_layer2);
-
-        // layer 1
-        layerNum = 0;
-        MakeClueInstance(StaticVars.cluePosition_layer1, ClueType.FAKE, 2, "Layer 1");
-        MakeClueInstance(StaticVars.cluePosition_layer1, ClueType.CODE, 3, "Layer 1");
-        MakeClueInstance(StaticVars.cluePosition_layer1, ClueType.USER, currentPlayer/2, "Layer 1");
-
-        // layer 2
-        layerNum = 0;
-        MakeClueInstance(StaticVars.cluePosition_layer2, ClueType.FAKE, 2, "Layer 2");
-        MakeClueInstance(StaticVars.cluePosition_layer2, ClueType.CODE, 2, "Layer 2");
-        MakeClueInstance(StaticVars.cluePosition_layer2, ClueType.USER, currentPlayer/2, "Layer 2");
     }
 
     private void Update()
@@ -91,54 +71,52 @@ public class PlayManager : MonoSingleton<PlayManager>
         gameReady = true;
     }
 
-    private void ShufflePosition(Vector2[] _position)
-    {
-        System.Random rand = new System.Random();
-
-        for (int i = _position.Length - 1; i > 0; i--)
-        {
-            int index = rand.Next(i + 1);
-
-            Vector2 temp = _position[index];
-            _position[index] = _position[i];
-            _position[i] = temp;
-        }
-    }
-
-    void MakeClueInstance(Vector2[] position, ClueType clueType, int N, string Layer)
+    public void MakeOtherClueInstance(Vector2[] position, ClueType clueType, int N)
     {
         for (int i = 0; i < N; i++)
         {
             GameObject myInstance = Instantiate(CluePrefab);     
-            myInstance.transform.position = position[layerNum];           
-            myInstance.layer = LayerMask.NameToLayer(Layer);     
-            myInstance.GetComponent<SpriteRenderer>().sortingLayerName = Layer;
+            myInstance.transform.position = position[posIndex];           
             myInstance.transform.SetParent(ObjectManager.transform);              
-            HandleClue hc = myInstance.GetComponent<HandleClue>(); 
-            layerNum++;
+            HandleClue hc = myInstance.GetComponent<HandleClue>();
+            posIndex++;
 
             if (clueType == ClueType.CODE)
             {
-                hc.MakeClue(clueType, index, codeIndex);
+                hc.MakeClue(clueType, index, codeIndex, " ", " ");
 
                 CodeClueInstances[codeIndex] = myInstance;
                 codeIndex++;
             }
 
-            else if (clueType == ClueType.USER)
-            {
-                hc.MakeClue(clueType, index, userIndex);
-
-                UserClueInstances[userIndex] = myInstance;
-                userIndex++;
-            }
-
             else if (clueType == ClueType.FAKE)
             {
-                hc.MakeClue(clueType, index, fakeIndex);
+                hc.MakeClue(clueType, index, fakeIndex, " ", " ");
 
                 FakeClueInstances[fakeIndex] = myInstance;
                 fakeIndex++;
+            }
+
+            ClueInstances[index] = myInstance;
+            index++;
+        }
+    }
+
+    public void MakeUserClueInstance(Vector2[] position, ClueType clueType, int N, string _nickname, string _code)
+    {
+        for (int i = 0; i < N; i++)
+        {
+            GameObject myInstance = Instantiate(CluePrefab);     
+            myInstance.transform.position = position[posIndex];           
+            myInstance.transform.SetParent(ObjectManager.transform);              
+            HandleClue hc = myInstance.GetComponent<HandleClue>();
+            posIndex++;
+
+            if (clueType == ClueType.USER)
+            {
+                hc.MakeClue(clueType, index, userIndex, _nickname, _code);
+                CodeClueInstances[userIndex] = myInstance;
+                userIndex++;
             }
 
             ClueInstances[index] = myInstance;
