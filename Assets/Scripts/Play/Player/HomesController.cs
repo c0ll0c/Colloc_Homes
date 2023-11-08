@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using UnityEngine;
 using Photon.Pun;
 
@@ -10,12 +8,10 @@ public class HomesController : MonoBehaviour
     private Vector2 nextVec;
     private float speed;
     private float moveY, moveX;
+
     private PhotonView pv;
     private Rigidbody2D rigid;
     private Animator anim;
-    public GameObject ClueGetButton;
-    public GameObject ClueHideButton;
-    private Clue clue;
 
     private void Awake()
     {
@@ -23,7 +19,6 @@ public class HomesController : MonoBehaviour
         rigid = transform.parent.GetComponent<Rigidbody2D>();
         anim = transform.parent.GetComponent<Animator>();
         speed = 3.0f;
-
 
         if (!pv.IsMine) { gameObject.SetActive(false); return; }
 
@@ -35,10 +30,8 @@ public class HomesController : MonoBehaviour
     }
 
     // moving & animation function
-    private void FixedUpdate()
-    {
-        //if (!pv.IsMine || !PhotonNetwork.IsConnected) return; // can control only mine
-
+    private void FixedUpdate() 
+    { 
         moveY = Input.GetAxis("Vertical");
         moveX = Input.GetAxis("Horizontal");
         inputVec = new Vector2(moveX, moveY);
@@ -47,5 +40,11 @@ public class HomesController : MonoBehaviour
 
         anim.SetFloat("Speed", inputVec.magnitude);
         if (inputVec.x != 0) pv.RPC("FlipX", RpcTarget.All, inputVec.x);
+    }
+    
+    // change speed after attack
+    public void SetSpeed(float _speed)
+    {
+        speed = _speed;
     }
 }

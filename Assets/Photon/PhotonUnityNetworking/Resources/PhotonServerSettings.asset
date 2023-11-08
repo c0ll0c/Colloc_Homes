@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: ca1ab45c-b12f-4fd1-8e4c-e4dc93e2324e
+    AppIdRealtime: 796b9280-0933-4444-9d88-b2ea4ad91c8d
     AppIdFusion: 
     AppIdChat: 
     AppIdVoice: 
@@ -45,6 +45,9 @@ MonoBehaviour:
   - SetItems
   - FlipX
   - SyncHiddenCode
+  - ChangeStatus
+  - Attack
+  - SetNickname
   - SetClues
   - SetOtherClues
   - SetUserClues
