@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DetoxTimer : MonoBehaviour
+public class DetoxTimerUI : MonoBehaviour
 {
     public HandleDetox DetoxHandler;
     private Image timerProgressBar;

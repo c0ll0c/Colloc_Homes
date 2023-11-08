@@ -5,7 +5,7 @@ public class HandleDetox : MonoBehaviour
     private GameObject deactivatedObj;
     private GameObject activatedObj;
     private GameObject timerObj;
-    private DetoxTimer detoxTimer;
+    private DetoxTimerUI detoxTimer;
     private GameObject buttonObj;
     private ItemBtnsOnClick btnHandler;
 
@@ -19,7 +19,7 @@ public class HandleDetox : MonoBehaviour
         activatedObj = transform.GetChild(0).GetChild(1).gameObject;
 
         timerObj = transform.GetChild(1).GetChild(0).gameObject;
-        detoxTimer = timerObj.GetComponent<DetoxTimer>();
+        detoxTimer = timerObj.GetComponent<DetoxTimerUI>();
         detoxTimer.DetoxHandler = this;
 
         buttonObj = transform.GetChild(1).GetChild(1).gameObject;
