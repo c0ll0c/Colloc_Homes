@@ -45,6 +45,7 @@ MonoBehaviour:
   - SetItems
   - FlipX
   - SyncHiddenCode
+  - DeactivateDetox
   - ChangeStatus
   - Attack
   - SetNickname

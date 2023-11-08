@@ -1,15 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Properties;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 // plane movement & drop vaccine
 public class Plane : PoolAble
 {
-    public Vector3 dropPos;
-
+    private Vector3 dropPos;
     private Vector3 direction = new Vector3(-1, 0, 0);
     private float speed = 5.0f;
     private bool alreadyDrop = false;
@@ -29,6 +23,12 @@ public class Plane : PoolAble
             alreadyDrop = false;
             ReleaseObject();
         }
+    }
+
+    public void InitiateDrop(int _index)
+    {
+        transform.position = new Vector3(25.0f, PlayManager.Instance.RandomDropPos[_index].y, 0f);
+        dropPos = PlayManager.Instance.RandomDropPos[_index];
     }
 
     // vaccine pool get

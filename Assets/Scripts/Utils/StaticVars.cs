@@ -3,6 +3,12 @@ using UnityEngine;
 public static class StaticVars
 {
     public static string PREFS_NICKNAE = "nickname";
+    public static byte MAX_PLAYERS_PER_ROOM = 6;
+
+    // time variables
+    public static double GAME_TIME = 300.0f; // 5m
+    public static double VACCINE_DROP_INTERVAL = 60.0f; // 1m
+    public static float DETOX_TIME = 15.0f; // 15s
 
     // homes spawn position
     public static Vector3[] SpawnPosition =
