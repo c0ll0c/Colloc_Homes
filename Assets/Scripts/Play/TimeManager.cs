@@ -38,13 +38,18 @@ public class TimeManager : MonoBehaviour
             vaccineDropTime -= enumTime;
             if (vaccineNum < 3 && vaccineDropTime < 0)
             {
-                // drop vaccine;
-                GameObject plane = ObjectPoolManager.Instance.GetObject("Plane");
-                plane.GetComponent<Plane>().InitiateDrop(vaccineNum);
-
-                vaccineNum++;
+                DropVaccine();
                 vaccineDropTime += StaticVars.VACCINE_DROP_INTERVAL;
             }
         }
+    }
+
+    private void DropVaccine()
+    {
+        // drop vaccine;
+        GameObject plane = ObjectPoolManager.Instance.GetObject("Plane");
+        plane.GetComponent<Plane>().InitiateDrop(vaccineNum);
+
+        vaccineNum++;
     }
 }
