@@ -15,7 +15,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     // Singleton ����
     public static NetworkManager Instance;
-    public    Dictionary<string, string> codes = new Dictionary<string, string>();
 
     private void Awake()
     {
@@ -148,8 +147,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
+            isColloc = false;
+
             code = StaticFuncs.GeneratePlayerCode();
-            codes.Add(player.NickName, code);
+
             if (i == colloc)
             {
                 isColloc = true;
@@ -157,12 +158,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 properties.Add("CollocCode", code);
                 PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
             }
+
             PV.RPC("SetPlayer", player, isColloc, i);
-            i++; isColloc = false;
-
+            i++;
+            
             PV.RPC("SetUserClues", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code);
-
-            Debug.Log(player.NickName + code);
         }
 
         PV.RPC("SetOtherClues", RpcTarget.AllBuffered, randomCluePosition);
@@ -175,7 +175,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         double endTime = PhotonNetwork.Time + StaticVars.GAME_TIME;
-        PV.RPC("SetItems", RpcTarget.AllBuffered, codes, randomDropTime, randomDropPos, endTime);
+        PV.RPC("SetItems", RpcTarget.AllBuffered, randomDropTime, randomDropPos, endTime);
     }
 
     // Set where clue will spawn
@@ -215,9 +215,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     // Inform game item setting to all players (clue code, item time & position)
     [PunRPC]
-    public void SetItems(Dictionary<string, string> _codes, int _dropTime, Vector3[] _dropPos, double _endTime)
+    public void SetItems(int _dropTime, Vector3[] _dropPos, double _endTime)
     {
-        PlaySceneManager.SetGame(_codes, _dropTime, _dropPos, _endTime);
+        PlaySceneManager.SetGame(_dropTime, _dropPos, _endTime);
     }
 
     [PunRPC]

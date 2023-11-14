@@ -8,9 +8,42 @@ public class UIManager : MonoSingleton<UIManager>
     public GameObject CollocClueUI;
     public Canvas ClueUI;
 
-    private void Start()
+    [SerializeField] private GameObject[] gameIcon = new GameObject[4];
+
+    protected override void Awake()
     {
+        base.Awake();
+
         ClueUI.gameObject.SetActive(false);
+        for (int i = 0; i < gameIcon.Length; i++)
+        {
+            gameIcon[i].SetActive(false);
+        }
+    }
+
+    public void SetGameUI(string _status)
+    {
+        switch (_status) {
+            case "Colloc":
+                gameIcon[2].SetActive(true);
+                gameIcon[3].SetActive(false);
+                break;
+
+            case "Homes":
+                gameIcon[0].SetActive(true);
+                gameIcon[1].SetActive(false);
+                gameIcon[3].SetActive(true);
+                gameIcon[3].GetComponent<Image>().color = Color.white;
+                gameIcon[3].GetComponent<Button>().enabled = true;
+                break;
+
+            case "Infect":
+                gameIcon[0].SetActive(false);
+                gameIcon[1].SetActive(true);
+                gameIcon[3].GetComponent<Image>().color = Color.gray;
+                gameIcon[3].GetComponent<Button>().enabled = false;
+                break;
+        }
     }
 
     public void ChangeUserClueUIText(string _username, string _usercode, int _index)

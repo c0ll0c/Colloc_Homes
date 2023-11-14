@@ -2,6 +2,7 @@ using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 // game manage & photon communication script
 public class PlayManager : MonoSingleton<PlayManager>
@@ -22,8 +23,9 @@ public class PlayManager : MonoSingleton<PlayManager>
     public TimeManager TimeManager;
 
     public Vector3[] RandomDropPos;
+    public bool isVaccinated = false;
 
-    private int currentPlayer = 4;
+    //private int currentPlayer = 4;
     private int index;
     private int posIndex = 0;
     private int codeIndex = 0;
@@ -54,11 +56,20 @@ public class PlayManager : MonoSingleton<PlayManager>
     public void SpawnHomes(bool _isColloc, int _idx)
     {
         gamePlayer = PhotonNetwork.Instantiate("PhotonHomes", StaticVars.SpawnPosition[_idx], Quaternion.identity) as GameObject;
-        if (_isColloc) gamePlayer.tag = "Colloc";
-        else gamePlayer.tag = "Homes";
+
+        if (_isColloc)
+        {
+            gamePlayer.tag = "Colloc";
+            UIManager.Instance.SetGameUI("Colloc");
+        }
+        else
+        {
+            gamePlayer.tag = "Homes";
+            UIManager.Instance.SetGameUI("Homes");
+        }
     }
 
-    public void SetGame(Dictionary<string, string> _codes, int _dropTime, Vector3[] _dropPos, double _endTime)
+    public void SetGame(int _dropTime, Vector3[] _dropPos, double _endTime)
     {
         RandomDropPos = _dropPos;
         TimeManager.SetPlayTime(_endTime, _dropTime);

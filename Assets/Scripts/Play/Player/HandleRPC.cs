@@ -5,6 +5,10 @@ using TMPro;
 
 public class HandleRPC : MonoBehaviour
 {
+    public GameObject AttackEffect;
+    public GameObject InfectEffect;
+    public GameObject VaccineEffect;
+
     [SerializeField] private TextMeshProUGUI nickname;
     private SpriteRenderer spriter;
     private PhotonView pv;
@@ -20,14 +24,19 @@ public class HandleRPC : MonoBehaviour
     private void Start()
     {
         pv.RPC("SetNickname", RpcTarget.AllBuffered, pv.Owner.NickName);
+        AttackEffect.SetActive(false);
+        InfectEffect.SetActive(false);
+        VaccineEffect.SetActive(false);
+
         if (gameObject.CompareTag("Colloc"))
         {
             transform.GetChild(2).GetComponent<AttackController>().enabled = false;
         }
-        StartCoroutine(delayStart());
+
+        StartCoroutine(DelayStart());
     }
 
-    private IEnumerator delayStart()
+    private IEnumerator DelayStart()
     {
         yield return StaticFuncs.WaitForSeconds(3.0f);
         attackController = PlayManager.Instance.gamePlayer.transform.GetChild(2).GetComponent<AttackController>();
@@ -59,18 +68,21 @@ public class HandleRPC : MonoBehaviour
         {
             attackController.enabled = true;
             PlayManager.Instance.gamePlayer.tag = "Homes";
+            UIManager.Instance.SetGameUI("Homes");
         }
         else
         {
-            StartCoroutine(delayInfect());
+            StartCoroutine(DelayInfect());
         }
     }
 
-    private IEnumerator delayInfect()
+    private IEnumerator DelayInfect()
     {
         yield return StaticFuncs.WaitForSeconds(3.0f);
         attackController.enabled = false;
         PlayManager.Instance.gamePlayer.tag = "Infect";
+        UIManager.Instance.SetGameUI("Infect");
+        StartCoroutine(StaticFuncs.SetEffect(PlayManager.Instance.gamePlayer.GetComponent<HandleRPC>().InfectEffect));
     }
 
     // change player speed (attack)
@@ -78,12 +90,13 @@ public class HandleRPC : MonoBehaviour
     public void Attack()
     {
         homesController.SetSpeed(0);
-        StartCoroutine(resetSpeed());
+        StartCoroutine(StaticFuncs.SetEffect(PlayManager.Instance.gamePlayer.GetComponent<HandleRPC>().AttackEffect));
+        StartCoroutine(ResetSpeed());
     }
 
-    private IEnumerator resetSpeed()
+    private IEnumerator ResetSpeed()
     {
         yield return StaticFuncs.WaitForSeconds(3.0f);
-       homesController.SetSpeed(3.0f);
+        homesController.SetSpeed(3.0f);
     }
 }
