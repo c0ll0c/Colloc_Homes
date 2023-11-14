@@ -79,10 +79,19 @@ public class HandleRPC : MonoBehaviour
     private IEnumerator DelayInfect()
     {
         yield return StaticFuncs.WaitForSeconds(3.0f);
-        attackController.enabled = false;
-        PlayManager.Instance.gamePlayer.tag = "Infect";
-        UIManager.Instance.SetGameUI("Infect");
-        StartCoroutine(StaticFuncs.SetEffect(PlayManager.Instance.gamePlayer.GetComponent<HandleRPC>().InfectEffect));
+
+        if (PlayManager.Instance.isVaccinated)
+        {
+            PlayManager.Instance.gamePlayer.GetComponent<HandleRPC>().VaccineEffect.SetActive(false);
+            PlayManager.Instance.isVaccinated = false;
+        }
+        else
+        {
+            attackController.enabled = false;
+            PlayManager.Instance.gamePlayer.tag = "Infect";
+            UIManager.Instance.SetGameUI("Infect");
+            StartCoroutine(StaticFuncs.SetEffect(PlayManager.Instance.gamePlayer.GetComponent<HandleRPC>().InfectEffect));
+        }
     }
 
     // change player speed (attack)

@@ -28,6 +28,7 @@ public class HandleVaccine : PoolAble
         if (collision.collider.GetComponent<PhotonView>().IsMine)
         {
             PlayManager.Instance.isVaccinated = true;
+            PlayManager.Instance.gamePlayer.GetComponent<HandleRPC>().VaccineEffect.SetActive(true);
         }
 
         ReleaseObject();
