@@ -4,11 +4,10 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using System.Collections;
 
-
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     [SerializeField]
-    private byte maxPlayersPerRoom = 6;
+    private byte maxPlayersPerRoom = StaticVars.MAX_PLAYERS_PER_ROOM;
 
     public PhotonView PV;
 
@@ -33,8 +32,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
-    // ���� ������, Ȥ�� �ڷ� ���� ��ư���� Intro Scene���� �ٽ� �̵��� �� �Ҹ���
-    // PhotonView�� ���� ���� �� PhotonNetwork ���� ����
     public void DisconnectAndDestroy()
     {
         if (PhotonNetwork.IsConnected)
@@ -47,7 +44,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
-    // Master Server�� ���� �� lobby ����
     public void Connect()
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
@@ -65,9 +61,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         GameManager.Instance.ChangeScene(GameState.INTRO);
     }
 
-
-    // �⺻ ���ӷ�(readyscene) ����
-    // [TODO] ���Ŀ� �� ���� / �� ��� ���� �� ������ ���� ����
+    #region SET LOBBY SCENE
     public void JoinDefaultRoom()
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
@@ -80,18 +74,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         };
         PhotonNetwork.JoinOrCreateRoom("gameroom", roomOptions, TypedLobby.Default);
     }
-
+    #endregion
+    #region SET READY SCENE
     public override void OnJoinedRoom()
     {
         GameManager.Instance.ChangeScene(GameState.READY);
         PV.RPC("SyncPlayersData", RpcTarget.OthersBuffered);
     }
 
-
-    // ReadySceneManager ����
     public ReadyManager ReadySceneManager;
-
-    // PlayerData ���� �ø��� ReadyScene(or PlayScene)�� Manager Call
     [PunRPC]
     public void SyncPlayersData()
     {
@@ -131,9 +122,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
-            object IsReady;
             // Check if player is ready
-            if (!player.IsMasterClient && player.CustomProperties.TryGetValue("IsReady", out IsReady))
+            if (!player.IsMasterClient && player.CustomProperties.TryGetValue("IsReady", out object IsReady))
             {
                 if ((bool)IsReady == false) return;
             }
@@ -142,8 +132,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         PhotonNetwork.LoadLevel("PlayScene");
     }
-
-
+    #endregion
+    #region SET PLAY SCENE
     // PlaySceneManager
     public PlayManager PlaySceneManager;
 
@@ -182,8 +172,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             randomDropPos[i] = SetDropPos();
         }
 
-        // [TODO] add codes and Nickname to clue
-        PV.RPC("SetItems", RpcTarget.AllBuffered, codes, randomDropTime, randomDropPos);
+        double endTime = PhotonNetwork.Time + StaticVars.GAME_TIME;
+        PV.RPC("SetItems", RpcTarget.AllBuffered, codes, randomDropTime, randomDropPos, endTime);
     }
 
     // Set where clue will spawn
@@ -206,7 +196,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // Set where item will drop
     private Vector3 SetDropPos()
     {
-        Vector3 randomDropPos = new Vector3(UnityEngine.Random.Range(-3f, 10f), UnityEngine.Random.Range(-8f, 17f), 0f);
+        Vector3 randomDropPos = new Vector3(Random.Range(-3f, 10f), Random.Range(-8f, 17f), 0f);
         if (StaticFuncs.CheckOnWall(randomDropPos))
         {
             return SetDropPos();
@@ -223,9 +213,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     // Inform game item setting to all players (clue code, item time & position)
     [PunRPC]
-    public void SetItems(Dictionary<string, string> _codes, int _dropTime, Vector3[] _dropPos)
+    public void SetItems(Dictionary<string, string> _codes, int _dropTime, Vector3[] _dropPos, double _endTime)
     {
-        PlaySceneManager.SetGame(_codes, _dropTime, _dropPos);
+        PlaySceneManager.SetGame(_codes, _dropTime, _dropPos, _endTime);
     }
 
     [PunRPC]
@@ -261,4 +251,24 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(15.0f);
         clue.IsHidden = false;
     }
+    #endregion
+
+    #region MANAGE GAME PLAY
+    public void SyncDetox(int _index) 
+    {
+        PV.RPC("DeactivateDetox", RpcTarget.All, _index);
+    }
+    [PunRPC]
+    public void DeactivateDetox(int _index)
+    {
+        PlaySceneManager.UseOrDeactivateDetox(_index);
+    }
+    #endregion
+
+    #region SERVER UTILS
+    public double GetServerTime()
+    {
+        return PhotonNetwork.Time;
+    }
+    #endregion
 }
