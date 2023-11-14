@@ -151,7 +151,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void GameSetting()
     {
         int i = 0;
-        int colloc = UnityEngine.Random.Range(0, PhotonNetwork.CurrentRoom.PlayerCount + 1);
+        int colloc = UnityEngine.Random.Range(0, PhotonNetwork.CurrentRoom.PlayerCount);
         bool isColloc = false;
         string code;
         Vector2[] randomCluePosition = ShufflePosition(StaticVars.CluePosition);
@@ -171,8 +171,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             i++; isColloc = false;
 
             PV.RPC("SetUserClues", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code);
-
-            Debug.Log(player.NickName + code);
         }
 
         PV.RPC("SetOtherClues", RpcTarget.AllBuffered, randomCluePosition);
@@ -183,7 +181,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             randomDropPos[i] = SetDropPos();
         }
-
 
         // [TODO] add codes and Nickname to clue
         PV.RPC("SetItems", RpcTarget.AllBuffered, codes, randomDropTime, randomDropPos);

@@ -59,7 +59,7 @@ public class HandleClue : MonoBehaviour
             else if (clue.ClueType == ClueType.CODE)                // Colloc's code
             {
                 string collocCode = PhotonNetwork.CurrentRoom.CustomProperties["CollocCode"].ToString();
-                UIManager.Instance.ChangeCodeClueUIText(collocCode[clue.TypeIndex], clue.TypeIndex);
+                UIManager.Instance.ChangeCodeClueUIText(collocCode[clue.TypeIndex]);
 
                 StartCoroutine(UnactivePanel(1));
             }
@@ -84,6 +84,7 @@ public class HandleClue : MonoBehaviour
         if (!clue.IsHidden)
         {
             NetworkManager.Instance.PV.RPC("SyncHiddenCode", RpcTarget.AllBuffered, clue.Index);
+            UIManager.Instance.ChangeClueStatusUIText("´Ü¼­ ¼û±è!");
 
             StartCoroutine(UnactivePanel(2));
         }

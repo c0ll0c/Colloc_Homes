@@ -13,9 +13,6 @@ public class HomesController : MonoBehaviour
     private PhotonView pv;
     private Rigidbody2D rigid;
     private Animator anim;
-    public GameObject ClueGetButton;
-    public GameObject ClueHideButton;
-    private Clue clue;
 
     private void Awake()
     {
