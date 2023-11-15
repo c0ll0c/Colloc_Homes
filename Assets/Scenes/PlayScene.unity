@@ -16627,7 +16627,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1466019604}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: CollocToUser
         m_Mode: 1
@@ -24650,7 +24650,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1466019604}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: ShowClueUI
         m_Mode: 1
@@ -25419,7 +25419,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1466019604}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: OnClickDoneButton
         m_Mode: 1
@@ -39756,7 +39756,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1466019604}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: UserToColloc
         m_Mode: 1
