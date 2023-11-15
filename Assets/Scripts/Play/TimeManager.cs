@@ -1,10 +1,14 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TimeManager : MonoBehaviour
 {
     public GameObject TimeCanvasObj;
     private TimeCanvasUI timeCanvas;
+
+    [SerializeField] private Image cooltimeBar;
+    private bool attackActivated = false;
 
     private double gameLeftTime;
     private double vaccineDropTime;
@@ -51,5 +55,19 @@ public class TimeManager : MonoBehaviour
         plane.GetComponent<Plane>().InitiateDrop(vaccineNum);
 
         vaccineNum++;
+    }
+
+    public bool IsAttackActivated()
+    {
+        if (attackActivated) return true;
+        attackActivated = true;
+        StartCoroutine(AttackCoolTime());
+        return false;
+    }
+
+    private IEnumerator AttackCoolTime()
+    {
+        yield return StaticFuncs.WaitForSeconds(15.0f);
+        attackActivated = false;
     }
 }

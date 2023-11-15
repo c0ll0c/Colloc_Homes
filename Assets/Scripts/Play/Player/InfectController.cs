@@ -43,7 +43,8 @@ public class InfectController : MonoBehaviour
         if (hit.collider == null) return;
         if (hit.collider != _collider) return;
 
-        //attackActivated = true;
+        if (PlayManager.Instance.TimeManager.IsAttackActivated()) return;
+        StartCoroutine(StaticFuncs.SetEffect(hit.collider.GetComponentInParent<HandleRPC>().InfectEffect));
         Photon.Realtime.Player targetPlayer = hit.collider.GetComponentInParent<PhotonView>().Owner;
         pv.RPC("ChangeStatus", targetPlayer, "Infect");
     }

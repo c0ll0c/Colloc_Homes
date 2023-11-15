@@ -86,17 +86,14 @@ namespace Photon.Pun
         //"this variable is never used" warning, which I am suppressing here
         #pragma warning disable 0414
 
-        [HideInInspector]
         [SerializeField]
         private bool ShowLayerWeightsInspector = true;
 
-        [HideInInspector]
         [SerializeField]
         private bool ShowParameterInspector = true;
 
         #pragma warning restore 0414
 
-        [HideInInspector]
         [SerializeField]
         private List<SynchronizedParameter> m_SynchronizeParameters = new List<SynchronizedParameter>();
 

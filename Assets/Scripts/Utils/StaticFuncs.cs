@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -76,5 +77,13 @@ public static class StaticFuncs
             _WaitForSeconds.Add(_seconds, wfs = new WaitForSeconds(_seconds));
         }
         return wfs;
+    }
+
+    // player effect
+    public static IEnumerator SetEffect(GameObject effect)
+    {
+        effect.SetActive(true);
+        yield return StaticFuncs.WaitForSeconds(3.0f);
+        effect.SetActive(false);
     }
 }
