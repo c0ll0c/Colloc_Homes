@@ -161,8 +161,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             i++; isColloc = false;
 
             PV.RPC("SetUserClues", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code);
-
-            Debug.Log(player.NickName + code);
         }
 
         PV.RPC("SetOtherClues", RpcTarget.AllBuffered, randomCluePosition);
