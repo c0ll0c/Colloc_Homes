@@ -13,9 +13,7 @@ public class PlayManager : MonoSingleton<PlayManager>
     public Tilemap[] LayerWall;
     public GameObject CluePrefab;
     public GameObject[] ClueInstances = new GameObject[16];
-    public GameObject[] CodeClueInstances = new GameObject[5];
-    public GameObject[] UserClueInstances = new GameObject[4];
-    public GameObject[] FakeClueInstances = new GameObject[4];
+
 
     public GameObject DetoxObj;
     private HandleDetox[] detoxHandlers = new HandleDetox[2];
@@ -26,7 +24,10 @@ public class PlayManager : MonoSingleton<PlayManager>
     public bool isVaccinated = false;
 
     //private int currentPlayer = 4;
-    private int index;
+    private GameObject[] CodeClueInstances = new GameObject[5];
+    private GameObject[] UserClueInstances = new GameObject[6];
+    private GameObject[] FakeClueInstances = new GameObject[4];
+    private int index = 0;
     private int posIndex = 0;
     private int codeIndex = 0;
     private int userIndex = 0;
@@ -106,26 +107,23 @@ public class PlayManager : MonoSingleton<PlayManager>
         }
     }
 
-    public void MakeUserClueInstance(Vector2[] position, ClueType clueType, int N, string _nickname, string _code)
+    public void MakeUserClueInstance(Vector2[] position, ClueType clueType, string _nickname, string _code)
     {
-        for (int i = 0; i < N; i++)
+        GameObject myInstance = Instantiate(CluePrefab);     
+        myInstance.transform.position = position[posIndex];           
+        myInstance.transform.SetParent(ObjectManager.transform);              
+        HandleClue hc = myInstance.GetComponent<HandleClue>();
+        posIndex++;
+
+        if (clueType == ClueType.USER)
         {
-            GameObject myInstance = Instantiate(CluePrefab);     
-            myInstance.transform.position = position[posIndex];           
-            myInstance.transform.SetParent(ObjectManager.transform);              
-            HandleClue hc = myInstance.GetComponent<HandleClue>();
-            posIndex++;
-
-            if (clueType == ClueType.USER)
-            {
-                hc.MakeClue(clueType, index, userIndex, _nickname, _code);
-                CodeClueInstances[userIndex] = myInstance;
-                userIndex++;
-            }
-
-            ClueInstances[index] = myInstance;
-            index++;
+            hc.MakeClue(clueType, index, userIndex, _nickname, _code);
+            UserClueInstances[userIndex] = myInstance;
+            userIndex++;
         }
+
+        ClueInstances[index] = myInstance;
+        index++;
     }
     
     private void OnDestroy()

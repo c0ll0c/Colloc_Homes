@@ -65,13 +65,13 @@ public class HandleClue : MonoBehaviour
 
         if (clue.IsGot && !clue.IsHidden)
         {
-            UIManager.Instance.ChangeClueStatusUIText("ï¿½Ì¹ï¿½ È¹ï¿½ï¿½ï¿½ï¿½ ï¿½Ü¼ï¿½!");
+            UIManager.Instance.ChangeClueStatusUIText("ÀÌ¹Ì È¹µæÇÑ ´Ü¼­!");
 
             StartCoroutine(UnactivePanel(2));
         }
         else if (clue.IsHidden)
         {
-            UIManager.Instance.ChangeClueStatusUIText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ü¼ï¿½!");
+            UIManager.Instance.ChangeClueStatusUIText("¼û°ÜÁø ´Ü¼­!");
 
             StartCoroutine(UnactivePanel(2));
         }
@@ -89,7 +89,7 @@ public class HandleClue : MonoBehaviour
 
         else
         {
-            UIManager.Instance.ChangeClueStatusUIText("ï¿½ï¿½ï¿½ï¿½ ï¿½Ü¼ï¿½!");
+            UIManager.Instance.ChangeClueStatusUIText("¼û±ä ´Ü¼­!");
             StartCoroutine(UnactivePanel(2));
         }
     }

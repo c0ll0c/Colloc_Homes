@@ -29,7 +29,8 @@ public class UIManager : MonoSingleton<UIManager>
 
     public void SetGameUI(string _status)
     {
-        switch (_status) {
+        switch (_status)
+        {
             case "Colloc":
                 gameIcon[2].SetActive(true);
                 gameIcon[3].SetActive(false);
@@ -49,6 +50,7 @@ public class UIManager : MonoSingleton<UIManager>
                 gameIcon[3].GetComponent<Image>().color = Color.gray;
                 gameIcon[3].GetComponent<Button>().enabled = false;
                 break;
+        }
     }
 
     public void ChangeUserClueUIText(string _username, string _usercode, int _index)
