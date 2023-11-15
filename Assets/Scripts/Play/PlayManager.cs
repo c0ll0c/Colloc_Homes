@@ -2,30 +2,38 @@ using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 // game manage & photon communication script
 public class PlayManager : MonoSingleton<PlayManager>
 {
     public GameObject ObjectManager;
+    public GameObject gamePlayer;
     public Tilemap[] LayerGrass;
     public Tilemap[] LayerWall;
     public GameObject CluePrefab;
     public GameObject[] ClueInstances = new GameObject[16];
-    public GameObject[] CodeClueInstances = new GameObject[5];
-    public GameObject[] UserClueInstances = new GameObject[4];
-    public GameObject[] FakeClueInstances = new GameObject[4];
 
-    private bool gameReady = false;
-    private int randomDropTime;
-    private Vector3[] randomDropPos;
-    private int dropNum = 0;
-    private float time = 0f;
-    private int currentPlayer = 4;
-    private int index;
-    private int layerNum;
+
+    public GameObject DetoxObj;
+    private HandleDetox[] detoxHandlers = new HandleDetox[2];
+
+    public TimeManager TimeManager;
+
+    public Vector3[] RandomDropPos;
+    public bool isVaccinated = false;
+
+    //private int currentPlayer = 4;
+    private GameObject[] CodeClueInstances = new GameObject[5];
+    private GameObject[] UserClueInstances = new GameObject[6];
+    private GameObject[] FakeClueInstances = new GameObject[4];
+    private int index = 0;
+    private int posIndex = 0;
     private int codeIndex = 0;
     private int userIndex = 0;
     private int fakeIndex = 0;
+
+    // private double gameEndTime;
 
     protected override void Awake()
     {
@@ -33,7 +41,7 @@ public class PlayManager : MonoSingleton<PlayManager>
 
         NetworkManager.Instance.PlaySceneManager = this;
         GameManager.Instance.EnterGame();
-
+        
         if (PhotonNetwork.IsMasterClient)
         {
             NetworkManager.Instance.GameSetting();
@@ -43,112 +51,88 @@ public class PlayManager : MonoSingleton<PlayManager>
     // [TODO] Syncronize Make Clue Instace exclude ShufflePosition : Move to GameSetting
     private void Start()
     {
-        ShufflePosition(StaticVars.cluePosition_layer1);
-        ShufflePosition(StaticVars.cluePosition_layer2);
-
-        // layer 1
-        layerNum = 0;
-        MakeClueInstance(StaticVars.cluePosition_layer1, ClueType.FAKE, 2, "Layer 1");
-        MakeClueInstance(StaticVars.cluePosition_layer1, ClueType.CODE, 3, "Layer 1");
-        MakeClueInstance(StaticVars.cluePosition_layer1, ClueType.USER, currentPlayer/2, "Layer 1");
-
-        // layer 2
-        layerNum = 0;
-        MakeClueInstance(StaticVars.cluePosition_layer2, ClueType.FAKE, 2, "Layer 2");
-        MakeClueInstance(StaticVars.cluePosition_layer2, ClueType.CODE, 2, "Layer 2");
-        MakeClueInstance(StaticVars.cluePosition_layer2, ClueType.USER, currentPlayer/2, "Layer 2");
-    }
-
-    private void Update()
-    {
-        if (!gameReady) return;
-
-        time += Time.deltaTime;
-
-        if(dropNum < 3 && time > randomDropTime)
-        {
-            var plane = ObjectPoolManager.Instance.GetObject("Plane");
-            plane.transform.position = new Vector3(25.0f, randomDropPos[dropNum].y, 0f);
-            plane.GetComponent<Plane>().dropPos = randomDropPos[dropNum];
-
-            dropNum++;
-            randomDropTime += 60;
-        }
+        detoxHandlers = DetoxObj.GetComponentsInChildren<HandleDetox>();
     }
 
     public void SpawnHomes(bool _isColloc, int _idx)
     {
-        GameObject gamePlayer = PhotonNetwork.Instantiate("PhotonHomes", StaticVars.SpawnPosition[_idx], Quaternion.identity) as GameObject;
-        if (_isColloc) gamePlayer.tag = "Colloc";
-    }
+        gamePlayer = PhotonNetwork.Instantiate("PhotonHomes", StaticVars.SpawnPosition[_idx], Quaternion.identity) as GameObject;
 
-    public void SetGame(Dictionary<string, string> _codes, int _dropTime, Vector3[] _dropPos)
-    {
-        randomDropTime = _dropTime;
-        randomDropPos = _dropPos;
-        gameReady = true;
-    }
-
-    private void ShufflePosition(Vector2[] _position)
-    {
-        System.Random rand = new System.Random();
-
-        for (int i = _position.Length - 1; i > 0; i--)
+        if (_isColloc)
         {
-            int index = rand.Next(i + 1);
-
-            Vector2 temp = _position[index];
-            _position[index] = _position[i];
-            _position[i] = temp;
+            gamePlayer.tag = "Colloc";
+            UIManager.Instance.SetGameUI("Colloc");
+        }
+        else
+        {
+            gamePlayer.tag = "Homes";
+            UIManager.Instance.SetGameUI("Homes");
         }
     }
 
-    void MakeClueInstance(Vector2[] position, ClueType clueType, int N, string Layer)
+    public void SetGame(int _dropTime, Vector3[] _dropPos, double _endTime)
+    {
+        RandomDropPos = _dropPos;
+        TimeManager.SetPlayTime(_endTime, _dropTime);
+    }
+
+    public void MakeOtherClueInstance(Vector2[] position, ClueType clueType, int N)
     {
         for (int i = 0; i < N; i++)
         {
             GameObject myInstance = Instantiate(CluePrefab);     
-            myInstance.transform.position = position[layerNum];           
-            myInstance.layer = LayerMask.NameToLayer(Layer);     
-            myInstance.GetComponent<SpriteRenderer>().sortingLayerName = Layer;
+            myInstance.transform.position = position[posIndex];           
             myInstance.transform.SetParent(ObjectManager.transform);              
-            HandleClue hc = myInstance.GetComponent<HandleClue>(); 
-            layerNum++;
+            HandleClue hc = myInstance.GetComponent<HandleClue>();
+            posIndex++;
 
             if (clueType == ClueType.CODE)
             {
-                hc.MakeClue(clueType, index, codeIndex);
+                hc.MakeClue(clueType, index, codeIndex, " ", " ");
 
                 CodeClueInstances[codeIndex] = myInstance;
                 codeIndex++;
-                Debug.Log("code" + codeIndex);
-            }
-
-            else if (clueType == ClueType.USER)
-            {
-                hc.MakeClue(clueType, index, userIndex);
-
-                UserClueInstances[userIndex] = myInstance;
-                userIndex++;
-                Debug.Log("user" + userIndex);
             }
 
             else if (clueType == ClueType.FAKE)
             {
-                hc.MakeClue(clueType, index, fakeIndex);
+                hc.MakeClue(clueType, index, fakeIndex, " ", " ");
 
                 FakeClueInstances[fakeIndex] = myInstance;
                 fakeIndex++;
-                Debug.Log("user" + userIndex);
             }
 
             ClueInstances[index] = myInstance;
             index++;
         }
     }
+
+    public void MakeUserClueInstance(Vector2[] position, ClueType clueType, string _nickname, string _code)
+    {
+        GameObject myInstance = Instantiate(CluePrefab);     
+        myInstance.transform.position = position[posIndex];           
+        myInstance.transform.SetParent(ObjectManager.transform);              
+        HandleClue hc = myInstance.GetComponent<HandleClue>();
+        posIndex++;
+
+        if (clueType == ClueType.USER)
+        {
+            hc.MakeClue(clueType, index, userIndex, _nickname, _code);
+            UserClueInstances[userIndex] = myInstance;
+            userIndex++;
+        }
+
+        ClueInstances[index] = myInstance;
+        index++;
+    }
     
     private void OnDestroy()
     {
         NetworkManager.Instance.PlaySceneManager = null;
+    }
+
+    public void UseOrDeactivateDetox(int _index)
+    {
+        detoxHandlers[_index-1].UseOrDeactivate();
     }
 }

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 // vaccine function script
@@ -22,9 +23,15 @@ public class HandleVaccine : PoolAble
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("Homes"))
+        if (collision.collider.CompareTag("Untagged")) return;
+
+        if (collision.collider.GetComponent<PhotonView>().IsMine)
         {
-            ReleaseObject();
+            PlayManager.Instance.isVaccinated = true;
+            PlayManager.Instance.gamePlayer.GetComponent<HandleRPC>().VaccineEffect.SetActive(true);
         }
+
+        ReleaseObject();
+   
     }
 }

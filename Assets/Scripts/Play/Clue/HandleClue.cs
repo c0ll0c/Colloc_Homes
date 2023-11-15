@@ -1,34 +1,45 @@
 using UnityEngine;
 using System.Collections;
+using Photon.Pun;
 
 public class HandleClue : MonoBehaviour
 {
-    private Clue clue;
+    public Clue clue;
     public GameObject ClueGetButton;
     public GameObject ClueHideButton;
+
+    private void Start()
+    {
+        StaticFuncs.SpriteRendering(gameObject);
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Homes") && clue.ClueType != ClueType.FAKE)
         {
-            ClueGetButton.SetActive(true);
+            if (collision.gameObject.GetComponent<PhotonView>().IsMine)
+                ClueGetButton.SetActive(true);
         }
 
         if (collision.gameObject.CompareTag("Colloc") && clue.ClueType != ClueType.FAKE)
         {
-            ClueHideButton.SetActive(true);
+            if (collision.gameObject.GetComponent<PhotonView>().IsMine)
+                ClueHideButton.SetActive(true);
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        ClueGetButton.SetActive(false);
-        ClueHideButton.SetActive(false);
+        if (collision.gameObject.GetComponent<PhotonView>().IsMine)
+        {
+            ClueGetButton.SetActive(false);
+            ClueHideButton.SetActive(false);
+        }
     }
 
-    public void MakeClue(ClueType _clueType, int _index, int _typeIndex)
+    public void MakeClue(ClueType _clueType, int _index, int _typeIndex, string _nickname, string _code)
     {
-        clue = new Clue(_clueType, _index, _typeIndex);
+        clue = new Clue(_clueType, _index, _typeIndex, _nickname, _code);
     }
 
     public void GetClue()
@@ -37,15 +48,16 @@ public class HandleClue : MonoBehaviour
         {
             if (clue.ClueType == ClueType.USER)
             {
-                UIManager.Instance.ChangeUserClueUIText("User Name: " + clue.TypeIndex,
-                     "User Code: " + clue.TypeIndex, clue.TypeIndex);
-                
+                UIManager.Instance.ChangeUserClueUIText(clue.UserNickName,
+                     clue.UserCode, clue.TypeIndex);
+
                 StartCoroutine(UnactivePanel(0));
             }
 
-            else if (clue.ClueType == ClueType.CODE)
+            else if (clue.ClueType == ClueType.CODE)                // Colloc's code
             {
-                UIManager.Instance.ChangeCodeClueUIText("Code " + clue.TypeIndex, clue.TypeIndex);
+                string collocCode = PhotonNetwork.CurrentRoom.CustomProperties["CollocCode"].ToString();
+                UIManager.Instance.ChangeCodeClueUIText(collocCode[clue.TypeIndex]);
 
                 StartCoroutine(UnactivePanel(1));
             }
@@ -67,13 +79,19 @@ public class HandleClue : MonoBehaviour
 
     public void HideClue()
     {
-        UIManager.Instance.ChangeClueStatusUIText("´Ü¼­ ¼û±è!");
+        if (!clue.IsHidden)
+        {
+            NetworkManager.Instance.PV.RPC("SyncHiddenCode", RpcTarget.AllBuffered, clue.Index);
+            UIManager.Instance.ChangeClueStatusUIText("´Ü¼­ ¼û±è!");
 
-        // [TODO] connect NetworkManager.cs in Runtime -> ÁÖ¼® ÇØÁ¦
-        // NetworkManager.Instance.PV.RPC("SyncHiddenCode", Photon.Pun.RpcTarget.Other, PlayManager.Instance.ClueInstances[indexOfClueInstance].GetComponent<HandleClue>().clue.IsHidden, true);
-        clue.IsHidden = true;
+            StartCoroutine(UnactivePanel(2));
+        }
 
-        StartCoroutine(UnactivePanel(2));
+        else
+        {
+            UIManager.Instance.ChangeClueStatusUIText("¼û±ä ´Ü¼­!");
+            StartCoroutine(UnactivePanel(2));
+        }
     }
 
     private WaitForSeconds waitFor1Sec = new WaitForSeconds(1.0f);
