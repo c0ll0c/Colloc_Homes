@@ -7,6 +7,7 @@ public class UIManager : MonoSingleton<UIManager>
     public GameObject UserClueUI;
     public GameObject CollocClueUI;
     public Canvas ClueUI;
+    private int i = 0;
 
     [SerializeField] private GameObject[] gameIcon = new GameObject[4];
 
@@ -18,6 +19,11 @@ public class UIManager : MonoSingleton<UIManager>
         for (int i = 0; i < gameIcon.Length; i++)
         {
             gameIcon[i].SetActive(false);
+        }
+        
+        for(int i = 0; i < 5; i++)
+        {
+            CollocClueUI.transform.GetChild(0).GetChild(i).gameObject.SetActive(false);
         }
     }
 
@@ -43,7 +49,6 @@ public class UIManager : MonoSingleton<UIManager>
                 gameIcon[3].GetComponent<Image>().color = Color.gray;
                 gameIcon[3].GetComponent<Button>().enabled = false;
                 break;
-        }
     }
 
     public void ChangeUserClueUIText(string _username, string _usercode, int _index)
@@ -56,10 +61,13 @@ public class UIManager : MonoSingleton<UIManager>
         CluePanelCanvas.GetChild(0).gameObject.SetActive(true);
     }
 
-    public void ChangeCodeClueUIText(char _usercode, int _index)
+    public void ChangeCodeClueUIText(char _usercode)
     {
         CluePanelCanvas.GetChild(1).GetChild(0).GetComponent<Text>().text = _usercode.ToString();
-        CollocClueUI.transform.GetChild(0).GetChild(_index).GetChild(0).GetComponent<Text>().text = _usercode.ToString();
+        CollocClueUI.transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
+        CollocClueUI.transform.GetChild(0).GetChild(i).GetChild(0).GetComponent<Text>().text = _usercode.ToString();
+
+        i++;
 
         CluePanelCanvas.GetChild(1).gameObject.SetActive(true);
     }
