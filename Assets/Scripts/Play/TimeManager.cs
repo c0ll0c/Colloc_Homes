@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TimeManager : MonoBehaviour
 {
@@ -10,7 +9,7 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private GameObject coolTimeUI;
     private bool attackActivated = false;
 
-    private double gameLeftTime;
+    private double gameLeftTime = 0;
     private double vaccineDropTime;
     private int vaccineNum = 0;
 
@@ -19,38 +18,29 @@ public class TimeManager : MonoBehaviour
         timeCanvas = TimeCanvasObj.GetComponent<TimeCanvasUI>();
     }
 
-    public void SetPlayTime(double _time, double _dropTime)
+    private void Update()
     {
-        gameLeftTime = _time - NetworkManager.Instance.GetServerTime();
-        vaccineDropTime = _dropTime;
-        StartCoroutine(ManageGameTime());
+        if (gameLeftTime <= 0) return;
+        gameLeftTime -= Time.deltaTime;
+        timeCanvas.SetTime(gameLeftTime);
+        vaccineDropTime -= Time.deltaTime;
+        if (vaccineNum < 3 && vaccineDropTime < 0)
+        {
+            DropVaccine();
+            vaccineDropTime += StaticVars.VACCINE_DROP_INTERVAL;
+        }
     }
 
-    private static readonly float enumTime = 0.5f;
-    private readonly WaitForSecondsRealtime halfSec = new WaitForSecondsRealtime(enumTime);
-    IEnumerator ManageGameTime()
+    public void SetPlayTime(double _time, double _dropTime)
     {
-        while (gameLeftTime > 0)
-        {
-            yield return halfSec;
+        vaccineDropTime = _dropTime;
 
-            // Manage Total Game Time
-            gameLeftTime -= enumTime;
-            timeCanvas.SetTime(gameLeftTime);
-
-            // Manage Vaccine Drop Time
-            vaccineDropTime -= enumTime;
-            if (vaccineNum < 3 && vaccineDropTime < 0)
-            {
-                DropVaccine();
-                vaccineDropTime += StaticVars.VACCINE_DROP_INTERVAL;
-            }
-        }
+        gameLeftTime = _time - NetworkManager.Instance.GetServerTime();
     }
 
     private void DropVaccine()
     {
-        // drop vaccine;
+        // drop vaccine
         GameObject plane = ObjectPoolManager.Instance.GetObject("Plane");
         plane.GetComponent<Plane>().InitiateDrop(vaccineNum);
 

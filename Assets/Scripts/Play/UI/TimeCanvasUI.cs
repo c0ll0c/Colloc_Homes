@@ -10,7 +10,7 @@ public class TimeCanvasUI : MonoBehaviour
         MainTimer.text = FormatTime((int)_time);
     }
 
-    public string FormatTime(int _time)
+    private string FormatTime(int _time)
     {
         return string.Format("{0:0}:{1:00}", _time / 60, _time % 60);
     }
