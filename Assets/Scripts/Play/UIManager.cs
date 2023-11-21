@@ -3,10 +3,14 @@ using UnityEngine.UI;
 
 public class UIManager : MonoSingleton<UIManager>
 {
-    public Transform CluePanelCanvas;
+    public Transform[] CluePanelCanvas = new Transform[3];             // 탐정 카드, 코드 조각, 상태 표시
     public GameObject UserClueUI;
     public GameObject CollocClueUI;
+    public Transform UserInfo;
+    public Transform CodeInfo;
     public Canvas ClueUI;
+    public Sprite[] playerSprite;
+
     private int i = 0;
 
     [SerializeField] private GameObject[] gameIcon = new GameObject[5];
@@ -23,7 +27,7 @@ public class UIManager : MonoSingleton<UIManager>
         
         for(int i = 0; i < 5; i++)
         {
-            CollocClueUI.transform.GetChild(0).GetChild(i).gameObject.SetActive(false);
+            CodeInfo.GetChild(i).gameObject.SetActive(false);
         }
     }
 
@@ -56,36 +60,72 @@ public class UIManager : MonoSingleton<UIManager>
         }
     }
 
-    public void ChangeUserClueUIText(string _username, string _usercode, int _index)
+    public void ChangeUserClueUIText(string _username, string _usercode, int _index, string _color)
     {
-        CluePanelCanvas.GetChild(0).GetChild(0).GetComponent<Text>().text = _username;
-        CluePanelCanvas.GetChild(0).GetChild(1).GetComponent<Text>().text = _usercode;
-        UserClueUI.transform.GetChild(0).GetChild(_index).GetChild(0).GetComponent<Text>().text = _username;
-        UserClueUI.transform.GetChild(0).GetChild(_index).GetChild(1).GetComponent<Text>().text = _usercode;
+        Image cardSourceImage = CluePanelCanvas[0].GetChild(2).GetChild(0).GetComponent<Image>();
 
-        CluePanelCanvas.GetChild(0).gameObject.SetActive(true);
+        // 단서 보기 눌렀을 때 나오는 탐정 카드
+        CluePanelCanvas[0].GetChild(0).GetComponent<Text>().text = _username;
+        CluePanelCanvas[0].GetChild(1).GetComponent<Text>().text = _usercode;
+
+        UserInfo.GetChild(_index).GetChild(1).GetComponent<Text>().text = _usercode;        // 얘만 해 줘도 되게끔
+
+        switch (_color)
+        {
+            case "Brown":
+                cardSourceImage.sprite = playerSprite[0];
+                break;
+            case "Blue":
+                cardSourceImage.sprite = playerSprite[1];
+                break;
+            case "Gray":
+                cardSourceImage.sprite = playerSprite[2];
+                break;
+            case "Green":
+                cardSourceImage.sprite = playerSprite[3];
+                break;
+            case "Orange":
+                cardSourceImage.sprite = playerSprite[4];
+                break;
+            case "Pink":
+                cardSourceImage.sprite = playerSprite[5];
+                break;
+            case "Purple":
+                cardSourceImage.sprite = playerSprite[6];
+                break;
+            case "Yellow":
+                cardSourceImage.sprite = playerSprite[7];
+                break;
+        }
+
+        CluePanelCanvas[0].gameObject.SetActive(true);
     }
 
     public void ChangeCodeClueUIText(char _usercode)
     {
-        CluePanelCanvas.GetChild(1).GetChild(0).GetComponent<Text>().text = _usercode.ToString();
-        CollocClueUI.transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
-        CollocClueUI.transform.GetChild(0).GetChild(i).GetChild(0).GetComponent<Text>().text = _usercode.ToString();
+        // 단서 보기 눌렀을 때 나오는 단서 조각
+        CluePanelCanvas[1].GetChild(0).GetComponent<Text>().text = _usercode.ToString();
 
-        i++;
+        // gameUI 버튼 눌렀을 때 나오는 collocInfo 동기화 (get)
+        CodeInfo.GetChild(i).gameObject.SetActive(true);
+        CodeInfo.GetChild(i).GetChild(0).GetComponent<Text>().text = _usercode.ToString();
 
-        CluePanelCanvas.GetChild(1).gameObject.SetActive(true);
+        if(i!=5) i++;
+
+        CluePanelCanvas[1].gameObject.SetActive(true);
     }
 
     public void ChangeClueStatusUIText(string _status)
     {
-        CluePanelCanvas.GetChild(2).GetChild(0).GetComponent<Text>().text = _status;
-        CluePanelCanvas.GetChild(2).gameObject.SetActive(true);
+        // 숨김, 이미 본 단서, 숨긴 단서 등 상태 표시
+        CluePanelCanvas[2].GetChild(0).GetComponent<Text>().text = _status;
+        CluePanelCanvas[2].gameObject.SetActive(true);
     }
 
     public void UnactivePanel(int _index)
     {
-        CluePanelCanvas.GetChild(_index).gameObject.SetActive(false);
+        // 단서 프리팹에 붙어 있는 버튼 눌렀을 때 뜬 판넬 false
+        CluePanelCanvas[_index].gameObject.SetActive(false);
     }
 
     public void UserToColloc()
@@ -102,11 +142,13 @@ public class UIManager : MonoSingleton<UIManager>
 
     public void ShowClueUI()
     {
-        for (int i = NetworkManager._currentPlayer; i < 6; i++)
+
+        for (int i = 0; i < NetworkManager._currentPlayer; i++)
         {
-            ClueUI.transform.GetChild(0).GetChild(0).GetChild(i).gameObject.SetActive(false);
+            UserInfo.GetChild(i).gameObject.SetActive(true);
         }
 
+        // gameUI 단서 수첩 버튼 눌렀을 때 UI가 보이게
         ClueUI.gameObject.SetActive(true);
         UserClueUI.SetActive(true);
         CollocClueUI.SetActive(false);

@@ -14,7 +14,6 @@ public class PlayManager : MonoSingleton<PlayManager>
     public GameObject CluePrefab;
     public GameObject[] ClueInstances = new GameObject[16];
 
-
     public GameObject DetoxObj;
     private HandleDetox[] detoxHandlers = new HandleDetox[2];
 
@@ -88,7 +87,7 @@ public class PlayManager : MonoSingleton<PlayManager>
 
             if (clueType == ClueType.CODE)
             {
-                hc.MakeClue(clueType, index, codeIndex, " ", " ");
+                hc.MakeClue(clueType, index, codeIndex, " ", " ", " ");
 
                 CodeClueInstances[codeIndex] = myInstance;
                 codeIndex++;
@@ -96,7 +95,7 @@ public class PlayManager : MonoSingleton<PlayManager>
 
             else if (clueType == ClueType.FAKE)
             {
-                hc.MakeClue(clueType, index, fakeIndex, " ", " ");
+                hc.MakeClue(clueType, index, fakeIndex, " ", " ", " ");
 
                 FakeClueInstances[fakeIndex] = myInstance;
                 fakeIndex++;
@@ -107,7 +106,7 @@ public class PlayManager : MonoSingleton<PlayManager>
         }
     }
 
-    public void MakeUserClueInstance(Vector2[] position, ClueType clueType, string _nickname, string _code)
+    public void MakeUserClueInstance(Vector2[] position, ClueType clueType, string _nickname, string _code, string _color)
     {
         GameObject myInstance = Instantiate(CluePrefab);     
         myInstance.transform.position = position[posIndex];           
@@ -117,7 +116,7 @@ public class PlayManager : MonoSingleton<PlayManager>
 
         if (clueType == ClueType.USER)
         {
-            hc.MakeClue(clueType, index, userIndex, _nickname, _code);
+            hc.MakeClue(clueType, index, userIndex, _nickname, _code, _color);
             UserClueInstances[userIndex] = myInstance;
             userIndex++;
         }

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System;
+using UnityEngine.UI;
+using System.Text;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -149,11 +151,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Vector2[] randomSpawnPosition = ShufflePosition(StaticVars.SpawnPosition);
         List<string> randomColor = StaticVars.Colors.OrderBy(_ => new System.Random().Next()).ToList();
 
+        string commonCharacters = "0123456789ABCDEX";
+
+        commonCharacters = ShuffleCharacter(commonCharacters).Substring(0, 3);          // 랜덤으로 세 글자
+        Debug.Log(commonCharacters);
+
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
             isColloc = false;
+            code = StaticFuncs.GeneratePlayerCode(commonCharacters);
 
-            code = StaticFuncs.GeneratePlayerCode();
 
             if (i == colloc)
             {
@@ -165,6 +172,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
             PV.RPC("SetPlayer", player, isColloc, randomSpawnPosition[i], randomColor[i]);
             PV.RPC("SetUserClue", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code, randomColor[i]);
+            PV.RPC("SetClueNote", RpcTarget.All, player.NickName, randomColor[i], i);
+
+            Debug.Log(player.NickName + " : " + code);
+
             i++;
         }
 
@@ -197,6 +208,26 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         return _position;
     }
+
+    // just shuffle...
+    public string ShuffleCharacter(string _characters)
+    {
+        System.Random rand = new System.Random();
+
+        StringBuilder result = new StringBuilder(_characters);
+
+        for (int i = result.Length - 1; i > 0; i--)
+        {
+            int index = rand.Next(i + 1);
+
+            char temp = result[index];
+            result[index] = result[i];
+            result[i] = temp;
+        }
+
+        return result.ToString();
+    }
+
 
     // Set where item will drop
     private Vector3 SetDropPos()
@@ -236,7 +267,43 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void SetUserClue(Vector2[] _position, string _nickname, string _code, string _color)
     {
         _currentPlayer = PhotonNetwork.CurrentRoom.PlayerCount;
-        PlaySceneManager.MakeUserClueInstance(_position, ClueType.USER, _nickname, _code);
+        PlaySceneManager.MakeUserClueInstance(_position, ClueType.USER, _nickname, _code, _color);
+        print(_color);
+    }
+
+    [PunRPC]
+    public void SetClueNote(string _nickname, string _color, int _index)
+    {
+        Image noteSourceImage = UIManager.Instance.UserInfo.GetChild(_index).GetChild(2).GetChild(0).GetComponent<Image>();
+
+        UIManager.Instance.UserInfo.GetChild(_index).GetChild(0).GetComponent<Text>().text = _nickname;
+        switch (_color)
+        {
+            case "Brown":
+                noteSourceImage.sprite = UIManager.Instance.playerSprite[0];
+                break;
+            case "Blue":
+                noteSourceImage.sprite = UIManager.Instance.playerSprite[1];
+                break;
+            case "Gray":
+                noteSourceImage.sprite = UIManager.Instance.playerSprite[2];
+                break;
+            case "Green":
+                noteSourceImage.sprite = UIManager.Instance.playerSprite[3];
+                break;
+            case "Orange":
+                noteSourceImage.sprite = UIManager.Instance.playerSprite[4];
+                break;
+            case "Pink":
+                noteSourceImage.sprite = UIManager.Instance.playerSprite[5];
+                break;
+            case "Purple":
+                noteSourceImage.sprite = UIManager.Instance.playerSprite[6];
+                break;
+            case "Yellow":
+                noteSourceImage.sprite = UIManager.Instance.playerSprite[7];
+                break;
+        }
     }
 
     // To modify
