@@ -63,7 +63,6 @@ public class HandleDetox : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("exit: "+collision.gameObject.name);
         if (collision.gameObject.GetInstanceID() == boothUser)
         {
             boothUser = 0;

@@ -57,7 +57,6 @@ public class PlayManager : MonoSingleton<PlayManager>
     public void SpawnHomes(bool _isColloc, int _idx)
     {
         gamePlayer = PhotonNetwork.Instantiate("PhotonHomes", StaticVars.SpawnPosition[_idx], Quaternion.identity) as GameObject;
-        Debug.Log(gamePlayer.GetInstanceID());
         if (_isColloc)
         {
             gamePlayer.tag = "Colloc";
