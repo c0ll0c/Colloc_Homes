@@ -164,9 +164,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             }
 
             PV.RPC("SetPlayer", player, isColloc, randomSpawnPosition[i], randomColor[i]);
+            PV.RPC("SetUserClue", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code, randomColor[i]);
             i++;
-            
-            PV.RPC("SetUserClue", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code);
         }
 
         PV.RPC("SetOtherClues", RpcTarget.AllBuffered, randomCluePosition);
@@ -234,7 +233,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void SetUserClue(Vector2[] _position, string _nickname, string _code)
+    public void SetUserClue(Vector2[] _position, string _nickname, string _code, string _color)
     {
         _currentPlayer = PhotonNetwork.CurrentRoom.PlayerCount;
         PlaySceneManager.MakeUserClueInstance(_position, ClueType.USER, _nickname, _code);
