@@ -5,8 +5,9 @@ public class HandlePlayerSlot : MonoBehaviour
 {
     public TMP_Text PlayerNameText;
     public GameObject IsLeaderObj;
+    public GameObject IsReadyObj;
 
-    public void SetSlot(bool hasPlayer, string _nickname, bool _isLead)
+    public void SetSlot(bool hasPlayer, string _nickname, bool _isLead, bool _isReady)
     {
         if (!hasPlayer)
         {
@@ -15,6 +16,11 @@ public class HandlePlayerSlot : MonoBehaviour
         }
         gameObject.SetActive(true);
         PlayerNameText.text = _nickname;
+
         IsLeaderObj.SetActive(_isLead);
+        if (!_isLead)
+        {
+            IsReadyObj.SetActive(_isReady);
+        }
     }
 }

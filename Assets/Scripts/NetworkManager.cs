@@ -80,6 +80,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         GameManager.Instance.ChangeScene(GameState.READY);
+        
         PV.RPC("SyncPlayersData", RpcTarget.OthersBuffered);
     }
 
@@ -106,7 +107,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if (ReadySceneManager != null)
         {
-            ReadySceneManager.SetUI(playersStatus, PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.IsMasterClient);
+            ReadySceneManager.SetUI(playersStatus, playersStatus.Count, PhotonNetwork.IsMasterClient);
         }
     }
 
@@ -116,6 +117,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
         properties.Add("IsReady", _isReady);
         PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
+    {
+        if (changedProps.ContainsKey("IsReady"))
+        {
+            SyncPlayersData();
+        }
     }
 
     // Start Game by Master
@@ -132,6 +141,27 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         PhotonNetwork.LoadLevel("PlayScene");
+    }
+
+    // when player leave room
+    public void LeaveRoom()
+    {
+        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
+        properties.Add("IsReady", false);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+
+        PhotonNetwork.LeaveRoom();
+    }
+
+    public override void OnLeftRoom()
+    {
+        GameManager.Instance.ChangeScene(GameState.LOBBY);
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        if (otherPlayer == PhotonNetwork.LocalPlayer) return;
+        SyncPlayersData();
     }
     #endregion
     #region SET PLAY SCENE
