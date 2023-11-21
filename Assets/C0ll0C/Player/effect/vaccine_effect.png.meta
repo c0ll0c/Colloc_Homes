@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 596b881253b50cf46ace5084a243ceaa
+guid: f40622dda4e1f6e48bdad25c5ab1c9c7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,43 +110,64 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Plane 1_0
+      name: vaccine_effect_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 240
+        height: 240
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3f32ca2f7e156ca42a3106590b864a1e
-      internalID: -399903718
+      spriteID: ef57a43689f1f2d4ba215a3dc2ae50b4
+      internalID: -1494724155
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Plane 1_1
+      name: vaccine_effect_1
       rect:
         serializedVersion: 2
-        x: 256
+        x: 240
         y: 0
-        width: 256
-        height: 256
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 240
+        height: 240
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 20346d16bbf4ea040a7ba8a10e132a9d
-      internalID: -1838666551
+      spriteID: 7a81b616f039aad438e8835c38184f17
+      internalID: 1424519864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: vaccine_effect_2
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 240
+        height: 240
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78fcd5cdc793aef4a8a512c0e26114d6
+      internalID: -1900077421
       vertices: []
       indices: 
       edges: []
@@ -162,8 +183,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Plane 1_0: -399903718
-      Plane 1_1: -1838666551
+      vaccine_effect_0: -1494724155
+      vaccine_effect_1: 1424519864
+      vaccine_effect_2: -1900077421
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
