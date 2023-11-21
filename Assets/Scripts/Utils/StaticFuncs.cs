@@ -26,7 +26,7 @@ public static class StaticFuncs
     // sprite renderer setting
     public static void SpriteRendering(GameObject _gameObject)
     {
-        for (int i = 1; i <= PlayManager.Instance.LayerGrass.Length; i++)
+        for (int i = PlayManager.Instance.LayerGrass.Length; i > 0; i--)
         {
             Vector3Int cellPosition = PlayManager.Instance.LayerGrass[i - 1].WorldToCell(_gameObject.transform.position);
             TileBase tile = PlayManager.Instance.LayerGrass[i - 1].GetTile(cellPosition);
@@ -34,6 +34,7 @@ public static class StaticFuncs
             if (tile != null)
             {
                 _gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Layer " + i;
+                return;
             }
         }
     }
