@@ -3,6 +3,8 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
+using System;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -144,6 +146,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         bool isColloc = false;
         string code;
         Vector2[] randomCluePosition = ShufflePosition(StaticVars.CluePosition);
+        Vector2[] randomSpawnPosition = ShufflePosition(StaticVars.SpawnPosition);
+        List<string> randomColor = StaticVars.Colors.OrderBy(_ => new System.Random().Next()).ToList();
 
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
@@ -159,7 +163,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
             }
 
-            PV.RPC("SetPlayer", player, isColloc, i);
+            PV.RPC("SetPlayer", player, isColloc, randomSpawnPosition[i], randomColor[i]);
             i++;
             
             PV.RPC("SetUserClue", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code);
@@ -178,7 +182,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PV.RPC("SetItems", RpcTarget.AllBuffered, randomDropTime, randomDropPos, endTime);
     }
 
-    // Set where clue will spawn
+    // Set where gameobject will spawn
     public Vector2[] ShufflePosition(Vector2[] _position)
     {
         System.Random rand = new System.Random();
@@ -198,7 +202,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // Set where item will drop
     private Vector3 SetDropPos()
     {
-        Vector3 randomDropPos = new Vector3(Random.Range(-3f, 10f), Random.Range(-8f, 17f), 0f);
+        Vector3 randomDropPos = new Vector3(UnityEngine.Random.Range(-3f, 10f), UnityEngine.Random.Range(-8f, 17f), 0f);
         if (StaticFuncs.CheckOnWall(randomDropPos))
         {
             return SetDropPos();
@@ -208,9 +212,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     // Set each player status, spawn position
     [PunRPC]
-    public void SetPlayer(bool _isColloc, int _idx)
+    public void SetPlayer(bool _isColloc, Vector2 _spawnPos, String _color)
     {
-        PlaySceneManager.SpawnHomes(_isColloc, _idx);
+        PlaySceneManager.SpawnHomes(_isColloc, _spawnPos, _color);
     }
 
     // Inform game item setting to all players (clue code, item time & position)
