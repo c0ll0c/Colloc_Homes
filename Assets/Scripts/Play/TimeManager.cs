@@ -7,7 +7,7 @@ public class TimeManager : MonoBehaviour
     public GameObject TimeCanvasObj;
     private TimeCanvasUI timeCanvas;
 
-    [SerializeField] private Image cooltimeBar;
+    [SerializeField] private GameObject coolTimeUI;
     private bool attackActivated = false;
 
     private double gameLeftTime;
@@ -62,12 +62,13 @@ public class TimeManager : MonoBehaviour
         if (attackActivated) return true;
         attackActivated = true;
         StartCoroutine(AttackCoolTime());
+        coolTimeUI.GetComponent<CoolTimeUI>().Active = true;
         return false;
     }
 
     private IEnumerator AttackCoolTime()
     {
-        yield return StaticFuncs.WaitForSeconds(15.0f);
+        yield return StaticFuncs.WaitForSeconds(StaticVars.ATTACK_TIME);
         attackActivated = false;
     }
 }

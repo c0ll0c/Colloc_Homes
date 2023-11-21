@@ -9,14 +9,14 @@ public class UIManager : MonoSingleton<UIManager>
     public Canvas ClueUI;
     private int i = 0;
 
-    [SerializeField] private GameObject[] gameIcon = new GameObject[4];
+    [SerializeField] private GameObject[] gameIcon = new GameObject[5];
 
     protected override void Awake()
     {
         base.Awake();
 
         ClueUI.gameObject.SetActive(false);
-        for (int i = 0; i < gameIcon.Length; i++)
+        for (int i = 0; i < gameIcon.Length - 1; i++)
         {
             gameIcon[i].SetActive(false);
         }
@@ -34,6 +34,7 @@ public class UIManager : MonoSingleton<UIManager>
             case "Colloc":
                 gameIcon[2].SetActive(true);
                 gameIcon[3].SetActive(false);
+                gameIcon[4].GetComponent<Image>().color = Color.red;
                 break;
 
             case "Homes":
@@ -42,6 +43,7 @@ public class UIManager : MonoSingleton<UIManager>
                 gameIcon[3].SetActive(true);
                 gameIcon[3].GetComponent<Image>().color = Color.white;
                 gameIcon[3].GetComponent<Button>().enabled = true;
+                gameIcon[4].GetComponent<Image>().color = Color.blue;
                 break;
 
             case "Infect":
@@ -49,6 +51,7 @@ public class UIManager : MonoSingleton<UIManager>
                 gameIcon[1].SetActive(true);
                 gameIcon[3].GetComponent<Image>().color = Color.gray;
                 gameIcon[3].GetComponent<Button>().enabled = false;
+                gameIcon[4].GetComponent<Image>().color = Color.red;
                 break;
         }
     }

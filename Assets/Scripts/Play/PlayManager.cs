@@ -54,9 +54,9 @@ public class PlayManager : MonoSingleton<PlayManager>
         detoxHandlers = DetoxObj.GetComponentsInChildren<HandleDetox>();
     }
 
-    public void SpawnHomes(bool _isColloc, int _idx)
+    public void SpawnHomes(bool _isColloc, Vector2 _spawnPos, string _color)
     {
-        gamePlayer = PhotonNetwork.Instantiate("PhotonHomes", StaticVars.SpawnPosition[_idx], Quaternion.identity) as GameObject;
+        gamePlayer = PhotonNetwork.Instantiate("Homes_" + _color, _spawnPos, Quaternion.identity) as GameObject;
 
         if (_isColloc)
         {

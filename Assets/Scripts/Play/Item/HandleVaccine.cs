@@ -25,7 +25,7 @@ public class HandleVaccine : PoolAble
     {
         if (collision.collider.CompareTag("Untagged")) return;
 
-        if (collision.collider.GetComponent<PhotonView>().IsMine)
+        if (collision.collider.GetComponent<PhotonView>().IsMine && collision.collider.gameObject.CompareTag("Homes"))
         {
             PlayManager.Instance.isVaccinated = true;
             PlayManager.Instance.gamePlayer.GetComponent<HandleRPC>().VaccineEffect.SetActive(true);
