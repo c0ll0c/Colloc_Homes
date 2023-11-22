@@ -14,11 +14,6 @@ public class PlayManager : MonoSingleton<PlayManager>
     public GameObject CluePrefab;
     public GameObject[] ClueInstances = new GameObject[16];
 
-    public GameObject DetoxObj;
-    private HandleDetox[] detoxHandlers = new HandleDetox[2];
-
-    public TimeManager TimeManager;
-
     public Vector3[] RandomDropPos;
     public bool isVaccinated = false;
 
@@ -32,7 +27,7 @@ public class PlayManager : MonoSingleton<PlayManager>
     private int userIndex = 0;
     private int fakeIndex = 0;
 
-    // private double gameEndTime;
+    private TimeManager timeManager;
 
     protected override void Awake()
     {
@@ -40,6 +35,8 @@ public class PlayManager : MonoSingleton<PlayManager>
 
         NetworkManager.Instance.PlaySceneManager = this;
         GameManager.Instance.EnterGame();
+
+        timeManager = transform.GetComponent<TimeManager>();
         
         if (PhotonNetwork.IsMasterClient)
         {
@@ -47,11 +44,17 @@ public class PlayManager : MonoSingleton<PlayManager>
         }
     }
 
-    // [TODO] Syncronize Make Clue Instace exclude ShufflePosition : Move to GameSetting
-    private void Start()
+    private bool canAttack = true;
+    public bool TryAttack()
     {
-        detoxHandlers = DetoxObj.GetComponentsInChildren<HandleDetox>();
+        if (!canAttack) return false;
+        // attack success -> attack cooltime activate
+        canAttack = false;
+        timeManager.AttackCooltime();
+        return true;
     }
+
+    public void ActivateAttack() { canAttack = true; }
 
     public void SpawnHomes(bool _isColloc, Vector2 _spawnPos, string _color)
     {
@@ -71,7 +74,7 @@ public class PlayManager : MonoSingleton<PlayManager>
     public void SetGame(int _dropTime, Vector3[] _dropPos, double _endTime)
     {
         RandomDropPos = _dropPos;
-        TimeManager.SetPlayTime(_endTime, _dropTime);
+        timeManager.SetPlayTime(_endTime, _dropTime);
     }
 
     public void MakeOtherClueInstance(Vector2[] position, ClueType clueType, int N)

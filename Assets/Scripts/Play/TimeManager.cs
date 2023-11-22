@@ -3,11 +3,10 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-    public GameObject TimeCanvasObj;
-    private TimeCanvasUI timeCanvas;
-
-    [SerializeField] private GameObject coolTimeUI;
-    private bool attackActivated = false;
+    public GameObject TimerObj;
+    public GameObject CooltimeObj;
+    private TimeCanvasUI timerUI;
+    private CoolTimeUI coolTimeUI;
 
     private double gameLeftTime = 0;
     private double vaccineDropTime;
@@ -15,14 +14,17 @@ public class TimeManager : MonoBehaviour
 
     private void Start()
     {
-        timeCanvas = TimeCanvasObj.GetComponent<TimeCanvasUI>();
+        timerUI = TimerObj.GetComponent<TimeCanvasUI>();
+        coolTimeUI = CooltimeObj.GetComponent<CoolTimeUI>();
     }
 
     private void Update()
     {
         if (gameLeftTime <= 0) return;
+
         gameLeftTime -= Time.deltaTime;
-        timeCanvas.SetTime(gameLeftTime);
+        timerUI.SetTime(gameLeftTime);
+
         vaccineDropTime -= Time.deltaTime;
         if (vaccineNum < 3 && vaccineDropTime < 0)
         {
@@ -47,18 +49,23 @@ public class TimeManager : MonoBehaviour
         vaccineNum++;
     }
 
-    public bool IsAttackActivated()
+    public void AttackCooltime()
     {
-        if (attackActivated) return true;
-        attackActivated = true;
-        StartCoroutine(AttackCoolTime());
-        coolTimeUI.GetComponent<CoolTimeUI>().Active = true;
-        return false;
+        StartCoroutine(AttackCooltimeBar());
     }
 
-    private IEnumerator AttackCoolTime()
+    static float incrementTime = 0.25f;
+    static float incrementProg = incrementTime / StaticVars.ATTACK_TIME;
+    private IEnumerator AttackCooltimeBar()
     {
-        yield return StaticFuncs.WaitForSeconds(StaticVars.ATTACK_TIME);
-        attackActivated = false;
+        float prog = 0;
+        while (prog < 1)
+        {
+            yield return StaticFuncs.WaitForSeconds(incrementTime);
+            prog += incrementProg;
+            coolTimeUI.SetCoolTimeBar(prog);
+        }
+
+        PlayManager.Instance.ActivateAttack();
     }
 }
