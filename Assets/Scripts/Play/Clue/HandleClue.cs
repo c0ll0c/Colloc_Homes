@@ -37,9 +37,9 @@ public class HandleClue : MonoBehaviour
         }
     }
 
-    public void MakeClue(ClueType _clueType, int _index, int _typeIndex, string _nickname, string _code)
+    public void MakeClue(ClueType _clueType, int _index, int _typeIndex, string _nickname, string _code, string _color)
     {
-        clue = new Clue(_clueType, _index, _typeIndex, _nickname, _code);
+        clue = new Clue(_clueType, _index, _typeIndex, _nickname, _code, _color);
     }
 
     public void GetClue()
@@ -48,8 +48,7 @@ public class HandleClue : MonoBehaviour
         {
             if (clue.ClueType == ClueType.USER)
             {
-                UIManager.Instance.ChangeUserClueUIText(clue.UserNickName,
-                     clue.UserCode, clue.TypeIndex);
+                UIManager.Instance.ChangeUserClueUIText(clue.UserNickName, clue.UserCode, clue.TypeIndex, clue.color);              // ÇöÀç ´©¸¥ ´Ü¼­ÀÇ ÀÎµ¦½º¸¦ ³Ñ°Ü ÁÜ. ´Ü¼­¸¶´Ù ÀÎµ¦½º¸¦ °¡Áö°í ÀÕÀ¸´Ï±î.. 
 
                 StartCoroutine(UnactivePanel(0));
             }
@@ -84,6 +83,7 @@ public class HandleClue : MonoBehaviour
             NetworkManager.Instance.PV.RPC("SyncHiddenCode", RpcTarget.AllBuffered, clue.Index);
             UIManager.Instance.ChangeClueStatusUIText("´Ü¼­ ¼û±è!");
 
+            Debug.Log("´Ü¼­ ¼û±è");
             StartCoroutine(UnactivePanel(2));
         }
 

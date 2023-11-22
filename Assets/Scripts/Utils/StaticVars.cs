@@ -13,14 +13,14 @@ public static class StaticVars
     public static float ATTACK_TIME = 15.0f; // 15s
 
     // homes spawn position
-    public static Vector3[] SpawnPosition =
+    public static Vector2[] SpawnPosition =
     {
-        new Vector3(-9.0f, -6.0f, 0),
-        new Vector3(-3.0f, 15.0f, 0),
-        new Vector3(14.5f, 1.5f, 0),
-        new Vector3(9.0f, 12.5f, 0),
-        new Vector3(7.0f, 6.0f, 0),
-        new Vector3(-2.0f, 0, 0),
+        new Vector2(-9.0f, -6.0f),
+        new Vector2(-3.0f, 15.0f),
+        new Vector2(14.5f, 1.5f),
+        new Vector2(9.0f, 12.5f),
+        new Vector2(7.0f, 6.0f),
+        new Vector2(-2.0f, 0),
     };
 
     public static Vector2[] CluePosition = {
@@ -28,9 +28,9 @@ public static class StaticVars
         new Vector2(-0.2f, -3.0f),
         new Vector2(4.0f, -10.0f),
         new Vector2(15.0f, 4.0f),
-        new Vector2(-2.5f, 16.0f),
+        new Vector2(-0.4f, 16.5f),
         new Vector2(-3.4f, -3.0f),
-        new Vector2(-1.2f, 4.0f),
+        new Vector2(-2.8f, 2.5f),
         new Vector2(12.0f, -9.0f),
         new Vector2(-8.4f, -6.0f),
         new Vector2(7.0f, -1.1f),
@@ -41,7 +41,19 @@ public static class StaticVars
         new Vector2(9.3f, 7.2f),
         new Vector2(13.3f, 4.4f),
         new Vector2(6.2f, 18.4f),
-        new Vector2(-7.1f, -3.1f),
+        new Vector2(-7f, -4.5f),
         new Vector2(5.0f, 7.7f),
+    };
+
+    public static string[] Colors =
+    {
+        "Brown",
+        "Blue",
+        "Gray",
+        "Green",
+        "Orange",
+        "Pink",
+        "Purple",
+        "Yellow",
     };
 }

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d5e632988f881ba4785b50d65b4c9e63
+guid: 57bb08ff96e770140b6302003d5f3b71
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 150
+  spritePixelsToUnits: 180
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Homes_0
+      name: homes_orange_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 200
-        height: 200
+        width: 240
+        height: 240
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,20 +124,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0bd0846f7a4642b418519ecb2b706add
-      internalID: 1152532944
+      spriteID: 70c3c756ebb69c840b02ef00cde1581e
+      internalID: 1353381249
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Homes_1
+      name: homes_orange_1
       rect:
         serializedVersion: 2
-        x: 200
+        x: 240
         y: 0
-        width: 200
-        height: 200
+        width: 240
+        height: 240
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -145,20 +145,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 98bac75e4dd1ee245985322fa8ace389
-      internalID: -1716642990
+      spriteID: bc10d7298983cd4449ce735ebdee48f5
+      internalID: -533021912
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Homes_2
+      name: homes_orange_2
       rect:
         serializedVersion: 2
-        x: 400
+        x: 480
         y: 0
-        width: 200
-        height: 200
+        width: 240
+        height: 240
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,20 +166,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6a7467ea6af01944293a314f7955be01
-      internalID: -1781496859
+      spriteID: 80cb95a91c16d8542a803cf45c794144
+      internalID: 1160181006
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Homes_3
+      name: homes_orange_3
       rect:
         serializedVersion: 2
-        x: 600
+        x: 720
         y: 0
-        width: 200
-        height: 200
+        width: 240
+        height: 240
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -187,20 +187,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 65e63dcbcea2d5f48b2c6dea7ea9a42d
-      internalID: 720163309
+      spriteID: 912274cf4b0f63844ad56b20f3c19cc0
+      internalID: 1800715130
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Homes_4
+      name: homes_orange_4
       rect:
         serializedVersion: 2
-        x: 800
+        x: 960
         y: 0
-        width: 200
-        height: 200
+        width: 240
+        height: 240
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -208,41 +208,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f190415a9037f2a4690967efc1339c1e
-      internalID: -1784512792
+      spriteID: cd6d7be2e01401c41afcae8c7dbbf64e
+      internalID: 1006214408
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Homes_5
-      rect:
-        serializedVersion: 2
-        x: 1000
-        y: 0
-        width: 200
-        height: 200
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bc7d923c15f304748bb2c288b2c559ab
-      internalID: -69960051
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Homes_6
+      name: homes_orange_5
       rect:
         serializedVersion: 2
         x: 1200
         y: 0
-        width: 200
-        height: 200
+        width: 240
+        height: 240
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -250,20 +229,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e4e51a81ef25b68409989d2a5b976c5e
-      internalID: -1907657683
+      spriteID: 25b2dfa0584f2d94a945e7db68a0f5bc
+      internalID: 1230961059
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Homes_7
+      name: homes_orange_6
       rect:
         serializedVersion: 2
-        x: 1400
+        x: 1440
         y: 0
-        width: 200
-        height: 200
+        width: 240
+        height: 240
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -271,8 +250,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0f4dbae275e706f4397d5a576f66dfa3
-      internalID: -464283906
+      spriteID: c834ae9e319ab714b938e624b104bc41
+      internalID: 1101083107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: homes_orange_7
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 0
+        width: 240
+        height: 240
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 181867e6604275941a848aeef683a6c0
+      internalID: 283698105
       vertices: []
       indices: 
       edges: []
@@ -288,14 +288,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Homes_0: 1152532944
-      Homes_1: -1716642990
-      Homes_2: -1781496859
-      Homes_3: 720163309
-      Homes_4: -1784512792
-      Homes_5: -69960051
-      Homes_6: -1907657683
-      Homes_7: -464283906
+      homes_orange_0: 1353381249
+      homes_orange_1: -533021912
+      homes_orange_2: 1160181006
+      homes_orange_3: 1800715130
+      homes_orange_4: 1006214408
+      homes_orange_5: 1230961059
+      homes_orange_6: 1101083107
+      homes_orange_7: 283698105
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

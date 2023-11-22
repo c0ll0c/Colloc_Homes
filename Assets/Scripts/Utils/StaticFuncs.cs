@@ -7,26 +7,21 @@ using UnityEngine.Tilemaps;
 
 public static class StaticFuncs 
 {
-    // 3개의 숫자와 2개의 영어로 된 플레이어 코드 반환
-    public static string GeneratePlayerCode()
+    public static string GeneratePlayerCode(string _commoncharacters)
     {
-        string characters = "0123456789ABCDEF";
-        StringBuilder result = new StringBuilder();
+        string code;
+        string randomCharacters = "0123456789ABCDEFGHIJYZ";
 
-        // 5자리의 랜덤 문자열 생성
-        for (int i = 0; i < 5; i++)
-        {
-            int randomIndex = Random.Range(0, characters.Length);
-            result.Append(characters[randomIndex]);
-        }
+        randomCharacters = NetworkManager.Instance.ShuffleCharacter(randomCharacters).Substring(0, 2);          // 랜덤으로 세 글자
+        code = _commoncharacters + randomCharacters;
 
-        return result.ToString();
+        return NetworkManager.Instance.ShuffleCharacter(code);
     }
 
     // sprite renderer setting
     public static void SpriteRendering(GameObject _gameObject)
     {
-        for (int i = 1; i <= PlayManager.Instance.LayerGrass.Length; i++)
+        for (int i = PlayManager.Instance.LayerGrass.Length; i > 0; i--)
         {
             Vector3Int cellPosition = PlayManager.Instance.LayerGrass[i - 1].WorldToCell(_gameObject.transform.position);
             TileBase tile = PlayManager.Instance.LayerGrass[i - 1].GetTile(cellPosition);
@@ -34,6 +29,7 @@ public static class StaticFuncs
             if (tile != null)
             {
                 _gameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Layer " + i;
+                return;
             }
         }
     }

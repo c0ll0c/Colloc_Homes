@@ -517,7 +517,7 @@ GameObject:
   - component: {fileID: -7308428104299149801}
   - component: {fileID: 5249598463803225960}
   m_Layer: 20
-  m_Name: PhotonHomes
+  m_Name: Homes_Pink
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -583,7 +583,7 @@ SpriteRenderer:
   m_SortingLayerID: -1869315837
   m_SortingLayer: 1
   m_SortingOrder: 2
-  m_Sprite: {fileID: -283909528, guid: 6e349873d9e87e04fa2f9a0b31768297, type: 3}
+  m_Sprite: {fileID: 488067637, guid: 27d41172fcf63c449a558c72eb05b25d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -604,7 +604,7 @@ Animator:
   m_GameObject: {fileID: 7864608580262559776}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 07b3d54077134294aa82c6d5b9746e70, type: 2}
+  m_Controller: {fileID: 22100000, guid: 1f11c4d29b8f70a4bab6a3ba3eba7cde, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -808,7 +808,7 @@ Transform:
   m_GameObject: {fileID: 8317362907923440812}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalPosition: {x: 0, y: -0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -855,8 +855,8 @@ SpriteRenderer:
   m_SortingLayerID: -976913131
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 387076824, guid: a2442f5165bd2f042b177930bf75b3f3, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: -1494724155, guid: f40622dda4e1f6e48bdad25c5ab1c9c7, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5882353}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

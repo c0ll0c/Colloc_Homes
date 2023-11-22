@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 public enum ReadyBtnType
@@ -26,7 +27,8 @@ public class ReadyBtnOnClick : MonoBehaviour
                 break;
 
             case ReadyBtnType.BACK:
-                GameManager.Instance.ChangeScene(GameState.LOBBY); break;
+                NetworkManager.Instance.LeaveRoom();
+                break;
         }
     }
 
