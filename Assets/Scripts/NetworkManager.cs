@@ -353,19 +353,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         clue.IsHidden = false;
     }
     #endregion
-
-    #region MANAGE GAME PLAY
-    public void SyncDetox(int _index) 
-    {
-        PV.RPC("DeactivateDetox", RpcTarget.All, _index);
-    }
-    [PunRPC]
-    public void DeactivateDetox(int _index)
-    {
-        PlaySceneManager.UseOrDeactivateDetox(_index);
-    }
-    #endregion
-
     #region SERVER UTILS
     public double GetServerTime()
     {

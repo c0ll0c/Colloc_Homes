@@ -56,7 +56,6 @@ public class PlayManager : MonoSingleton<PlayManager>
     public void SpawnHomes(bool _isColloc, Vector2 _spawnPos, string _color)
     {
         gamePlayer = PhotonNetwork.Instantiate("Homes_" + _color, _spawnPos, Quaternion.identity) as GameObject;
-
         if (_isColloc)
         {
             gamePlayer.tag = "Colloc";
@@ -128,10 +127,5 @@ public class PlayManager : MonoSingleton<PlayManager>
     private void OnDestroy()
     {
         NetworkManager.Instance.PlaySceneManager = null;
-    }
-
-    public void UseOrDeactivateDetox(int _index)
-    {
-        detoxHandlers[_index-1].UseOrDeactivate();
     }
 }

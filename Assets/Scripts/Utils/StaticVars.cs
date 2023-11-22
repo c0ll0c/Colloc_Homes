@@ -8,7 +8,8 @@ public static class StaticVars
     // time variables
     public static double GAME_TIME = 300.0f; // 5m
     public static double VACCINE_DROP_INTERVAL = 60.0f; // 1m
-    public static float DETOX_TIME = 15.0f; // 15s
+    public static float DETOX_USE_TIME = 3.0f; // 3s
+    public static float DETOX_DEACTIVE_TIME = 15.0f; // 15s
     public static float ATTACK_TIME = 15.0f; // 15s
 
     // homes spawn position

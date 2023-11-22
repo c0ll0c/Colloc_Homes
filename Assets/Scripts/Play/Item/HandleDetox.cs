@@ -1,72 +1,98 @@
+using System.Collections;
 using UnityEngine;
 
 public class HandleDetox : MonoBehaviour
 {
-    private GameObject deactivatedObj;
-    private GameObject activatedObj;
-    private GameObject timerObj;
+    private GameObject lightOffObj;
+    private GameObject lightOnObj;
+    private GameObject timer3Obj;
+    private GameObject twinkleEffectObj;
     private DetoxTimerUI detoxTimer;
-    private GameObject buttonObj;
-    private ItemBtnsOnClick btnHandler;
 
-    public bool isActivated;
+    private bool isActive;
+    private bool isUsing;
+    private bool isMe;
+    private int boothUser;
+    
 
     private void Awake()
     {
-        isActivated = true;
+        isActive = true;
+        isUsing = false;
+        isMe = false;
+        boothUser = 0;
 
-        deactivatedObj = transform.GetChild(0).GetChild(0).gameObject;
-        activatedObj = transform.GetChild(0).GetChild(1).gameObject;
+        lightOffObj = transform.GetChild(0).GetChild(0).gameObject;
+        lightOnObj = transform.GetChild(0).GetChild(1).gameObject;
 
-        timerObj = transform.GetChild(1).GetChild(0).gameObject;
-        detoxTimer = timerObj.GetComponent<DetoxTimerUI>();
-        detoxTimer.DetoxHandler = this;
+        timer3Obj = transform.GetChild(1).GetChild(0).gameObject;
+        twinkleEffectObj = transform.GetChild(1).GetChild(1).gameObject;
 
-        buttonObj = transform.GetChild(1).GetChild(1).gameObject;
-        btnHandler = buttonObj.GetComponent<ItemBtnsOnClick>();
+        detoxTimer = timer3Obj.GetComponent<DetoxTimerUI>();
 
         ActivateBooth(true);
-        buttonObj.SetActive(false);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void DetoxUsed()
     {
-        if (isActivated)
+        if (isMe)
         {
-            // [TODO] collision 일어난 player가 게임을 play 중인 사람인지 확인해야 함!
-            if (collision.collider.CompareTag("Homes"))
-            {
-                btnHandler.ChangeBtnText("사용하기");
-            }
-            else if (collision.collider.CompareTag("Colloc"))
-            {
-                btnHandler.ChangeBtnText("파괴하기");
-            }
-            buttonObj.SetActive(true);
+            PlayManager.Instance.gamePlayer.GetComponent<HandleRPC>().ChangeStatus("Homes");
+        }
+        ActivateBooth(false);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (
+            collision.gameObject.CompareTag("Player") || 
+            collision.gameObject.CompareTag("Homes") || 
+            collision.gameObject.CompareTag("Colloc")
+            ) { 
+            isMe = false; 
+        }
+        else if ( collision.gameObject.CompareTag("Infect") ) { isMe = true; }
+        else { return; }
+
+        if (isActive && !isUsing)
+        {
+            boothUser = collision.gameObject.GetInstanceID();
+            UseBooth(true);
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        buttonObj.SetActive(false);
+        if (collision.gameObject.GetInstanceID() == boothUser)
+        {
+            boothUser = 0;
+            UseBooth(false);
+        }
     }
 
-    public void ActivateBooth(bool activate)
+    private void UseBooth(bool use)
     {
-        isActivated = activate;
-        activatedObj.SetActive(activate);
-
-        timerObj.SetActive(!activate);
-        deactivatedObj.SetActive(!activate);
+        isUsing = use;
+        lightOnObj.SetActive(use);
+        lightOffObj.SetActive(!use);
+        timer3Obj.SetActive(use);
     }
 
-    // Called When
-    // 1) Homes uses detox booth
-    // 2) Colloc deactivates booth
-    public void UseOrDeactivate()
+    private void ActivateBooth(bool activate)
     {
-        if (!isActivated) return;
-
-        ActivateBooth(false);
+        isActive = activate;
+        UseBooth(false);
+        twinkleEffectObj.SetActive(activate);
+        if (!activate)
+        {
+            StartCoroutine(CountDeactivateTime());
+        }
+    }
+    
+    private readonly WaitForSecondsRealtime waitSec = new WaitForSecondsRealtime(StaticVars.DETOX_DEACTIVE_TIME);
+    IEnumerator CountDeactivateTime()
+    {
+        yield return waitSec;
+        ActivateBooth(true);
     }
 }

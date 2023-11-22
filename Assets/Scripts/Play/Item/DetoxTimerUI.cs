@@ -4,17 +4,19 @@ using UnityEngine.UI;
 
 public class DetoxTimerUI : MonoBehaviour
 {
-    public HandleDetox DetoxHandler;
+    private HandleDetox detoxHandler;
     private Image timerProgressBar;
 
-    private static readonly float enumTime = 0.5f;
+    private static readonly float enumTime = 0.25f;
     private float progress;
     private float progressIncrement;
 
     private void Awake()
     {
+        detoxHandler = transform.parent.parent.GetComponent<HandleDetox>();
         timerProgressBar = transform.GetChild(1).GetComponent<Image>();
-        progressIncrement = enumTime / StaticVars.DETOX_TIME;
+        progressIncrement = enumTime / StaticVars.DETOX_USE_TIME;
+
     }
 
     private void OnEnable()
@@ -22,17 +24,17 @@ public class DetoxTimerUI : MonoBehaviour
         StartCoroutine(CountDetoxTime());
     }
 
-    private readonly WaitForSecondsRealtime halfSec = new WaitForSecondsRealtime(enumTime);
+    private readonly WaitForSecondsRealtime waitSec = new WaitForSecondsRealtime(enumTime);
     IEnumerator CountDetoxTime()
     {
-        progress = 1f;
+        progress = 0f;
         timerProgressBar.fillAmount = progress;
-        while (progress > 0)
+        while (progress < 1)
         {
-            progress -= progressIncrement;
+            progress += progressIncrement;
             timerProgressBar.fillAmount = progress;
-            yield return halfSec;
+            yield return waitSec;
         }
-        DetoxHandler.ActivateBooth(true);
+        detoxHandler.DetoxUsed();
     }
 }
