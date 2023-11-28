@@ -12,15 +12,26 @@ public class TimeManager : MonoBehaviour
     private double vaccineDropTime;
     private int vaccineNum = 0;
 
+    public GameObject EndingCanvasObj;
+    private EndingManager endingManager;
+
     private void Start()
     {
         timerUI = TimerObj.GetComponent<TimeCanvasUI>();
         coolTimeUI = CooltimeObj.GetComponent<CoolTimeUI>();
+        endingManager = EndingCanvasObj.GetComponent<EndingManager>();
     }
 
     private void Update()
     {
-        if (gameLeftTime <= 0) return;
+        if (gameLeftTime <= 0)
+        {
+            if (!EndingCanvasObj.activeSelf)
+            {
+                endingManager.ShowResult(EndingType.TimeOver, true);
+            }
+            return;
+        }
 
         gameLeftTime -= Time.deltaTime;
         timerUI.SetTime(gameLeftTime);
