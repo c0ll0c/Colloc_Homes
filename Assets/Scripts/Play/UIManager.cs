@@ -8,6 +8,7 @@ public class UIManager : MonoSingleton<UIManager>
     public GameObject CollocClueUI;
     public Transform UserInfo;
     public Transform CodeInfo;
+    public Transform HomesInfo;
     public Canvas ClueUI;
     public Sprite[] playerSprite;
 
@@ -68,7 +69,7 @@ public class UIManager : MonoSingleton<UIManager>
         CluePanelCanvas[0].GetChild(0).GetComponent<Text>().text = _username;
         CluePanelCanvas[0].GetChild(1).GetComponent<Text>().text = _usercode;
 
-        UserInfo.GetChild(_index).GetChild(1).GetComponent<Text>().text = _usercode;        // ¾ê¸¸ ÇØ Áàµµ µÇ°Ô²û
+        UserInfo.GetChild(_index).GetChild(1).GetComponent<Text>().text = _usercode;
 
         switch (_color)
         {
@@ -142,7 +143,6 @@ public class UIManager : MonoSingleton<UIManager>
 
     public void ShowClueUI()
     {
-
         for (int i = 0; i < NetworkManager._currentPlayer; i++)
         {
             UserInfo.GetChild(i).gameObject.SetActive(true);

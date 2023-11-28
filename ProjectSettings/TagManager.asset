@@ -8,6 +8,7 @@ TagManager:
   - Homes
   - Infect
   - Clue
+  - NPC
   layers:
   - Default
   - TransparentFX
