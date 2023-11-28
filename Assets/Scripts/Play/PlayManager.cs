@@ -1,11 +1,9 @@
 using Photon.Pun;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UI;
 
 // game manage & photon communication script
-public class PlayManager : MonoSingleton<PlayManager>
+public class PlayManager : MonoBehaviour
 {
     public GameObject ObjectManager;
     public GameObject gamePlayer;
@@ -29,10 +27,8 @@ public class PlayManager : MonoSingleton<PlayManager>
 
     private TimeManager timeManager;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
-
         NetworkManager.Instance.PlaySceneManager = this;
         GameManager.Instance.EnterGame();
 

@@ -340,7 +340,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SyncHiddenCode(int _index)
     {
-        Clue clue = PlayManager.Instance.ClueInstances[_index].GetComponent<HandleClue>().clue;
+        Clue clue = PlaySceneManager.ClueInstances[_index].GetComponent<HandleClue>().clue;
 
         clue.IsHidden = true;
 

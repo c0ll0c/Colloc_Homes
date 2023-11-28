@@ -39,8 +39,8 @@ public class HandleRPC : MonoBehaviour
     private IEnumerator DelayStart()
     {
         yield return StaticFuncs.WaitForSeconds(3.0f);
-        attackController = PlayManager.Instance.gamePlayer.transform.GetChild(2).GetComponent<AttackController>();
-        homesController = PlayManager.Instance.gamePlayer.transform.GetChild(2).GetComponent<HomesController>();
+        attackController = NetworkManager.Instance.PlaySceneManager.gamePlayer.transform.GetChild(2).GetComponent<AttackController>();
+        homesController = NetworkManager.Instance.PlaySceneManager.gamePlayer.transform.GetChild(2).GetComponent<HomesController>();
     }
 
     // sync player direction
@@ -61,13 +61,13 @@ public class HandleRPC : MonoBehaviour
     [PunRPC]
     public void ChangeStatus(string _status)
     {
-        if (PlayManager.Instance.gamePlayer.CompareTag(_status)) return;
-        if (PlayManager.Instance.gamePlayer.CompareTag("Colloc")) return;
+        if (NetworkManager.Instance.PlaySceneManager.gamePlayer.CompareTag(_status)) return;
+        if (NetworkManager.Instance.PlaySceneManager.gamePlayer.CompareTag("Colloc")) return;
 
         if (_status == "Homes")
         {
             attackController.enabled = true;
-            PlayManager.Instance.gamePlayer.tag = "Homes";
+            NetworkManager.Instance.PlaySceneManager.gamePlayer.tag = "Homes";
             UIManager.Instance.SetGameUI("Homes");
         }
         else
@@ -80,17 +80,17 @@ public class HandleRPC : MonoBehaviour
     {
         yield return StaticFuncs.WaitForSeconds(3.0f);
 
-        if (PlayManager.Instance.isVaccinated)
+        if (NetworkManager.Instance.PlaySceneManager.isVaccinated)
         {
-            PlayManager.Instance.gamePlayer.GetComponent<HandleRPC>().VaccineEffect.SetActive(false);
-            PlayManager.Instance.isVaccinated = false;
+            NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().VaccineEffect.SetActive(false);
+            NetworkManager.Instance.PlaySceneManager.isVaccinated = false;
         }
         else
         {
             attackController.enabled = false;
-            PlayManager.Instance.gamePlayer.tag = "Infect";
+            NetworkManager.Instance.PlaySceneManager.gamePlayer.tag = "Infect";
             UIManager.Instance.SetGameUI("Infect");
-            StartCoroutine(StaticFuncs.SetEffect(PlayManager.Instance.gamePlayer.GetComponent<HandleRPC>().InfectEffect));
+            StartCoroutine(StaticFuncs.SetEffect(NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect));
         }
     }
 
@@ -99,7 +99,7 @@ public class HandleRPC : MonoBehaviour
     public void Attack()
     {
         homesController.SetSpeed(0);
-        StartCoroutine(StaticFuncs.SetEffect(PlayManager.Instance.gamePlayer.GetComponent<HandleRPC>().AttackEffect));
+        StartCoroutine(StaticFuncs.SetEffect(NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().AttackEffect));
         StartCoroutine(ResetSpeed());
     }
 

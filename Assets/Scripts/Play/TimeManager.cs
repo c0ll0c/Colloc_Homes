@@ -77,6 +77,6 @@ public class TimeManager : MonoBehaviour
             coolTimeUI.SetCoolTimeBar(prog);
         }
 
-        PlayManager.Instance.ActivateAttack();
+        NetworkManager.Instance.PlaySceneManager.ActivateAttack();
     }
 }

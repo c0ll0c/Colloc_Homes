@@ -32,7 +32,7 @@ public class AttackController : MonoBehaviour
         if (hit.collider.name != "PlayerTrigger") return;
         if (hit.collider.GetComponentInParent<PhotonView>().IsMine) return;
 
-        if (!PlayManager.Instance.TryAttack()) return;
+        if (!NetworkManager.Instance.PlaySceneManager.TryAttack()) return;
         StartCoroutine(StaticFuncs.SetEffect(hit.collider.GetComponentInParent<HandleRPC>().AttackEffect));
         Photon.Realtime.Player targetPlayer = hit.collider.GetComponentInParent<PhotonView>().Owner;
         pv.RPC("Attack", targetPlayer);

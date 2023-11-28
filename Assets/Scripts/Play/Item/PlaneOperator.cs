@@ -27,8 +27,8 @@ public class Plane : PoolAble
 
     public void InitiateDrop(int _index)
     {
-        transform.position = new Vector3(25.0f, PlayManager.Instance.RandomDropPos[_index].y, 0f);
-        dropPos = PlayManager.Instance.RandomDropPos[_index];
+        transform.position = new Vector3(25.0f, NetworkManager.Instance.PlaySceneManager.RandomDropPos[_index].y, 0f);
+        dropPos = NetworkManager.Instance.PlaySceneManager.RandomDropPos[_index];
     }
 
     // vaccine pool get

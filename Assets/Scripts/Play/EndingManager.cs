@@ -39,7 +39,7 @@ public class EndingManager : MonoBehaviour
 
     public void ShowResult(EndingType _endType, bool invoker)
     {
-        bool isHomes = PlayManager.Instance.gamePlayer.tag != "Colloc";
+        bool isHomes = NetworkManager.Instance.PlaySceneManager.gamePlayer.tag != "Colloc";
         switch (_endType)
         {
             case EndingType.CatchColloc:
