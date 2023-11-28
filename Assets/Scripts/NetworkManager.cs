@@ -56,6 +56,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         GameManager.Instance.ChangeScene(GameState.LOBBY);
+        PhotonNetwork.JoinLobby();
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -65,6 +66,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     #region SET LOBBY SCENE
+    public RoomManager LobbySceneManager;
     public void JoinDefaultRoom()
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
@@ -76,6 +78,43 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             MaxPlayers = maxPlayersPerRoom
         };
         PhotonNetwork.JoinOrCreateRoom("gameroom", roomOptions, TypedLobby.Default);
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        foreach (RoomInfo roomInfo in roomList)
+        {
+            if (roomInfo.RemovedFromList)
+            {
+                if (LobbySceneManager != null)
+                {
+                    LobbySceneManager.RemoveRoom(roomInfo);
+                }
+            }
+            else
+            {
+                if (LobbySceneManager != null)
+                {
+                    LobbySceneManager.AddRoom(roomInfo);
+                }
+            }
+        }
+    }
+
+    public void CreateRoom(string _roomName)
+    {
+        RoomOptions roomOptions = new()
+        {
+            IsOpen = true,
+            IsVisible = true,
+            MaxPlayers = maxPlayersPerRoom
+        };
+        PhotonNetwork.CreateRoom(_roomName, roomOptions, TypedLobby.Default);
+    }
+
+    public void JoinRoom(string _roomName)
+    {
+        PhotonNetwork.JoinRoom(_roomName);
     }
     #endregion
     #region SET READY SCENE
