@@ -26,6 +26,18 @@ public class PlayManager : MonoBehaviour
     private int fakeIndex = 0;
 
     private TimeManager timeManager;
+    
+    // GameSetting
+    public enum GameSettings
+    {
+        READY_PLAYER = 1,
+        READY_USERCLUE = 2,
+        READY_CLUENOTE = 4,
+        READY_OTHERCLUE_FAKE = 8,
+        READY_OTHERCLUE_CODE = 16,
+        READY_ITEM = 32,
+    }
+    private int readyStauts = 0;
 
     private void Awake()
     {
@@ -33,11 +45,24 @@ public class PlayManager : MonoBehaviour
         GameManager.Instance.EnterGame();
 
         timeManager = transform.GetComponent<TimeManager>();
-        
+
+        readyStauts = 0;
         if (PhotonNetwork.IsMasterClient)
         {
             NetworkManager.Instance.GameSetting();
         }
+    }
+    
+    public void CheckReady(GameSettings _type)
+    {
+        readyStauts |= (int)_type;
+        if (readyStauts == 63) NetworkManager.Instance.SetPlayerSettingDone();
+    }
+
+    public void StartGame(double _endTime)
+    {
+        timeManager.SetEndTime(_endTime);
+        UIManager.Instance.DeactivateStartPanel();
     }
 
     private bool canAttack = true;
@@ -65,12 +90,16 @@ public class PlayManager : MonoBehaviour
             gamePlayer.tag = "Homes";
             UIManager.Instance.SetGameUI("Homes");
         }
+
+        UIManager.Instance.LoadStartPanel(_isColloc);
+        CheckReady(GameSettings.READY_PLAYER);
     }
 
-    public void SetGame(int _dropTime, Vector3[] _dropPos, double _endTime)
+    public void SetGame(int _dropTime, Vector3[] _dropPos)
     {
         RandomDropPos = _dropPos;
-        timeManager.SetPlayTime(_endTime, _dropTime);
+        timeManager.SetDropTime(_dropTime);
+        CheckReady(GameSettings.READY_ITEM);
     }
 
     public void MakeOtherClueInstance(Vector2[] position, ClueType clueType, int N)
@@ -102,6 +131,9 @@ public class PlayManager : MonoBehaviour
             ClueInstances[index] = myInstance;
             index++;
         }
+
+        if (clueType == ClueType.CODE) CheckReady(GameSettings.READY_OTHERCLUE_CODE);
+        else CheckReady(GameSettings.READY_OTHERCLUE_FAKE);
     }
 
     public void MakeUserClueInstance(Vector2[] position, ClueType clueType, string _nickname, string _code, string _color)
@@ -121,6 +153,8 @@ public class PlayManager : MonoBehaviour
 
         ClueInstances[index] = myInstance;
         index++;
+
+        CheckReady(GameSettings.READY_USERCLUE);
     }
     
     private void OnDestroy()

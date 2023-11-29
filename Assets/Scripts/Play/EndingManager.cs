@@ -22,14 +22,9 @@ public class EndingManager : MonoBehaviour
 
     public void Awake()
     {
-        gameObject.SetActive(false);
         resultText = transform.GetChild(1).GetComponent<TMP_Text>();
         resultImg = transform.GetChild(2).GetComponent<Image>();
-    }
-
-    public void OnEnable()
-    {
-        Time.timeScale = 0;
+        gameObject.SetActive(false);
     }
 
     public void OnDisable()
@@ -39,6 +34,7 @@ public class EndingManager : MonoBehaviour
 
     public void ShowResult(EndingType _endType, bool invoker)
     {
+        Time.timeScale = 0;
         bool isHomes = NetworkManager.Instance.PlaySceneManager.gamePlayer.tag != "Colloc";
         switch (_endType)
         {

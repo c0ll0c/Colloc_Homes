@@ -54,6 +54,7 @@ MonoBehaviour:
   - SetUserClues
   - SetUserClue
   - SetClueNote
+  - SetGameStart
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

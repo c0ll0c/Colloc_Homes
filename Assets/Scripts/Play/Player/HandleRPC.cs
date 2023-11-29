@@ -33,12 +33,6 @@ public class HandleRPC : MonoBehaviour
             transform.GetChild(2).GetComponent<AttackController>().enabled = false;
         }
 
-        StartCoroutine(DelayStart());
-    }
-
-    private IEnumerator DelayStart()
-    {
-        yield return StaticFuncs.WaitForSeconds(3.0f);
         attackController = NetworkManager.Instance.PlaySceneManager.gamePlayer.transform.GetChild(2).GetComponent<AttackController>();
         homesController = NetworkManager.Instance.PlaySceneManager.gamePlayer.transform.GetChild(2).GetComponent<HomesController>();
     }
