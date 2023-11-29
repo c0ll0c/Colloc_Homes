@@ -11,19 +11,19 @@ public class RoomManager : MonoBehaviour
     {
         NetworkManager.Instance.LobbySceneManager = this;
     }
-    public void AddRoom(RoomInfo roomInfo)
+    public void AddRoom(RoomInfo _roomInfo)
     {
         HandleRoomList newRoom = Instantiate(RoomList, Content);
         if (newRoom != null )
         {
-            newRoom.SetRoomInfo(roomInfo);
+            newRoom.SetRoomInfo(_roomInfo);
             roomCollection.Add(newRoom);
         }
     }
 
-    public void RemoveRoom(RoomInfo roomInfo)
+    public void RemoveRoom(RoomInfo _roomInfo)
     {
-        int index = roomCollection.FindIndex(x => x.RoomInfo.Name == roomInfo.Name);
+        int index = roomCollection.FindIndex(x => x.RoomInfo.Name == _roomInfo.Name);
         if (index != -1)
         {
             Destroy(roomCollection[index].gameObject);

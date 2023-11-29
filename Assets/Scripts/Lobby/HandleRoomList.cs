@@ -7,10 +7,10 @@ public class HandleRoomList : MonoBehaviour
     public TMPro.TextMeshProUGUI RoomName;
     public RoomInfo RoomInfo { get; private set; }
 
-    public void SetRoomInfo(RoomInfo roomInfo)
+    public void SetRoomInfo(RoomInfo _roomInfo)
     {
-        RoomName.text = roomInfo.Name;
-        RoomInfo = roomInfo;
+        RoomName.text = _roomInfo.Name;
+        RoomInfo = _roomInfo;
     }
 
     public void JoinRoom()
