@@ -1,5 +1,3 @@
-using ExitGames.Client.Photon;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -36,6 +34,7 @@ public class ObjectPoolManager : MonoBehaviour
     // pool 기본 설정
     private void Init()
     {
+        Debug.Log("INIT");
         for (int i = 0; i < objectInfos.Length; i++)
         {
             IObjectPool<GameObject> pool = new ObjectPool<GameObject>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, 

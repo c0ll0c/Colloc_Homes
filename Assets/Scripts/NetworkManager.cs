@@ -71,7 +71,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
 
-        RoomOptions roomOptions = new ()
+        RoomOptions roomOptions = new()
         {
             IsOpen = true,
             IsVisible = true,
@@ -121,7 +121,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         GameManager.Instance.ChangeScene(GameState.READY);
-        
+
         PV.RPC("SyncPlayersData", RpcTarget.OthersBuffered);
     }
 
@@ -130,7 +130,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void SyncPlayersData()
     {
         List<PlayerData> playersStatus = new List<PlayerData>();
-        
+
         // Check if CurrentRoom is not null
         if (PhotonNetwork.CurrentRoom != null)
         {
@@ -165,6 +165,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         if (changedProps.ContainsKey("IsReady"))
         {
             SyncPlayersData();
+        }
+
+        if (changedProps.ContainsKey("SettingDone"))
+        {
+            if(PhotonNetwork.IsMasterClient) CheckStart();
         }
     }
 
@@ -230,20 +235,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             isColloc = false;
             code = StaticFuncs.GeneratePlayerCode(commonCharacters);
 
-
             if (i == colloc)
             {
                 isColloc = true;
                 ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
                 properties.Add("CollocCode", code);
+                properties.Add("CollocName", player.NickName);
                 PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
             }
 
             PV.RPC("SetPlayer", player, isColloc, randomSpawnPosition[i], randomColor[i]);
             PV.RPC("SetUserClue", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code, randomColor[i]);
             PV.RPC("SetClueNote", RpcTarget.All, player.NickName, randomColor[i], i);
-
-            Debug.Log(player.NickName + " : " + code);
+            PV.RPC("SetUserSelect", RpcTarget.All, player.NickName, randomColor[i], i);
 
             i++;
         }
@@ -257,8 +261,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             randomDropPos[i] = SetDropPos();
         }
 
-        double endTime = PhotonNetwork.Time + StaticVars.GAME_TIME;
-        PV.RPC("SetItems", RpcTarget.AllBuffered, randomDropTime, randomDropPos, endTime);
+        PV.RPC("SetItems", RpcTarget.AllBuffered, randomDropTime, randomDropPos);
     }
 
     // Set where gameobject will spawn
@@ -318,9 +321,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     // Inform game item setting to all players (clue code, item time & position)
     [PunRPC]
-    public void SetItems(int _dropTime, Vector3[] _dropPos, double _endTime)
+    public void SetItems(int _dropTime, Vector3[] _dropPos)
     {
-        PlaySceneManager.SetGame(_dropTime, _dropPos, _endTime);
+        PlaySceneManager.SetGame(_dropTime, _dropPos);
     }
 
     [PunRPC]
@@ -337,7 +340,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         _currentPlayer = PhotonNetwork.CurrentRoom.PlayerCount;
         PlaySceneManager.MakeUserClueInstance(_position, ClueType.USER, _nickname, _code, _color);
-        print(_color);
     }
 
     [PunRPC]
@@ -373,13 +375,78 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 noteSourceImage.sprite = UIManager.Instance.playerSprite[7];
                 break;
         }
+
+        PlaySceneManager.CheckReady(PlayManager.GameSettings.READY_CLUENOTE);
+    }
+
+    public void SetPlayerSettingDone()
+    {
+        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
+        properties.Add("SettingDone", true);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+    }
+
+    private void CheckStart()
+    {
+        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            // Check if player is ready
+            if (player.CustomProperties.TryGetValue("SettingDone", out object isDone))
+            {
+                if ((bool)isDone == false) return;
+            }
+        }
+
+        double endTime = PhotonNetwork.Time + StaticVars.GAME_TIME + StaticVars.START_PANEL_TIME;
+        PV.RPC("SetGameStart", RpcTarget.AllBuffered, endTime);
+    }
+
+    [PunRPC]
+    public void SetGameStart(double _endTime)
+    {
+        PlaySceneManager.StartGame(_endTime);
+    }
+
+    [PunRPC]
+    public void SetUserSelect(string _nickname, string _color, int _index)
+    {
+        Image selectSourceImage = UIManager.Instance.HomesInfo.GetChild(_index).GetChild(1).GetComponent<Image>();
+
+        UIManager.Instance.HomesInfo.GetChild(_index).GetChild(0).GetComponent<Text>().text = _nickname;
+        switch (_color)
+        {
+            case "Brown":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[0];
+                break;
+            case "Blue":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[1];
+                break;
+            case "Gray":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[2];
+                break;
+            case "Green":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[3];
+                break;
+            case "Orange":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[4];
+                break;
+            case "Pink":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[5];
+                break;
+            case "Purple":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[6];
+                break;
+            case "Yellow":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[7];
+                break;
+        }
     }
 
     // To modify
     [PunRPC]
     public void SyncHiddenCode(int _index)
     {
-        Clue clue = PlayManager.Instance.ClueInstances[_index].GetComponent<HandleClue>().clue;
+        Clue clue = PlaySceneManager.ClueInstances[_index].GetComponent<HandleClue>().clue;
 
         clue.IsHidden = true;
 

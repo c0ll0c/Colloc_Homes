@@ -12,15 +12,27 @@ public class TimeManager : MonoBehaviour
     private double vaccineDropTime;
     private int vaccineNum = 0;
 
+    private bool gameStart = false;
+    public GameObject EndingCanvasObj;
+    private EndingManager endingManager;
+
     private void Start()
     {
         timerUI = TimerObj.GetComponent<TimeCanvasUI>();
         coolTimeUI = CooltimeObj.GetComponent<CoolTimeUI>();
+        endingManager = EndingCanvasObj.GetComponent<EndingManager>();
     }
 
     private void Update()
     {
-        if (gameLeftTime <= 0) return;
+        if (gameLeftTime <= 0)
+        {
+            if (!EndingCanvasObj.activeSelf && gameStart)
+            {
+                endingManager.ShowResult(EndingType.TimeOver, true);
+            }
+            return;
+        }
 
         gameLeftTime -= Time.deltaTime;
         timerUI.SetTime(gameLeftTime);
@@ -33,11 +45,15 @@ public class TimeManager : MonoBehaviour
         }
     }
 
-    public void SetPlayTime(double _time, double _dropTime)
+    public void SetDropTime(double _dropTime)
     {
         vaccineDropTime = _dropTime;
+    }
 
-        gameLeftTime = _time - NetworkManager.Instance.GetServerTime();
+    public void SetEndTime(double _endTime)
+    {
+        gameLeftTime = _endTime - NetworkManager.Instance.GetServerTime();
+        gameStart = true;
     }
 
     private void DropVaccine()
@@ -66,6 +82,6 @@ public class TimeManager : MonoBehaviour
             coolTimeUI.SetCoolTimeBar(prog);
         }
 
-        PlayManager.Instance.ActivateAttack();
+        NetworkManager.Instance.PlaySceneManager.ActivateAttack();
     }
 }

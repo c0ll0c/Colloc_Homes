@@ -37,7 +37,7 @@ public class HandleDetox : MonoBehaviour
     {
         if (isMe)
         {
-            PlayManager.Instance.gamePlayer.GetComponent<HandleRPC>().ChangeStatus("Homes");
+            NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().ChangeStatus("Homes");
         }
         ActivateBooth(false);
     }

@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using System.Collections.Generic;
+using System.Collections;
 
 public class UIManager : MonoSingleton<UIManager>
 {
@@ -8,8 +11,11 @@ public class UIManager : MonoSingleton<UIManager>
     public GameObject CollocClueUI;
     public Transform UserInfo;
     public Transform CodeInfo;
+    public Transform HomesInfo;
     public Canvas ClueUI;
     public Sprite[] playerSprite;
+
+    public GameObject StartPanelObj;
 
     private int i = 0;
 
@@ -60,6 +66,37 @@ public class UIManager : MonoSingleton<UIManager>
         }
     }
 
+    public void LoadStartPanel(bool _isColloc)
+    {
+        StartPanelObj.SetActive(true);
+        // Status Text
+        StartPanelObj.transform.GetChild(1).GetChild(0).gameObject.SetActive(_isColloc);
+        StartPanelObj.transform.GetChild(1).GetChild(1).gameObject.SetActive(!_isColloc);
+        // Status Img
+        StartPanelObj.transform.GetChild(2).GetChild(0).gameObject.SetActive(_isColloc);
+        StartPanelObj.transform.GetChild(2).GetChild(1).gameObject.SetActive(!_isColloc);
+    }
+
+    public void DeactivateStartPanel()
+    {
+        StartCoroutine(StartDeactiveCount());
+    }
+
+    private IEnumerator StartDeactiveCount()
+    {
+        StartPanelObj.transform.GetChild(3).gameObject.SetActive(false);
+        TMP_Text countText = StartPanelObj.transform.GetChild(4).GetComponent<TMP_Text>();
+        int count = StaticVars.START_PANEL_TIME;
+        while (count > 0)
+        {
+            countText.text = count.ToString();
+            yield return StaticFuncs.WaitForSeconds(1);
+            count--;
+        }
+        countText.text = "";
+        StartPanelObj.SetActive(false);
+    }
+
     public void ChangeUserClueUIText(string _username, string _usercode, int _index, string _color)
     {
         Image cardSourceImage = CluePanelCanvas[0].GetChild(2).GetChild(0).GetComponent<Image>();
@@ -68,7 +105,7 @@ public class UIManager : MonoSingleton<UIManager>
         CluePanelCanvas[0].GetChild(0).GetComponent<Text>().text = _username;
         CluePanelCanvas[0].GetChild(1).GetComponent<Text>().text = _usercode;
 
-        UserInfo.GetChild(_index).GetChild(1).GetComponent<Text>().text = _usercode;        // ¾ê¸¸ ÇØ Áàµµ µÇ°Ô²û
+        UserInfo.GetChild(_index).GetChild(1).GetComponent<Text>().text = _usercode;
 
         switch (_color)
         {
@@ -142,7 +179,6 @@ public class UIManager : MonoSingleton<UIManager>
 
     public void ShowClueUI()
     {
-
         for (int i = 0; i < NetworkManager._currentPlayer; i++)
         {
             UserInfo.GetChild(i).gameObject.SetActive(true);

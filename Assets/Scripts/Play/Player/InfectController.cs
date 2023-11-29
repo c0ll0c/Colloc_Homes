@@ -16,7 +16,7 @@ public class InfectController : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collider)
     {
-        if (collider.name == "PlayerTrigger" && !PlayManager.Instance.gamePlayer.CompareTag("Homes"))
+        if (collider.name == "PlayerTrigger" && !NetworkManager.Instance.PlaySceneManager.gamePlayer.CompareTag("Homes"))
         {
             if (!pv.IsMine) spriter.enabled = true;
             if (Input.GetMouseButtonDown(0) && pv.IsMine)
@@ -42,7 +42,7 @@ public class InfectController : MonoBehaviour
 
         if (hit.collider == null) return;
         if (hit.collider != _collider) return;
-        if (!PlayManager.Instance.TryAttack()) return; 
+        if (!NetworkManager.Instance.PlaySceneManager.TryAttack()) return; 
 
         StartCoroutine(StaticFuncs.SetEffect(hit.collider.GetComponentInParent<HandleRPC>().InfectEffect));
         Photon.Realtime.Player targetPlayer = hit.collider.GetComponentInParent<PhotonView>().Owner;
