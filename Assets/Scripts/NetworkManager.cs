@@ -69,7 +69,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
 
-        RoomOptions roomOptions = new ()
+        RoomOptions roomOptions = new()
         {
             IsOpen = true,
             IsVisible = true,
@@ -82,7 +82,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         GameManager.Instance.ChangeScene(GameState.READY);
-        
+
         PV.RPC("SyncPlayersData", RpcTarget.OthersBuffered);
     }
 
@@ -91,7 +91,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void SyncPlayersData()
     {
         List<PlayerData> playersStatus = new List<PlayerData>();
-        
+
         // Check if CurrentRoom is not null
         if (PhotonNetwork.CurrentRoom != null)
         {
@@ -201,14 +201,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 isColloc = true;
                 ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
                 properties.Add("CollocCode", code);
+                properties.Add("CollocName", player.NickName);
                 PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
             }
 
             PV.RPC("SetPlayer", player, isColloc, randomSpawnPosition[i], randomColor[i]);
             PV.RPC("SetUserClue", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code, randomColor[i]);
             PV.RPC("SetClueNote", RpcTarget.All, player.NickName, randomColor[i], i);
-
-            Debug.Log(player.NickName + " : " + code);
+            PV.RPC("SetUserSelect", RpcTarget.All, player.NickName, randomColor[i], i);
 
             i++;
         }
@@ -366,6 +366,41 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void SetGameStart(double _endTime)
     {
         PlaySceneManager.StartGame(_endTime);
+    }
+
+    [PunRPC]
+    public void SetUserSelect(string _nickname, string _color, int _index)
+    {
+        Image selectSourceImage = UIManager.Instance.HomesInfo.GetChild(_index).GetChild(1).GetComponent<Image>();
+
+        UIManager.Instance.HomesInfo.GetChild(_index).GetChild(0).GetComponent<Text>().text = _nickname;
+        switch (_color)
+        {
+            case "Brown":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[0];
+                break;
+            case "Blue":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[1];
+                break;
+            case "Gray":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[2];
+                break;
+            case "Green":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[3];
+                break;
+            case "Orange":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[4];
+                break;
+            case "Pink":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[5];
+                break;
+            case "Purple":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[6];
+                break;
+            case "Yellow":
+                selectSourceImage.sprite = UIManager.Instance.playerSprite[7];
+                break;
+        }
     }
 
     // To modify
