@@ -13,8 +13,13 @@ public class RoomManager : MonoBehaviour
     }
     public void AddRoom(RoomInfo _roomInfo)
     {
+        int index = roomCollection.FindIndex(x => x.RoomInfo.Name == _roomInfo.Name);
+        if (index != -1)
+        {
+            return;
+        }
         HandleRoomList newRoom = Instantiate(RoomList, Content);
-        if (newRoom != null )
+        if (newRoom != null)
         {
             newRoom.SetRoomInfo(_roomInfo);
             roomCollection.Add(newRoom);
