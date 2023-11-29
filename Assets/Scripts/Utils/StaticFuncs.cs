@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
-using UnityEngine.Assertions.Comparers;
 using UnityEngine.Tilemaps;
 
 public static class StaticFuncs 
@@ -21,10 +19,10 @@ public static class StaticFuncs
     // sprite renderer setting
     public static void SpriteRendering(GameObject _gameObject)
     {
-        for (int i = PlayManager.Instance.LayerGrass.Length; i > 0; i--)
+        for (int i = NetworkManager.Instance.PlaySceneManager.LayerGrass.Length; i > 0; i--)
         {
-            Vector3Int cellPosition = PlayManager.Instance.LayerGrass[i - 1].WorldToCell(_gameObject.transform.position);
-            TileBase tile = PlayManager.Instance.LayerGrass[i - 1].GetTile(cellPosition);
+            Vector3Int cellPosition = NetworkManager.Instance.PlaySceneManager.LayerGrass[i - 1].WorldToCell(_gameObject.transform.position);
+            TileBase tile = NetworkManager.Instance.PlaySceneManager.LayerGrass[i - 1].GetTile(cellPosition);
 
             if (tile != null)
             {
@@ -37,10 +35,10 @@ public static class StaticFuncs
    // check position on wall
    public static bool CheckOnWall(Vector3 _pos)
     {
-        for (int i = 1; i <= PlayManager.Instance.LayerWall.Length; i++)
+        for (int i = 1; i <= NetworkManager.Instance.PlaySceneManager.LayerWall.Length; i++)
         {
-            Vector3Int cellPosition = PlayManager.Instance.LayerWall[i - 1].WorldToCell(_pos);
-            TileBase tile = PlayManager.Instance.LayerWall[i - 1].GetTile(cellPosition);
+            Vector3Int cellPosition = NetworkManager.Instance.PlaySceneManager.LayerWall[i - 1].WorldToCell(_pos);
+            TileBase tile = NetworkManager.Instance.PlaySceneManager.LayerWall[i - 1].GetTile(cellPosition);
 
             if (tile != null)
             {

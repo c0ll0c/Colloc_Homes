@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using System.Collections.Generic;
+using System.Collections;
 
 public class UIManager : MonoSingleton<UIManager>
 {
@@ -11,6 +14,8 @@ public class UIManager : MonoSingleton<UIManager>
     public Transform HomesInfo;
     public Canvas ClueUI;
     public Sprite[] playerSprite;
+
+    public GameObject StartPanelObj;
 
     private int i = 0;
 
@@ -59,6 +64,37 @@ public class UIManager : MonoSingleton<UIManager>
                 gameIcon[4].GetComponent<Image>().color = Color.red;
                 break;
         }
+    }
+
+    public void LoadStartPanel(bool _isColloc)
+    {
+        StartPanelObj.SetActive(true);
+        // Status Text
+        StartPanelObj.transform.GetChild(1).GetChild(0).gameObject.SetActive(_isColloc);
+        StartPanelObj.transform.GetChild(1).GetChild(1).gameObject.SetActive(!_isColloc);
+        // Status Img
+        StartPanelObj.transform.GetChild(2).GetChild(0).gameObject.SetActive(_isColloc);
+        StartPanelObj.transform.GetChild(2).GetChild(1).gameObject.SetActive(!_isColloc);
+    }
+
+    public void DeactivateStartPanel()
+    {
+        StartCoroutine(StartDeactiveCount());
+    }
+
+    private IEnumerator StartDeactiveCount()
+    {
+        StartPanelObj.transform.GetChild(3).gameObject.SetActive(false);
+        TMP_Text countText = StartPanelObj.transform.GetChild(4).GetComponent<TMP_Text>();
+        int count = StaticVars.START_PANEL_TIME;
+        while (count > 0)
+        {
+            countText.text = count.ToString();
+            yield return StaticFuncs.WaitForSeconds(1);
+            count--;
+        }
+        countText.text = "";
+        StartPanelObj.SetActive(false);
     }
 
     public void ChangeUserClueUIText(string _username, string _usercode, int _index, string _color)

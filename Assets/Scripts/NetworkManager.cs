@@ -127,6 +127,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             SyncPlayersData();
         }
+
+        if (changedProps.ContainsKey("SettingDone"))
+        {
+            if(PhotonNetwork.IsMasterClient) CheckStart();
+        }
     }
 
     // Start Game by Master
@@ -217,8 +222,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             randomDropPos[i] = SetDropPos();
         }
 
-        double endTime = PhotonNetwork.Time + StaticVars.GAME_TIME;
-        PV.RPC("SetItems", RpcTarget.AllBuffered, randomDropTime, randomDropPos, endTime);
+        PV.RPC("SetItems", RpcTarget.AllBuffered, randomDropTime, randomDropPos);
     }
 
     // Set where gameobject will spawn
@@ -278,9 +282,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     // Inform game item setting to all players (clue code, item time & position)
     [PunRPC]
-    public void SetItems(int _dropTime, Vector3[] _dropPos, double _endTime)
+    public void SetItems(int _dropTime, Vector3[] _dropPos)
     {
-        PlaySceneManager.SetGame(_dropTime, _dropPos, _endTime);
+        PlaySceneManager.SetGame(_dropTime, _dropPos);
     }
 
     [PunRPC]
@@ -297,7 +301,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         _currentPlayer = PhotonNetwork.CurrentRoom.PlayerCount;
         PlaySceneManager.MakeUserClueInstance(_position, ClueType.USER, _nickname, _code, _color);
-        print(_color);
     }
 
     [PunRPC]
@@ -333,6 +336,36 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 noteSourceImage.sprite = UIManager.Instance.playerSprite[7];
                 break;
         }
+
+        PlaySceneManager.CheckReady(PlayManager.GameSettings.READY_CLUENOTE);
+    }
+
+    public void SetPlayerSettingDone()
+    {
+        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
+        properties.Add("SettingDone", true);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+    }
+
+    private void CheckStart()
+    {
+        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            // Check if player is ready
+            if (player.CustomProperties.TryGetValue("SettingDone", out object isDone))
+            {
+                if ((bool)isDone == false) return;
+            }
+        }
+
+        double endTime = PhotonNetwork.Time + StaticVars.GAME_TIME + StaticVars.START_PANEL_TIME;
+        PV.RPC("SetGameStart", RpcTarget.AllBuffered, endTime);
+    }
+
+    [PunRPC]
+    public void SetGameStart(double _endTime)
+    {
+        PlaySceneManager.StartGame(_endTime);
     }
 
     [PunRPC]
@@ -374,7 +407,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SyncHiddenCode(int _index)
     {
-        Clue clue = PlayManager.Instance.ClueInstances[_index].GetComponent<HandleClue>().clue;
+        Clue clue = PlaySceneManager.ClueInstances[_index].GetComponent<HandleClue>().clue;
 
         clue.IsHidden = true;
 
