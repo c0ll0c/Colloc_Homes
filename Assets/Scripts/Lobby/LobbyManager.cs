@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Photon.Realtime;
 
-public class RoomManager : MonoBehaviour
+public class LobbyManager : MonoBehaviour
 {
     public Transform Content;
     public HandleRoomList RoomList;

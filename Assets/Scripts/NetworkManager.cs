@@ -66,7 +66,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     #region SET LOBBY SCENE
-    public RoomManager LobbySceneManager;
+    public LobbyManager LobbySceneManager;
     public void JoinDefaultRoom()
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
@@ -103,6 +103,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void CreateRoom(string _roomName)
     {
+        PhotonNetwork.NickName = GameManager.Instance.PlayerName;
+
         RoomOptions roomOptions = new()
         {
             IsOpen = true,
@@ -114,6 +116,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void JoinRoom(string _roomName)
     {
+        PhotonNetwork.NickName = GameManager.Instance.PlayerName;
+
         PhotonNetwork.JoinRoom(_roomName);
     }
     #endregion
