@@ -4,7 +4,7 @@ using TMPro;
 using System.Collections.Generic;
 using System.Collections;
 
-public class UIManager : MonoSingleton<UIManager>
+public class UIManager : MonoBehaviour
 {
     public Transform[] CluePanelCanvas = new Transform[3];             // 탐정 카드, 코드 조각, 상태 표시
     public GameObject UserClueUI;
@@ -21,21 +21,49 @@ public class UIManager : MonoSingleton<UIManager>
 
     [SerializeField] private GameObject[] gameIcon = new GameObject[5];
 
-    protected override void Awake()
+    private static UIManager instance;
+
+    public static UIManager Instance
     {
-        base.Awake();
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<UIManager>();
+                if (instance == null)
+                {
+                    GameObject obj = new GameObject();
+                    obj.name = typeof(UIManager).Name;
+                    instance = obj.AddComponent<UIManager>();
+                }
+            }
+            return instance;
+        }
+    }
+
+    protected virtual void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this as UIManager;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
 
         ClueUI.gameObject.SetActive(false);
         for (int i = 0; i < gameIcon.Length - 1; i++)
         {
             gameIcon[i].SetActive(false);
         }
-        
-        for(int i = 0; i < 5; i++)
+
+        for (int i = 0; i < 5; i++)
         {
             CodeInfo.GetChild(i).gameObject.SetActive(false);
         }
     }
+    
 
     public void SetGameUI(string _status)
     {
