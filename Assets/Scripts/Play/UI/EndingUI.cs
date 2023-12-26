@@ -9,7 +9,7 @@ public class EndingUI : MonoBehaviour
 {
     public GameObject dialogText;
     private string[] dialogBody = {
-        "자네, 무슨 일인가?",
+        ", 범인을 찾은 건가?",
         "싱겁긴.",
         "오, 빨리 말해 보게! 이들 중 누가 콜록인가?",
         "... 수사 중 ...",
@@ -18,9 +18,8 @@ public class EndingUI : MonoBehaviour
     };
     public GameObject FirstSelect;
     public GameObject SecondSelect;
-    public Text HomesName;
+    public string HomesName;
     public Image HomesImage;
-    public GameObject DoneButton;
     public GameObject[] UserButton;
 
     private void OnEnable()
@@ -30,46 +29,55 @@ public class EndingUI : MonoBehaviour
 
     private void SetupDialog()
     {
-        HomesName.text = GameManager.Instance.PlayerName;
-        dialogText.transform.GetChild(1).GetComponent<Text>().text = dialogBody[0];
-        FirstSelect.SetActive(true);
+        HomesName = GameManager.Instance.PlayerName;
+        dialogBody[0] = ", 범인을 찾은 건가?";
+        dialogBody[0] = HomesName + dialogBody[0];
+        dialogText.GetComponent<Text>().text = dialogBody[0];
+        FirstSelect.SetActive(false);
         SecondSelect.SetActive(false);
-        DoneButton.SetActive(false);
 
-        for (int i = 0; i < NetworkManager._currentPlayer; i++)             // 내가 들어있는 인덱스를 없애고 
+        for (int i = 0; i < NetworkManager._currentPlayer; i++)             // 내가 들어있는 인덱스는 화면에 띄워 주지 마셈
         {
-            print(GameManager.Instance.PlayerName);
-            print(UIManager.Instance.HomesInfo.GetChild(i).GetChild(0).GetComponent<Text>().text);
-            if (UIManager.Instance.HomesInfo.GetChild(i).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
+            Debug.Log("닉네임 확인 중");
+            Debug.Log(UIManager.Instance.HomesInfo.GetChild(i).GetChild(0).GetChild(0).GetComponent<Text>().text);
+            if (UIManager.Instance.HomesInfo.GetChild(i).GetChild(0).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
             {
-                HomesImage.sprite = UIManager.Instance.HomesInfo.GetChild(i).GetChild(1).GetComponent<Image>().sprite;
-                for (int j = i; j < UIManager.Instance.HomesInfo.childCount - 1; j++)
-                {
-                    Transform currentElement = UIManager.Instance.HomesInfo.GetChild(j);
-                    Transform nextElement = UIManager.Instance.HomesInfo.GetChild(j + 1);
-
-                    currentElement.GetChild(0).GetComponent<Text>().text = nextElement.GetChild(0).GetComponent<Text>().text;
-                    currentElement.GetChild(1).GetComponent<Image>().sprite = nextElement.GetChild(1).GetComponent<Image>().sprite;
-                }
+                Debug.Log("내 거");
+                HomesImage.sprite = UIManager.Instance.HomesInfo.GetChild(i).GetChild(1).GetChild(0).GetComponent<Image>().sprite;
+                // UIManager.Instance.HomesInfo.GetChild(i).gameObject.SetActive(false);
             }
         }
     }
-    
+
     public void onClickNo()
     {
-        dialogText.transform.GetChild(1).GetComponent<Text>().text = dialogBody[1];
+        dialogText.GetComponent<Text>().text = dialogBody[1];
         FirstSelect.SetActive(false);
-        DoneButton.SetActive(true);
     }
 
-    public void OnClickDone()
+    // next 버튼 눌럿을 때, 
+    public void OnClickNextButton()
     {
-        gameObject.SetActive(false);
+        if (dialogText.GetComponent<Text>().text == dialogBody[0])
+        {
+            Debug.Log("범인을 찾앗는지 아닌지...");
+            FirstSelect.SetActive(true);
+        }
+        else if (dialogText.GetComponent<Text>().text == dialogBody[1])
+        {
+            Debug.Log("취소하고 나가기");
+            gameObject.SetActive(false);
+        }
+        else if (dialogText.GetComponent<Text>().text == dialogBody[2])
+        {
+            Debug.Log("범인 고르는 중");
+            SecondSelect.SetActive(true);
+        }
     }
 
     public void OnClickFound()          // 찾았어요 누름
     {
-        dialogText.transform.GetChild(1).GetComponent<Text>().text = dialogBody[2];
+        dialogText.GetComponent<Text>().text = dialogBody[2];
         FirstSelect.SetActive(false);
 
         print(NetworkManager._currentPlayer);
@@ -77,8 +85,6 @@ public class EndingUI : MonoBehaviour
         {
             SecondSelect.transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
         }
-
-        SecondSelect.SetActive(true);
     }
 
     public void OnClickUserButton()     // 고발함
@@ -86,24 +92,25 @@ public class EndingUI : MonoBehaviour
         GameObject clickedButton = EventSystem.current.currentSelectedGameObject;
         Debug.Log("클릭된 버튼: " + clickedButton.name);
 
-        dialogText.transform.GetChild(1).GetComponent<Text>().text = dialogBody[3];
+        dialogText.GetComponent<Text>().text = dialogBody[3];
         SecondSelect.SetActive(false);
 
         StartCoroutine(ShowResult(clickedButton.transform.GetChild(0).GetComponent<Text>().text));
     }
 
+    // TODO: win, lose로 넘어가게
     public IEnumerator ShowResult(string _name)
     {
         yield return new WaitForSeconds(2f);
 
         if (_name == PhotonNetwork.CurrentRoom.CustomProperties["CollocName"].ToString())
         {
-            dialogText.transform.GetChild(1).GetComponent<Text>().text = dialogBody[5];
+            dialogText.GetComponent<Text>().text = dialogBody[5];
         }
 
         else
         {
-            dialogText.transform.GetChild(1).GetComponent<Text>().text = dialogBody[4];
+            dialogText.GetComponent<Text>().text = dialogBody[4];
 
         }
     }
