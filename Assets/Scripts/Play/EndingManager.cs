@@ -41,6 +41,7 @@ public class EndingManager : MonoBehaviour
             case EndingType.CatchColloc:
                 if (isHomes)
                 {
+                    Debug.Log("누군가가 콜록 찾음");
                     if (invoker)
                     {
                         // win _ founder homes
@@ -54,6 +55,7 @@ public class EndingManager : MonoBehaviour
                 }
                 else
                 {
+                    Debug.Log("발각됨");
                     // lose _ colloc
                     result = false;
                 }
