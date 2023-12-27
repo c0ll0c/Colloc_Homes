@@ -1,22 +1,22 @@
 using TMPro;
 using UnityEngine;
 
-public class RoomnameInputFieldUI : MonoBehaviour
+public class CreateRoomOptionsUI: MonoBehaviour
 {
     public TMP_InputField RoomnameField;
+    public TMP_InputField PasswordField;
     public bool RoomPublic;
-    public int PlayerNum;
 
     private void Start()
     {
         RoomPublic = true;
-        PlayerNum = 4;
     }
 
     public void CreateRoom()
     {
         if (string.IsNullOrEmpty(RoomnameField.text)) return;
+        if (!RoomPublic && string.IsNullOrEmpty (PasswordField.text)) return;
 
-        NetworkManager.Instance.CreateRoom(RoomnameField.text, RoomPublic, PlayerNum);
+        NetworkManager.Instance.CreateRoom(RoomnameField.text, RoomPublic, PasswordField.text);
     }
 }

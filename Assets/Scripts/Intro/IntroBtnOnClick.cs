@@ -36,8 +36,13 @@ public class IntroBtnOnClick : MonoBehaviour
     public void StartGame()
     {
         NetworkManager.Instance.Connect();
-        StartBtn.GetComponent<Button>().interactable = false;
-        StartBtn.transform.GetChild(0).gameObject.SetActive(false);
-        StartBtn.transform.GetChild(1).gameObject.SetActive(true);
+        transform.GetComponent<Button>().interactable = false;
+        transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(1).gameObject.SetActive(true);
+        if (string.IsNullOrEmpty(GameManager.Instance.PlayerName)){
+            int rand = Random.Range(10000, 100000);
+            PlayerPrefs.SetString(StaticVars.PREFS_NICKNAE, "P#"+rand.ToString());
+            GameManager.Instance.PlayerName = "P#" + rand.ToString();
+        }
     }
 }

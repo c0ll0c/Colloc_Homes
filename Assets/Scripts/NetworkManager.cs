@@ -101,7 +101,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void CreateRoom(string _roomName, bool _isVisible, int _maxPlayers)
+    public void CreateRoom(string _roomName, bool _isVisible, string password)
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
 
@@ -109,7 +109,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             IsOpen = true,
             IsVisible = _isVisible,
-            MaxPlayers = _maxPlayers
+            MaxPlayers = 6,
         };
         PhotonNetwork.CreateRoom(_roomName, roomOptions, TypedLobby.Default);
     }

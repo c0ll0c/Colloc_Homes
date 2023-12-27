@@ -6,15 +6,12 @@ public enum RoomOptionBtnType
 {
     PUBLIC,
     PRIVATE,
-    FOUR,
-    FIVE,
-    SIX,
 }
 
 
 public class RoomOptionBtnsOnClick : MonoBehaviour
 {
-    public RoomnameInputFieldUI CreateRoomManager;
+    public CreateRoomOptionsUI CreateRoomManager;
     public RoomOptionBtnType BtnType;
 
     public void OnClickBtn()
@@ -33,21 +30,6 @@ public class RoomOptionBtnsOnClick : MonoBehaviour
                 CreateRoomManager.RoomPublic = false;
                 transform.parent.GetChild(2).GetComponent<Image>().color = Color.gray;
                 transform.parent.GetChild(4).GetChild(2).GetComponent<TMP_InputField>().interactable = true;
-                break;
-            case RoomOptionBtnType.FOUR:
-                CreateRoomManager.PlayerNum = 4;
-                transform.parent.GetChild(3).GetComponent<Image>().color = Color.gray;
-                transform.parent.GetChild(4).GetComponent<Image>().color = Color.gray;
-                break;
-            case RoomOptionBtnType.FIVE:
-                CreateRoomManager.PlayerNum = 5;
-                transform.parent.GetChild(2).GetComponent<Image>().color = Color.gray;
-                transform.parent.GetChild(4).GetComponent<Image>().color = Color.gray;
-                break;
-            case RoomOptionBtnType.SIX:
-                CreateRoomManager.PlayerNum = 6;
-                transform.parent.GetChild(2).GetComponent<Image>().color = Color.gray;
-                transform.parent.GetChild(3).GetComponent<Image>().color = Color.gray;
                 break;
         }
     }
