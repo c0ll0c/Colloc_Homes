@@ -37,7 +37,7 @@ public class PlayManager : MonoBehaviour
         READY_OTHERCLUE_CODE = 16,
         READY_ITEM = 32,
     }
-    private int readyStauts = 0;
+    private int readyStatus = 0;
 
     private void Awake()
     {
@@ -46,7 +46,7 @@ public class PlayManager : MonoBehaviour
 
         timeManager = transform.GetComponent<TimeManager>();
 
-        readyStauts = 0;
+        readyStatus = 0;
         if (PhotonNetwork.IsMasterClient)
         {
             NetworkManager.Instance.GameSetting();
@@ -55,8 +55,8 @@ public class PlayManager : MonoBehaviour
     
     public void CheckReady(GameSettings _type)
     {
-        readyStauts |= (int)_type;
-        if (readyStauts == 63) NetworkManager.Instance.SetPlayerSettingDone();
+        readyStatus |= (int)_type;
+        if (readyStatus == 63) NetworkManager.Instance.SetPlayerSettingDone();
     }
 
     public void StartGame(double _endTime)
