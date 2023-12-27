@@ -13,9 +13,10 @@ public class NicknameInputFieldUI : MonoBehaviour
     public void SaveNickname()
     {
         if (string.IsNullOrEmpty(NicknameField.text)) return;
-
+        Debug.Log(NicknameField.text);
         // [TODO] nickname°ª validate(2~9ÀÚ)
         PlayerPrefs.SetString(StaticVars.PREFS_NICKNAE, NicknameField.text);
         GameManager.Instance.PlayerName = NicknameField.text;
+        Debug.Log(GameManager.Instance.PlayerName);
     }
 }
