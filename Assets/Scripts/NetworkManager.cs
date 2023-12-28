@@ -272,7 +272,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PV.RPC("SetPlayer", player, isColloc, randomSpawnPosition[i], randomColor[i]);
             PV.RPC("SetUserClue", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code, randomColor[i]);
             PV.RPC("SetClueNote", RpcTarget.All, player.NickName, randomColor[i], i);
-            PV.RPC("SetUserSelect", RpcTarget.All, player.NickName, randomColor[i], i);
+            PV.RPC("SetUserSelect", RpcTarget.All, player.NickName, randomColor[i], i, code);
 
             i++;
         }
@@ -433,11 +433,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void SetUserSelect(string _nickname, string _color, int _index)
+    public void SetUserSelect(string _nickname, string _color, int _index, string _code)
     {
-        Image selectSourceImage = UIManager.Instance.HomesInfo.GetChild(_index).GetChild(1).GetComponent<Image>();
+        // 콜록 고발할 때 -> 몇 번째에 누가 있는지를 네트워크 매니저에서 그냥 박아 둠.
 
-        UIManager.Instance.HomesInfo.GetChild(_index).GetChild(0).GetComponent<Text>().text = _nickname;
+        Image selectSourceImage = UIManager.Instance.HomesInfo.GetChild(_index).GetChild(1).GetChild(0).GetComponent<Image>();
+
+        UIManager.Instance.HomesInfo.GetChild(_index).GetChild(0).GetChild(0).GetComponent<Text>().text = _nickname;
+        UIManager.Instance.HomesInfo.GetChild(_index).GetChild(0).GetChild(1).GetComponent<Text>().text = _code;
+
         switch (_color)
         {
             case "Brown":
