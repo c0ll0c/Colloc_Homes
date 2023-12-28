@@ -101,15 +101,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void CreateRoom(string _roomName)
+    public void CreateRoom(string _roomName, bool _isVisible, string password)
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
 
         RoomOptions roomOptions = new()
         {
             IsOpen = true,
-            IsVisible = true,
-            MaxPlayers = maxPlayersPerRoom
+            IsVisible = _isVisible,
+            MaxPlayers = 6,
         };
         PhotonNetwork.CreateRoom(_roomName, roomOptions, TypedLobby.Default);
     }
@@ -124,6 +124,21 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #region SET READY SCENE
     public override void OnJoinedRoom()
     {
+        bool checkName = true;
+
+        if (PhotonNetwork.CurrentRoom != null && checkName)
+        {
+            checkName = false;
+            foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
+            {
+                if (player != PhotonNetwork.LocalPlayer && player.NickName == PhotonNetwork.NickName)
+                {
+                    PhotonNetwork.NickName = player.NickName + "1";
+                    checkName = true;
+                }
+            }
+        }
+
         GameManager.Instance.ChangeScene(GameState.READY);
 
         PV.RPC("SyncPlayersData", RpcTarget.OthersBuffered);
@@ -191,6 +206,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         PhotonNetwork.LoadLevel("PlayScene");
+
+        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
+            properties.Add("IsReady", false);
+            player.SetCustomProperties(properties);
+        }
     }
 
     // when player leave room
@@ -232,7 +254,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         string commonCharacters = "0123456789ABCDEX";
 
         commonCharacters = ShuffleCharacter(commonCharacters).Substring(0, 3);          // 랜덤으로 세 글자
-        Debug.Log(commonCharacters);
 
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {

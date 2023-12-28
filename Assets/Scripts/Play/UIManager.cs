@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
     public GameObject StartPanelObj;
 
     private int i = 0;
+    private bool isColloc;
 
     [SerializeField] private GameObject[] gameIcon = new GameObject[5];
 
@@ -97,12 +98,9 @@ public class UIManager : MonoBehaviour
     public void LoadStartPanel(bool _isColloc)
     {
         StartPanelObj.SetActive(true);
-        // Status Text
-        StartPanelObj.transform.GetChild(1).GetChild(0).gameObject.SetActive(_isColloc);
-        StartPanelObj.transform.GetChild(1).GetChild(1).gameObject.SetActive(!_isColloc);
-        // Status Img
-        StartPanelObj.transform.GetChild(2).GetChild(0).gameObject.SetActive(_isColloc);
-        StartPanelObj.transform.GetChild(2).GetChild(1).gameObject.SetActive(!_isColloc);
+        StartPanelObj.transform.GetChild(1).GetChild(0).gameObject.SetActive(true);
+        StartPanelObj.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
+        isColloc = _isColloc;
     }
 
     public void DeactivateStartPanel()
@@ -113,6 +111,7 @@ public class UIManager : MonoBehaviour
     private IEnumerator StartDeactiveCount()
     {
         StartPanelObj.transform.GetChild(3).gameObject.SetActive(false);
+
         TMP_Text countText = StartPanelObj.transform.GetChild(4).GetComponent<TMP_Text>();
         int count = StaticVars.START_PANEL_TIME;
         while (count > 0)
@@ -122,6 +121,18 @@ public class UIManager : MonoBehaviour
             count--;
         }
         countText.text = "";
+
+        StartPanelObj.transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
+        StartPanelObj.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
+
+        // Status Text
+        StartPanelObj.transform.GetChild(1).GetChild(1).gameObject.SetActive(isColloc);
+        StartPanelObj.transform.GetChild(1).GetChild(2).gameObject.SetActive(!isColloc);
+        // Status Img
+        StartPanelObj.transform.GetChild(2).GetChild(1).gameObject.SetActive(isColloc);
+        StartPanelObj.transform.GetChild(2).GetChild(2).gameObject.SetActive(!isColloc);
+        yield return StaticFuncs.WaitForSeconds(1);
+
         StartPanelObj.SetActive(false);
     }
 
