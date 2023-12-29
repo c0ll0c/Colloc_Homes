@@ -101,6 +101,18 @@ public class EndingUI : MonoBehaviour
                 UIManager.Instance.HomesInfo.GetChild(count).gameObject.SetActive(true);
             }
         }
+        else  // 0에서 더 앞으로 갔을 때, 맨 뒤로 가기
+        // 여기 뭔가 문제 잇다!!
+        {
+            count = NetworkManager._currentPlayer - 1;
+
+            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(0).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
+                count--;
+
+            for (int i = 0; i < 6; i++)
+                UIManager.Instance.HomesInfo.GetChild(i).gameObject.SetActive(false);
+            UIManager.Instance.HomesInfo.GetChild(count).gameObject.SetActive(true);
+        }
     }
 
     public void OnClickRight()
@@ -118,6 +130,17 @@ public class EndingUI : MonoBehaviour
                     UIManager.Instance.HomesInfo.GetChild(i).gameObject.SetActive(false);
                 UIManager.Instance.HomesInfo.GetChild(count).gameObject.SetActive(true);
             }
+        }
+        else  // 맨 뒤에서 더 뒤로 갔을 때, 0으로 가기, 0번째가 내 거라면 ++
+        {
+            count = 0;
+
+            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(0).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
+                count++;
+
+            for (int i = 0; i < 6; i++)
+                UIManager.Instance.HomesInfo.GetChild(i).gameObject.SetActive(false);
+            UIManager.Instance.HomesInfo.GetChild(count).gameObject.SetActive(true);
         }
     }
 
