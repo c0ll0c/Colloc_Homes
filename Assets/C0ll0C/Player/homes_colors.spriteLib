@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5e6fedc2472449cead18ef23b5cb30d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Library:
+  - m_Name: Color
+    m_Hash: 664233965
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: Brown
+      m_Hash: 752401232
+      m_Sprite: {fileID: -283909528, guid: 6e349873d9e87e04fa2f9a0b31768297, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -283909528, guid: 6e349873d9e87e04fa2f9a0b31768297,
+        type: 3}
+    - m_Name: Gray
+      m_Hash: 634228952
+      m_Sprite: {fileID: -590944496, guid: 83eee8f91e0613b4685ad276e50a3f0d, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -590944496, guid: 83eee8f91e0613b4685ad276e50a3f0d,
+        type: 3}
+    - m_Name: Green
+      m_Hash: 291225893
+      m_Sprite: {fileID: 1387748553, guid: 8a06962e1406ac545b72f91b2878ea1b, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1387748553, guid: 8a06962e1406ac545b72f91b2878ea1b,
+        type: 3}
+    - m_Name: Orange
+      m_Hash: 443135054
+      m_Sprite: {fileID: 1353381249, guid: 57bb08ff96e770140b6302003d5f3b71, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1353381249, guid: 57bb08ff96e770140b6302003d5f3b71,
+        type: 3}
+    - m_Name: Pink
+      m_Hash: 206692072
+      m_Sprite: {fileID: 488067637, guid: 27d41172fcf63c449a558c72eb05b25d, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 488067637, guid: 27d41172fcf63c449a558c72eb05b25d,
+        type: 3}
+    - m_Name: Purple
+      m_Hash: 757692368
+      m_Sprite: {fileID: 1721778752, guid: 25b0df3d69e8ecf4aa25565ff023a64d, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1721778752, guid: 25b0df3d69e8ecf4aa25565ff023a64d,
+        type: 3}
+    - m_Name: Yellow
+      m_Hash: 396945833
+      m_Sprite: {fileID: 1106217176, guid: 09006f02ffc969947a444e64756c506a, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1106217176, guid: 09006f02ffc969947a444e64756c506a,
+        type: 3}
+    - m_Name: Blue
+      m_Hash: 1040475530
+      m_Sprite: {fileID: 528853636, guid: c2354d4f2ff81214690da9b8a6bf3fd6, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 528853636, guid: c2354d4f2ff81214690da9b8a6bf3fd6,
+        type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 8
+  m_PrimaryLibraryGUID: 
+  m_ModificationHash: 638396326104200045
+  m_Version: 1
