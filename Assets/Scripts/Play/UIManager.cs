@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.U2D.Animation;
 
 public class UIManager : MonoBehaviour
 {
@@ -13,7 +14,6 @@ public class UIManager : MonoBehaviour
     public Transform CodeInfo;
     public Transform HomesInfo;
     public Canvas ClueUI;
-    public Sprite[] playerSprite;
 
     public GameObject StartPanelObj;
 
@@ -138,41 +138,15 @@ public class UIManager : MonoBehaviour
 
     public void ChangeUserClueUIText(string _username, string _usercode, int _index, string _color)
     {
-        Image cardSourceImage = CluePanelCanvas[0].GetChild(2).GetChild(0).GetComponent<Image>();
-
         // 단서 보기 눌렀을 때 나오는 탐정 카드
         CluePanelCanvas[0].GetChild(0).GetComponent<Text>().text = _username;
         CluePanelCanvas[0].GetChild(1).GetComponent<Text>().text = _usercode;
 
         UserInfo.GetChild(_index).GetChild(1).GetComponent<Text>().text = _usercode;
 
-        switch (_color)
-        {
-            case "Brown":
-                cardSourceImage.sprite = playerSprite[0];
-                break;
-            case "Blue":
-                cardSourceImage.sprite = playerSprite[1];
-                break;
-            case "Gray":
-                cardSourceImage.sprite = playerSprite[2];
-                break;
-            case "Green":
-                cardSourceImage.sprite = playerSprite[3];
-                break;
-            case "Orange":
-                cardSourceImage.sprite = playerSprite[4];
-                break;
-            case "Pink":
-                cardSourceImage.sprite = playerSprite[5];
-                break;
-            case "Purple":
-                cardSourceImage.sprite = playerSprite[6];
-                break;
-            case "Yellow":
-                cardSourceImage.sprite = playerSprite[7];
-                break;
-        }
+        Image cardImage = CluePanelCanvas[0].GetChild(2).GetChild(0).GetComponent<Image>();
+        SpriteLibraryAsset sprites = CluePanelCanvas[0].GetChild(2).GetChild(0).GetComponent<SpriteLibrary>().spriteLibraryAsset;
+        cardImage.sprite = sprites.GetSprite("Color", _color);
 
         CluePanelCanvas[0].gameObject.SetActive(true);
     }
