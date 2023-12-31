@@ -5,6 +5,8 @@ public static class StaticVars
     public static string PREFS_NICKNAE = "nickname";
     public static byte MAX_PLAYERS_PER_ROOM = 6;
 
+    public static int PLAYER_COLORS = 0b11111111; // 8Á¾·ù
+
     // time variables
     public static double GAME_TIME = 300.0f; // 5m
     public static int START_PANEL_TIME = 3; // 3s

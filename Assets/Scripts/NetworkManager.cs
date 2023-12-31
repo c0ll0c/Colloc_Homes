@@ -126,19 +126,29 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         bool checkName = true;
+        int ableColor = 0;
 
         if (PhotonNetwork.CurrentRoom != null && checkName)
         {
             checkName = false;
             foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
             {
-                if (player != PhotonNetwork.LocalPlayer && player.NickName == PhotonNetwork.NickName)
+                if (player != PhotonNetwork.LocalPlayer)
                 {
-                    PhotonNetwork.NickName = player.NickName + "1";
-                    checkName = true;
+                    if (player.NickName == PhotonNetwork.NickName)
+                    {
+                        PhotonNetwork.NickName = player.NickName + "1";
+                        checkName = true;
+                    }
+                    player.CustomProperties.TryGetValue("Color", out object color);
+                    ableColor |= (int)color;
                 }
             }
         }
+
+        ableColor ^= StaticVars.PLAYER_COLORS;
+        int playerColor = ableColor & (-ableColor);
+        SetPlayerColor(playerColor);
 
         GameManager.Instance.ChangeScene(GameState.READY);
 
@@ -177,6 +187,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
         properties.Add("IsReady", _isReady);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+    }
+
+    public void SetPlayerColor(int _color)
+    {
+        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
+        properties.Add("Color", _color);
         PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
     }
 
@@ -219,10 +236,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // when player leave room
     public void LeaveRoom()
     {
-        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-        properties.Add("IsReady", false);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
-
+        SetPlayerReady(false);
         PhotonNetwork.LeaveRoom();
     }
 

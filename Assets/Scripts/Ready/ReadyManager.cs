@@ -29,11 +29,11 @@ public class ReadyManager : MonoBehaviour
     {
         for (int i=0; i<_playerNum; i++)
         {
-            playerSlots[i].SetSlot(true, _players[i].Name, _players[i].IsMaster, _players[i].IsReady);
+            playerSlots[i].SetSlot(_players[i]);
         }
         for (int i = _playerNum; i < 6; i++)
         {
-            playerSlots[i].SetSlot(false, string.Empty, false, false);
+            playerSlots[i].SetEmptySlot();
         }
 
         StartBtnObj.SetActive(_isMaster);
