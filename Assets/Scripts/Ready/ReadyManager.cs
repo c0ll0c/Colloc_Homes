@@ -38,7 +38,7 @@ public class ReadyManager : MonoBehaviour
         {
             playerSlots[i].SetSlot(_players[i]);
             if (_players[i].IsLocal) 
-            { 
+            {
                 SetColorToggle(_players[i].Color); 
                 localSlotIndex = i; 
             }
@@ -62,13 +62,11 @@ public class ReadyManager : MonoBehaviour
         }
 
         Toggle toggle = ColorToggleGroupObj.transform.GetChild(index).GetComponent<Toggle>();
-        colorToggleGroup.NotifyToggleOn(toggle);
-        toggle.Select();
+        toggle.isOn = true;
     }
 
     public void ChangeLocalColor(int _color)
     {
-        Debug.Log("local color changed");
         color = _color;
         playerSlots[localSlotIndex].SetPlayerColor(_color);
     }

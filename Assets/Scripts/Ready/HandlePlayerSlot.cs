@@ -15,7 +15,7 @@ public class HandlePlayerSlot : MonoBehaviour
 
     public int PlayerColor;
 
-    private void Start()
+    private void Awake()
     {
         playerImg = PlayerImage.GetComponent<Image>();
         sprites = PlayerImage.GetComponent<SpriteLibrary>().spriteLibraryAsset;
