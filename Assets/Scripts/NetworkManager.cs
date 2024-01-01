@@ -125,12 +125,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #region SET READY SCENE
     public override void OnJoinedRoom()
     {
-        bool checkName = true;
         int ableColor = 0;
 
-        if (PhotonNetwork.CurrentRoom != null && checkName)
+        if (PhotonNetwork.CurrentRoom != null)
         {
-            checkName = false;
             foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
             {
                 if (player != PhotonNetwork.LocalPlayer)
@@ -138,9 +136,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                     if (player.NickName == PhotonNetwork.NickName)
                     {
                         PhotonNetwork.NickName = player.NickName + "1";
-                        checkName = true;
                     }
-                    player.CustomProperties.TryGetValue("Color", out object color);
+                    player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_COLOR, out object color);
                     ableColor |= (int)color;
                 }
             }
@@ -148,7 +145,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         ableColor ^= StaticVars.PLAYER_COLORS;
         int playerColor = ableColor & (-ableColor);
-        SetPlayerColor(playerColor);
+
+        AddCustomPropertiesToLocal(StaticCodes.PHOTON_PROP_COLOR, playerColor);
 
         GameManager.Instance.ChangeScene(GameState.READY);
 
@@ -185,26 +183,31 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // Player Ready
     public void SetPlayerReady(bool _isReady)
     {
-        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-        properties.Add("IsReady", _isReady);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
-    }
+        // Check other players' color
+        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            if (!player.IsLocal && player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_COLOR, out object color))
+            {
+                if ((int)color == ReadySceneManager.color) 
+                {
+                    Debug.LogError("other player occupied that color");
+                    return; 
+                }
+            }
+        }
 
-    public void SetPlayerColor(int _color)
-    {
-        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-        properties.Add("Color", _color);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+        AddCustomPropertiesToLocal(StaticCodes.PHOTON_PROP_ISREADY, _isReady);
+        AddCustomPropertiesToLocal(StaticCodes.PHOTON_PROP_COLOR, ReadySceneManager.color);
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
-        if (changedProps.ContainsKey("IsReady"))
+        if (changedProps.ContainsKey(StaticCodes.PHOTON_PROP_ISREADY))
         {
             SyncPlayersData();
         }
 
-        if (changedProps.ContainsKey("SettingDone"))
+        if (changedProps.ContainsKey(StaticCodes.PHOTON_PROP_SYNC))
         {
             if(PhotonNetwork.IsMasterClient) CheckStart();
         }
@@ -216,7 +219,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
             // Check if player is ready
-            if (!player.IsMasterClient && player.CustomProperties.TryGetValue("IsReady", out object IsReady))
+            if (!player.IsMasterClient && player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_ISREADY, out object IsReady))
             {
                 if ((bool)IsReady == false) return;
             }
@@ -228,7 +231,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
             ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-            properties.Add("IsReady", false);
+            properties.Add(StaticCodes.PHOTON_PROP_ISREADY, false);
             player.SetCustomProperties(properties);
         }
     }
@@ -398,9 +401,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void SetPlayerSettingDone()
     {
-        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-        properties.Add("SettingDone", true);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+        AddCustomPropertiesToLocal(StaticCodes.PHOTON_PROP_SYNC, true);
     }
 
     private void CheckStart()
@@ -408,7 +409,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
             // Check if player is ready
-            if (player.CustomProperties.TryGetValue("SettingDone", out object isDone))
+            if (player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_SYNC, out object isDone))
             {
                 if ((bool)isDone == false) return;
             }
@@ -458,6 +459,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public double GetServerTime()
     {
         return PhotonNetwork.Time;
+    }
+    public void AddCustomPropertiesToLocal(string _key, object _value)
+    {
+        var hash = PhotonNetwork.LocalPlayer.CustomProperties;
+        if (hash.ContainsKey(_key))
+        {
+            hash[_key] = _value;
+        }
+        else
+        {
+            hash.Add(_key, _value);
+        }
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
     }
     #endregion
 }

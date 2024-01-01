@@ -84,26 +84,17 @@ public static class StaticFuncs
 
     public static string GetColorName(int _colorCode)
     {
-        switch (_colorCode)
+        return _colorCode switch
         {
-            case 0b00000001:
-                return "Brown";
-            case 0b00000010:
-                return "Gray";
-            case 0b00000100:
-                return "Green";
-            case 0b00001000:
-                return "Yellow";
-            case 0b00010000:
-                return "Pink";
-            case 0b00100000:
-                return "Purple";
-            case 0b01000000:
-                return "Orange";
-            case 0b10000000:
-                return "Blue";
-            default:
-                return "";
-        }
+            0b00000001 => "Brown",
+            0b00000010 => "Gray",
+            0b00000100 => "Green",
+            0b00001000 => "Yellow",
+            0b00010000 => "Pink",
+            0b00100000 => "Purple",
+            0b01000000 => "Orange",
+            0b10000000 => "Blue",
+            _ => "",
+        };
     }
 }

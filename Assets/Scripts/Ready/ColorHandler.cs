@@ -19,12 +19,7 @@ public class ColorHandler : MonoBehaviour
     {
         if (change.isOn)
         {
-            Debug.Log(Color + " is on");
-            // 내 프로필 변경
-        }
-        else
-        {
-            Debug.Log(Color + " is off");
+            NetworkManager.Instance.ReadySceneManager.ChangeLocalColor(Color);
         }
     }
 }

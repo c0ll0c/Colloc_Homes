@@ -1,7 +1,7 @@
 public class PlayerData
 {
     public string Name { get; set; }
-    public int Id { get; set; }
+    public bool IsLocal { get; set; }
     public bool IsMaster { get; set; }
     public int Color { get; set; }
     public bool IsReady { get; set; } = false;
@@ -9,16 +9,16 @@ public class PlayerData
     public PlayerData(Photon.Realtime.Player _player)
     {
         Name = _player.NickName;
-        Id = _player.ActorNumber;
+        IsLocal = _player.IsLocal;
         if (_player.CustomProperties != null)
         {
-            if (_player.CustomProperties.ContainsKey("IsReady"))
+            if (_player.CustomProperties.ContainsKey(StaticCodes.PHOTON_PROP_ISREADY))
             {
-                IsReady = (bool)_player.CustomProperties["IsReady"] ? (bool)_player.CustomProperties["IsReady"] : false;
+                IsReady = (bool)_player.CustomProperties[StaticCodes.PHOTON_PROP_ISREADY] ? (bool)_player.CustomProperties[StaticCodes.PHOTON_PROP_ISREADY] : false;
             }
-            if (_player.CustomProperties.ContainsKey("Color"))
+            if (_player.CustomProperties.ContainsKey(StaticCodes.PHOTON_PROP_COLOR))
             {
-                Color = (int)_player.CustomProperties["Color"];
+                Color = (int)_player.CustomProperties[StaticCodes.PHOTON_PROP_COLOR];
             }
         }
     }

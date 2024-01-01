@@ -1922,6 +1922,8 @@ MonoBehaviour:
   PlayerSlotsObj: {fileID: 171982438}
   StartBtnObj: {fileID: 1647382811}
   ReadyBtnObj: {fileID: 257072585}
+  ColorToggleGroupObj: {fileID: 1637245363}
+  color: 0
 --- !u!1001 &1495373511
 PrefabInstance:
   m_ObjectHideFlags: 0
