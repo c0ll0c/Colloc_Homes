@@ -1,10 +1,14 @@
-using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
+using UnityEngine;
 using UnityEngine.U2D.Animation;
+using UnityEngine.UI;
 
 public class HandlePlayerSlot : MonoBehaviour
 {
+    private GameObject existingPlayer;
+    private GameObject noPlayer;
+    private Toggle emptySlotToggle;
+
     public TMP_Text PlayerNameText;
     public GameObject IsLeaderObj;
     public GameObject IsReadyObj;
@@ -17,13 +21,24 @@ public class HandlePlayerSlot : MonoBehaviour
 
     private void Awake()
     {
+        existingPlayer = transform.GetChild(0).gameObject;
+        noPlayer = transform.GetChild(1).gameObject;
+        
         playerImg = PlayerImage.GetComponent<Image>();
         sprites = PlayerImage.GetComponent<SpriteLibrary>().spriteLibraryAsset;
     }
 
+    private void SetSlotState(bool hasPlayer)
+    {
+        existingPlayer.SetActive(hasPlayer);
+        noPlayer.SetActive(!hasPlayer);
+        emptySlotToggle = (hasPlayer) ? null : noPlayer.GetComponent<Toggle>();
+    }
+
     public void SetSlot(PlayerData _player)
     {
-        gameObject.SetActive(true);
+        SetSlotState(true);
+
         PlayerNameText.text = _player.Name;
 
         IsLeaderObj.SetActive(_player.IsMaster);
@@ -34,7 +49,28 @@ public class HandlePlayerSlot : MonoBehaviour
 
     public void SetEmptySlot()
     {
-        gameObject.SetActive(false);
+        SetSlotState(false);
+
+        SetNoPlayerImg(emptySlotToggle.isOn);
+
+        emptySlotToggle.onValueChanged.AddListener(delegate
+        {
+            OnToggle(emptySlotToggle.isOn);
+        });
+    }
+
+    private void OnToggle(bool canJoin)
+    {
+        // [TODO] activated 칸이 5칸 이상일때만 가능
+        // 네트워크 상 공유..!
+        bool res = NetworkManager.Instance.ReadySceneManager.PlayerSlotClick(canJoin);
+        if (res) SetNoPlayerImg(canJoin);
+    }
+
+    private void SetNoPlayerImg(bool canJoin)
+    {
+        noPlayer.transform.GetChild(0).gameObject.SetActive(canJoin);
+        noPlayer.transform.GetChild(1).gameObject.SetActive(!canJoin);
     }
 
     public void SetPlayerColor(int _color)

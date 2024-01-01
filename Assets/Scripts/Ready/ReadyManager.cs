@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class ReadyManager : MonoBehaviour
 {
@@ -69,5 +70,18 @@ public class ReadyManager : MonoBehaviour
     {
         color = _color;
         playerSlots[localSlotIndex].SetPlayerColor(_color);
+    }
+
+
+    private int maxPlayers = 6;
+    public bool PlayerSlotClick(bool canJoin)
+    {
+        if (!PhotonNetwork.IsMasterClient) return false;
+
+        if (canJoin) maxPlayers++;
+        else if (maxPlayers > 4) maxPlayers--;
+        // 네트워크 상 공유... 어케하지
+
+        return true;
     }
 }
