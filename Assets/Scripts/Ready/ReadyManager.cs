@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Photon.Pun;
 
 public class ReadyManager : MonoBehaviour
 {
@@ -13,13 +12,13 @@ public class ReadyManager : MonoBehaviour
     public GameObject ReadyBtnObj;
 
     public GameObject ColorToggleGroupObj;
-    private ToggleGroup colorToggleGroup;
     public int color;
+
+    public GameObject ColorToggleDeactivatePanelObj;
 
     private void Awake()
     { 
         playerSlots = PlayerSlotsObj.transform.GetComponentsInChildren<HandlePlayerSlot>();
-        colorToggleGroup = ColorToggleGroupObj.GetComponent<ToggleGroup>();
     }
 
     private void Start()
@@ -33,20 +32,26 @@ public class ReadyManager : MonoBehaviour
         NetworkManager.Instance.ReadySceneManager = null;
     }
 
-    public void SetUI(List<PlayerData> _players, bool _isMaster)
+    public void SetUI(List<PlayerData> _players, int _availableSlots, bool _isMaster)
     {
-        for (int i=0; i<_players.Count; i++)
-        {
-            playerSlots[i].SetSlot(_players[i]);
-            if (_players[i].IsLocal) 
+        int index = 0;
+        foreach(PlayerData player in _players){
+            while ((_availableSlots & (1 << index)) == 0)
             {
-                SetColorToggle(_players[i].Color); 
-                localSlotIndex = i; 
+                playerSlots[index].SetEmptySlot(true);
+                index++;
             }
+            playerSlots[index].SetSlot(player);
+            if (player.IsLocal)
+            {
+                SetColorToggle(player.Color);
+                localSlotIndex = index;
+            }
+            index++;
         }
-        for (int i = _players.Count; i < 6; i++)
+        for (; index < StaticVars.MAX_PLAYERS_PER_ROOM; index++)
         {
-            playerSlots[i].SetEmptySlot();
+            playerSlots[index].SetEmptySlot(false);
         }
 
         StartBtnObj.SetActive(_isMaster);
@@ -72,14 +77,17 @@ public class ReadyManager : MonoBehaviour
         playerSlots[localSlotIndex].SetPlayerColor(_color);
     }
 
+    public void DisactivateColorToggle(bool _isReady)
+    {
+        ColorToggleDeactivatePanelObj.SetActive(_isReady);
+    }
+
     public void SetSlotAble(int _availableSlots)
     {
         for (int i=0; i<StaticVars.MAX_PLAYERS_PER_ROOM; i++)
         {
-            if ((_availableSlots & (1 << i)) == 0)
-            {
-                playerSlots[i].SetNoPlayerImg(false);
-            }
-        }        
+            if (playerSlots[i].hasPlayer) continue;
+            playerSlots[i].SetNoPlayerImg((_availableSlots & (1 << i)) == 0);
+        }
     }
 }

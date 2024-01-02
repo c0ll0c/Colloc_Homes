@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class HandlePlayerSlot : MonoBehaviour
 {
+    public bool hasPlayer;
+    public bool blocked;
+
     private GameObject existingPlayer;
     private GameObject noPlayer;
     private Toggle emptySlotToggle;
@@ -21,6 +24,9 @@ public class HandlePlayerSlot : MonoBehaviour
 
     private void Awake()
     {
+        hasPlayer = false;
+        blocked = false;
+
         existingPlayer = transform.GetChild(0).gameObject;
         noPlayer = transform.GetChild(1).gameObject;
         
@@ -28,11 +34,12 @@ public class HandlePlayerSlot : MonoBehaviour
         sprites = PlayerImage.GetComponent<SpriteLibrary>().spriteLibraryAsset;
     }
 
-    private void SetSlotState(bool hasPlayer)
+    private void SetSlotState(bool _hasPlayer)
     {
-        existingPlayer.SetActive(hasPlayer);
-        noPlayer.SetActive(!hasPlayer);
-        emptySlotToggle = (hasPlayer) ? null : noPlayer.GetComponent<Toggle>();
+        hasPlayer = _hasPlayer;
+        existingPlayer.SetActive(_hasPlayer);
+        noPlayer.SetActive(!_hasPlayer);
+        emptySlotToggle = (_hasPlayer) ? null : noPlayer.GetComponent<Toggle>();
     }
 
     public void SetSlot(PlayerData _player)
@@ -47,27 +54,26 @@ public class HandlePlayerSlot : MonoBehaviour
         SetPlayerColor(_player.Color);
     }
 
-    public void SetEmptySlot()
+    public void SetEmptySlot(bool _blocked)
     {
         SetSlotState(false);
-
-        SetNoPlayerImg(emptySlotToggle.isOn);
-
+        SetNoPlayerImg(_blocked);
         emptySlotToggle.onValueChanged.AddListener(delegate
         {
-            OnToggle(emptySlotToggle.isOn);
+            OnToggle();
         });
     }
 
-    private void OnToggle(bool canJoin)
+    private void OnToggle()
     {
-        NetworkManager.Instance.SetSlotAble(transform.GetSiblingIndex(),canJoin);
+        bool res = NetworkManager.Instance.SetSlotAble(transform.GetSiblingIndex(), blocked);
+        if (res) blocked = !blocked;
     }
 
-    public void SetNoPlayerImg(bool canJoin)
+    public void SetNoPlayerImg(bool _blocked)
     {
-        noPlayer.transform.GetChild(0).gameObject.SetActive(canJoin);
-        noPlayer.transform.GetChild(1).gameObject.SetActive(!canJoin);
+        noPlayer.transform.GetChild(0).gameObject.SetActive(!_blocked);
+        noPlayer.transform.GetChild(1).gameObject.SetActive(_blocked);
     }
 
     public void SetPlayerColor(int _color)

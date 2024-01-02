@@ -18,7 +18,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     static public int _currentPlayer;
 
-    // Singleton ����
+    // Singleton 선언
     public static NetworkManager Instance;
 
     private void Awake()
@@ -106,11 +106,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
 
+        ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
+        hash.Add(StaticCodes.PHOTON_PROP_SLOTS, 0b111111);
+        
         RoomOptions roomOptions = new()
         {
             IsOpen = true,
             IsVisible = _isVisible,
             MaxPlayers = 6,
+            CustomRoomProperties = hash,
         };
         PhotonNetwork.CreateRoom(_roomName, roomOptions, TypedLobby.Default);
     }
@@ -150,12 +154,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         GameManager.Instance.ChangeScene(GameState.READY);
 
-        SyncPlayersData();
-        //PV.RPC("SyncPlayersData", RpcTarget.All);
+        PV.RPC("SyncPlayersData", RpcTarget.All);
     }
 
     public ReadyManager ReadySceneManager;
-    // [PunRPC]
+    [PunRPC]
     public void SyncPlayersData()
     {
         List<PlayerData> playersStatus = new List<PlayerData>();
@@ -177,12 +180,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if (ReadySceneManager != null)
         {
-            ReadySceneManager.SetUI(playersStatus, PhotonNetwork.IsMasterClient);
+            PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_SLOTS, out object slots);
+            ReadySceneManager.SetUI(playersStatus, (int)slots, PhotonNetwork.IsMasterClient);
         }
     }
 
     // Player Ready
-    public void SetPlayerReady(bool _isReady)
+    public bool SetPlayerReady(bool _isReady)
     {
         // Check other players' color
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
@@ -192,21 +196,27 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 if ((int)color == ReadySceneManager.color) 
                 {
                     Debug.LogError("other player occupied that color");
-                    return; 
+                    return false; 
                 }
             }
         }
 
         AddCustomPropertiesToLocal(StaticCodes.PHOTON_PROP_ISREADY, _isReady);
         AddCustomPropertiesToLocal(StaticCodes.PHOTON_PROP_COLOR, ReadySceneManager.color);
+        return _isReady;
     }
 
     private int maxPlayers = StaticVars.MAX_PLAYERS_PER_ROOM;
-    private int availableSlots = 0b111111;
-    public void SetSlotAble(int _index, bool _isAble)
+    // _index: 해제될 슬롯
+    // _isAble: true(x->?), false(?->x)
+    public bool SetSlotAble(int _index, bool _isAble)
     {
-        if (!PhotonNetwork.IsMasterClient) return;
+        if (!PhotonNetwork.IsMasterClient) return false;
 
+        bool res = PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_SLOTS, out object slots);
+        if (!res) return false;
+
+        int availableSlots = (int)slots;
         if (_isAble)
         {
             maxPlayers++;
@@ -217,15 +227,21 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             maxPlayers--;
             availableSlots &= (~(1 << _index));
         }
-        else return;
+        else return false;
 
-        PV.RPC("SetEmptySlots", RpcTarget.AllBuffered, availableSlots);
+        var hash = PhotonNetwork.CurrentRoom.CustomProperties;
+        hash[StaticCodes.PHOTON_PROP_SLOTS] = availableSlots;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+
+        PV.RPC("SetEmptySlots", RpcTarget.AllBuffered);
+        return true;
     }
 
     [PunRPC]
-    public void SetEmptySlots(int _availableSlots)
+    public void SetEmptySlots()
     {
-        ReadySceneManager.SetSlotAble(_availableSlots);
+        PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_SLOTS, out object slots);
+        ReadySceneManager.SetSlotAble((int)slots);
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
@@ -246,12 +262,24 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
-            // Check if player is ready
-            if (!player.IsMasterClient && player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_ISREADY, out object IsReady))
+            if (!player.IsMasterClient)
             {
-                if ((bool)IsReady == false) return;
+                // Check if player is ready
+                if (player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_ISREADY, out object IsReady))
+                {
+                    Debug.Log(IsReady);
+                    if (!(bool)IsReady) return;
+                }
+                else return;
+                if (player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_COLOR, out object color))
+                {
+                    if ((int)color == ReadySceneManager.color)
+                    {
+                        Debug.LogError("other player occupied that color");
+                        return;
+                    }
+                }
             }
-            else if (!player.IsMasterClient) return;
         }
 
         PhotonNetwork.LoadLevel("PlayScene");

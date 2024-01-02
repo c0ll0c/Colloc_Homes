@@ -4,5 +4,6 @@ public static class StaticCodes
     public static string PHOTON_PROP_COLOR = "p_color";
     public static string PHOTON_PROP_ISREADY = "p_ready";
     public static string PHOTON_PROP_SYNC = "p_sync";
+    public static string PHOTON_PROP_SLOTS = "p_slots";
     #endregion
 }

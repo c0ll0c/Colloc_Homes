@@ -4,7 +4,7 @@ public static class StaticVars
 {
     public static string PREFS_NICKNAE = "nickname";
     public static byte MAX_PLAYERS_PER_ROOM = 6;
-
+    public static int PLAYER_SLOTS = 0b111111; // 6명의 players
     public static int PLAYER_COLORS = 0b11111111; // 8종류
 
     // time variables
