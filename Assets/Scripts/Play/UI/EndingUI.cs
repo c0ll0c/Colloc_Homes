@@ -86,23 +86,24 @@ public class EndingUI : MonoBehaviour
 
     public void OnClickLeft()
     {
-        // 이전 인덱스를 보여주되, 내 거라면 한 번 더 --, 이후 count가 0보다 크거나 같다면 보여주기
-        if (count != 0)
+        // 이전 인덱스를 보여주되, 내 거라면 한 번 더 --, 이후 count가 0보다 작다면 맨 마지막으로
+        if (count > 0)
         {
             count--;
             
             if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(0).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
                 count--;
 
-            if (count >= 0)
+            if (count < 0)
             {
-                for (int i = 0; i < 6; i++)
-                    UIManager.Instance.HomesInfo.GetChild(i).gameObject.SetActive(false);
-                UIManager.Instance.HomesInfo.GetChild(count).gameObject.SetActive(true);
+                count = NetworkManager._currentPlayer - 1;
             }
+
+            for (int i = 0; i < 6; i++)
+                UIManager.Instance.HomesInfo.GetChild(i).gameObject.SetActive(false);
+            UIManager.Instance.HomesInfo.GetChild(count).gameObject.SetActive(true);
         }
         else  // 0에서 더 앞으로 갔을 때, 맨 뒤로 가기
-        // 여기 뭔가 문제 잇다!!
         {
             count = NetworkManager._currentPlayer - 1;
 
@@ -117,20 +118,22 @@ public class EndingUI : MonoBehaviour
 
     public void OnClickRight()
     {
-        if (count != NetworkManager._currentPlayer - 1)
+        if (count < NetworkManager._currentPlayer - 1)
         {
             count++;
 
             if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(0).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
                 count++;
 
-            if (count < NetworkManager._currentPlayer)
+            if (count >= NetworkManager._currentPlayer)
             {
-                for (int i = 0; i < 6; i++)
-                    UIManager.Instance.HomesInfo.GetChild(i).gameObject.SetActive(false);
-                UIManager.Instance.HomesInfo.GetChild(count).gameObject.SetActive(true);
+                count = 0;
             }
+            for (int i = 0; i < 6; i++)
+                UIManager.Instance.HomesInfo.GetChild(i).gameObject.SetActive(false);
+            UIManager.Instance.HomesInfo.GetChild(count).gameObject.SetActive(true);
         }
+
         else  // 맨 뒤에서 더 뒤로 갔을 때, 0으로 가기, 0번째가 내 거라면 ++
         {
             count = 0;
@@ -164,20 +167,22 @@ public class EndingUI : MonoBehaviour
     // TODO: win, lose로 넘어가게
     public IEnumerator ShowResult(string _name)
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2f);               // 결과를 말하고 나서 2초 뒤에 win, lose가 뜨도록!
 
-        if (_name == PhotonNetwork.CurrentRoom.CustomProperties["CollocName"].ToString())
+        if (_name == PhotonNetwork.CurrentRoom.CustomProperties["CollocName"].ToString())       // 맞았음
         {
-            dialogText.GetComponent<Text>().text = dialogBody[5];               // 결과를 말하고 나서 2초 뒤에 win, lose가 뜨도록!
+            dialogText.GetComponent<Text>().text = dialogBody[5];
             yield return new WaitForSeconds(2f);
-            endingManager.ShowResult(EndingType.CatchColloc, true);             // 내가 맞음... 다른 애들은 false가 보내져야 됨
+            endingManager.ShowResult(EndingType.CatchColloc, true);
+            NetworkManager.Instance.PV.RPC("ShowResultRPC", RpcTarget.Others, EndingType.CatchColloc, false);
         }
 
-        else
+        else                // 틀렸음
         {
             dialogText.GetComponent<Text>().text = dialogBody[4];
             yield return new WaitForSeconds(2f);
             endingManager.ShowResult(EndingType.FalseAlarm, true);
+            NetworkManager.Instance.PV.RPC("OutRPC", RpcTarget.Others);
         }
     }
 }

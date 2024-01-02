@@ -207,6 +207,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         PhotonNetwork.LoadLevel("PlayScene");
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+        PhotonNetwork.CurrentRoom.IsVisible = false;
 
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
@@ -240,6 +242,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #region SET PLAY SCENE
     // PlaySceneManager
     public PlayManager PlaySceneManager;
+    public EndingManager EndingManager;
 
     // Generate players, codes, items(drop time, position): called by MasterClient
     public void GameSetting()
@@ -438,6 +441,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(15.0f);
         clue.IsHidden = false;
+    }
+
+
+    [PunRPC]
+    public void ShowResultRPC(EndingType _endType, bool invoker)
+    {
+        Debug.Log("RPC 발동!");
+        Debug.Log(_endType);
+        Debug.Log(invoker);
+        EndingManager.ShowResult(_endType, invoker);
+    }
+
+    [PunRPC]
+    IEnumerator OutRPC()
+    {
+        Debug.Log("RPC 발동!");
+        UIManager.Instance.OutPanelObj.SetActive(true);
+        yield return new WaitForSeconds(2.0f);
+        UIManager.Instance.OutPanelObj.SetActive(false);
     }
     #endregion
     #region SERVER UTILS
