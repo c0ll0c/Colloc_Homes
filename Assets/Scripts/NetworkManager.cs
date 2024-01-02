@@ -150,11 +150,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         GameManager.Instance.ChangeScene(GameState.READY);
 
-        PV.RPC("SyncPlayersData", RpcTarget.OthersBuffered);
+        SyncPlayersData();
+        //PV.RPC("SyncPlayersData", RpcTarget.All);
     }
 
     public ReadyManager ReadySceneManager;
-    [PunRPC]
+    // [PunRPC]
     public void SyncPlayersData()
     {
         List<PlayerData> playersStatus = new List<PlayerData>();
@@ -176,7 +177,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if (ReadySceneManager != null)
         {
-            ReadySceneManager.SetUI(playersStatus, playersStatus.Count, PhotonNetwork.IsMasterClient);
+            ReadySceneManager.SetUI(playersStatus, PhotonNetwork.IsMasterClient);
         }
     }
 
@@ -198,6 +199,33 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         AddCustomPropertiesToLocal(StaticCodes.PHOTON_PROP_ISREADY, _isReady);
         AddCustomPropertiesToLocal(StaticCodes.PHOTON_PROP_COLOR, ReadySceneManager.color);
+    }
+
+    private int maxPlayers = StaticVars.MAX_PLAYERS_PER_ROOM;
+    private int availableSlots = 0b111111;
+    public void SetSlotAble(int _index, bool _isAble)
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        if (_isAble)
+        {
+            maxPlayers++;
+            availableSlots |= (1 << _index);
+        }
+        else if (maxPlayers > 4)
+        {
+            maxPlayers--;
+            availableSlots &= (~(1 << _index));
+        }
+        else return;
+
+        PV.RPC("SetEmptySlots", RpcTarget.AllBuffered, availableSlots);
+    }
+
+    [PunRPC]
+    public void SetEmptySlots(int _availableSlots)
+    {
+        ReadySceneManager.SetSlotAble(_availableSlots);
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)

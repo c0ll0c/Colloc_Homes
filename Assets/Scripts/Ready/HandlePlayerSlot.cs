@@ -61,13 +61,10 @@ public class HandlePlayerSlot : MonoBehaviour
 
     private void OnToggle(bool canJoin)
     {
-        // [TODO] activated 칸이 5칸 이상일때만 가능
-        // 네트워크 상 공유..!
-        bool res = NetworkManager.Instance.ReadySceneManager.PlayerSlotClick(canJoin);
-        if (res) SetNoPlayerImg(canJoin);
+        NetworkManager.Instance.SetSlotAble(transform.GetSiblingIndex(),canJoin);
     }
 
-    private void SetNoPlayerImg(bool canJoin)
+    public void SetNoPlayerImg(bool canJoin)
     {
         noPlayer.transform.GetChild(0).gameObject.SetActive(canJoin);
         noPlayer.transform.GetChild(1).gameObject.SetActive(!canJoin);

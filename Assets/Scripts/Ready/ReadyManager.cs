@@ -33,9 +33,9 @@ public class ReadyManager : MonoBehaviour
         NetworkManager.Instance.ReadySceneManager = null;
     }
 
-    public void SetUI(List<PlayerData> _players, int _playerNum, bool _isMaster)
+    public void SetUI(List<PlayerData> _players, bool _isMaster)
     {
-        for (int i=0; i<_playerNum; i++)
+        for (int i=0; i<_players.Count; i++)
         {
             playerSlots[i].SetSlot(_players[i]);
             if (_players[i].IsLocal) 
@@ -44,7 +44,7 @@ public class ReadyManager : MonoBehaviour
                 localSlotIndex = i; 
             }
         }
-        for (int i = _playerNum; i < 6; i++)
+        for (int i = _players.Count; i < 6; i++)
         {
             playerSlots[i].SetEmptySlot();
         }
@@ -72,16 +72,14 @@ public class ReadyManager : MonoBehaviour
         playerSlots[localSlotIndex].SetPlayerColor(_color);
     }
 
-
-    private int maxPlayers = 6;
-    public bool PlayerSlotClick(bool canJoin)
+    public void SetSlotAble(int _availableSlots)
     {
-        if (!PhotonNetwork.IsMasterClient) return false;
-
-        if (canJoin) maxPlayers++;
-        else if (maxPlayers > 4) maxPlayers--;
-        // 네트워크 상 공유... 어케하지
-
-        return true;
+        for (int i=0; i<StaticVars.MAX_PLAYERS_PER_ROOM; i++)
+        {
+            if ((_availableSlots & (1 << i)) == 0)
+            {
+                playerSlots[i].SetNoPlayerImg(false);
+            }
+        }        
     }
 }
