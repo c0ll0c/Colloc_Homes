@@ -82,26 +82,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+        if (LobbySceneManager == null) return;
         foreach (RoomInfo roomInfo in roomList)
         {
+            Debug.Log(roomInfo.Name);
             if (roomInfo.RemovedFromList)
             {
-                if (LobbySceneManager != null)
-                {
-                    LobbySceneManager.RemoveRoom(roomInfo);
-                }
+                LobbySceneManager.RemoveRoom(roomInfo);
             }
             else
             {
-                if (LobbySceneManager != null)
-                {
-                    LobbySceneManager.AddRoom(roomInfo);
-                }
+                LobbySceneManager.AddRoom(roomInfo);
             }
         }
     }
 
-    public void CreateRoom(string _roomName, bool _isVisible, string password)
+    public void CreateRoom(string _roomName, bool _isVisible, string _password)
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
 
@@ -111,7 +107,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             IsVisible = _isVisible,
             MaxPlayers = 6,
         };
-        PhotonNetwork.CreateRoom(_roomName, roomOptions, TypedLobby.Default);
+
+        string randomCharacters = "0123456789ABCDEFGHIJYZ";
+        string roomCode = this.ShuffleCharacter(randomCharacters).Substring(0, 5);
+
+        ExitGames.Client.Photon.Hashtable roomCustomProps = new ExitGames.Client.Photon.Hashtable();
+        roomCustomProps.Add("RoomName", _roomName);
+        roomCustomProps.Add("Password", _password);
+        roomCustomProps.Add("State", "waiting");
+        roomOptions.CustomRoomProperties = roomCustomProps;
+
+        string[] customPropsForLobby = { "RoomName", "Password", "State" };
+        roomOptions.CustomRoomPropertiesForLobby = customPropsForLobby;
+
+        PhotonNetwork.CreateRoom(roomCode, roomOptions, TypedLobby.Default);
     }
 
     public void JoinRoom(string _roomName)
@@ -119,6 +128,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
 
         PhotonNetwork.JoinRoom(_roomName);
+    }
+
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        if (returnCode == 32760)
+        {
+            // TODO: 가능한 방이 없습니다
+        }
     }
     #endregion
     #region SET READY SCENE
@@ -206,6 +223,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         PhotonNetwork.LoadLevel("PlayScene");
+
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+        PhotonNetwork.CurrentRoom.IsVisible = false;
 
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {

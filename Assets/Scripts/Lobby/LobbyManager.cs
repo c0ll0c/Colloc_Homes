@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Photon.Realtime;
+using Photon.Pun;
 
 public class LobbyManager : MonoBehaviour
 {
@@ -11,6 +12,12 @@ public class LobbyManager : MonoBehaviour
     {
         NetworkManager.Instance.LobbySceneManager = this;
     }
+
+    public void RefreshRoom()
+    {
+        roomCollection.Clear();
+    }
+
     public void AddRoom(RoomInfo _roomInfo)
     {
         int index = roomCollection.FindIndex(x => x.RoomInfo.Name == _roomInfo.Name);

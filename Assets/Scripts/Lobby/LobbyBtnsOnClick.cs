@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 public enum LobbyBtnType
@@ -10,6 +11,8 @@ public enum LobbyBtnType
     CLOSE_PANEL,
     SET_NAME,
     SAVE_NAME,
+    SEARCH,
+    ENTER
 }
 
 public class LobbyBtnsOnClick : MonoBehaviour
@@ -26,7 +29,7 @@ public class LobbyBtnsOnClick : MonoBehaviour
             case LobbyBtnType.BACK:
                 GameManager.Instance.ChangeScene(GameState.INTRO); break;
             case LobbyBtnType.RANDOM_JOIN:
-
+                PhotonNetwork.JoinRandomRoom();
                 break;
             case LobbyBtnType.SET_ROOM:
                 transform.parent.GetChild(1).gameObject.SetActive(true);
@@ -40,6 +43,12 @@ public class LobbyBtnsOnClick : MonoBehaviour
                 break;
             case LobbyBtnType.CLOSE_PANEL:
                 transform.parent.gameObject.SetActive(false);
+                break;
+            case LobbyBtnType.SEARCH:
+                transform.parent.GetComponent<CodeInputFieldUI>().SearchRoom();
+                break;
+            case LobbyBtnType.ENTER:
+                transform.parent.GetComponent<CodeInputFieldUI>().CheckPassword();
                 break;
         }
     }
