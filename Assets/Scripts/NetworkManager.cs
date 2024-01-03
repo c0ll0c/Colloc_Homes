@@ -7,6 +7,7 @@ using System.Linq;
 using System;
 using UnityEngine.UI;
 using System.Text;
+using UnityEngine.U2D.Animation;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -390,37 +391,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetClueNote(string _nickname, string _color, int _index)
     {
-        Image noteSourceImage = UIManager.Instance.UserInfo.GetChild(_index).GetChild(2).GetChild(0).GetComponent<Image>();
+        Transform userInfo = UIManager.Instance.UserInfo.GetChild(_index);
 
-        UIManager.Instance.UserInfo.GetChild(_index).GetChild(0).GetComponent<Text>().text = _nickname;
-        switch (_color)
-        {
-            case "Brown":
-                noteSourceImage.sprite = UIManager.Instance.playerSprite[0];
-                break;
-            case "Blue":
-                noteSourceImage.sprite = UIManager.Instance.playerSprite[1];
-                break;
-            case "Gray":
-                noteSourceImage.sprite = UIManager.Instance.playerSprite[2];
-                break;
-            case "Green":
-                noteSourceImage.sprite = UIManager.Instance.playerSprite[3];
-                break;
-            case "Orange":
-                noteSourceImage.sprite = UIManager.Instance.playerSprite[4];
-                break;
-            case "Pink":
-                noteSourceImage.sprite = UIManager.Instance.playerSprite[5];
-                break;
-            case "Purple":
-                noteSourceImage.sprite = UIManager.Instance.playerSprite[6];
-                break;
-            case "Yellow":
-                noteSourceImage.sprite = UIManager.Instance.playerSprite[7];
-                break;
-        }
+        userInfo.GetChild(0).GetComponent<Text>().text = _nickname;
 
+        Image noteImage = userInfo.GetChild(2).GetChild(0).GetComponent<Image>();
+        SpriteLibraryAsset sprites = userInfo.GetChild(2).GetChild(0).GetComponent<SpriteLibrary>().spriteLibraryAsset;
+        noteImage.sprite = sprites.GetSprite("Color", _color);
+        
         PlaySceneManager.CheckReady(PlayManager.GameSettings.READY_CLUENOTE);
     }
 
@@ -456,39 +434,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void SetUserSelect(string _nickname, string _color, int _index, string _code)
     {
         // 콜록 고발할 때 -> 몇 번째에 누가 있는지를 네트워크 매니저에서 그냥 박아 둠.
+        Transform homesInfo = UIManager.Instance.HomesInfo.GetChild(_index);
+        homesInfo.GetChild(0).GetChild(0).GetComponent<Text>().text = _nickname;
+        homesInfo.GetChild(0).GetChild(1).GetComponent<Text>().text = _code;
 
-        Image selectSourceImage = UIManager.Instance.HomesInfo.GetChild(_index).GetChild(1).GetChild(0).GetComponent<Image>();
-
-        UIManager.Instance.HomesInfo.GetChild(_index).GetChild(0).GetChild(0).GetComponent<Text>().text = _nickname;
-        UIManager.Instance.HomesInfo.GetChild(_index).GetChild(0).GetChild(1).GetComponent<Text>().text = _code;
-
-        switch (_color)
-        {
-            case "Brown":
-                selectSourceImage.sprite = UIManager.Instance.playerSprite[0];
-                break;
-            case "Blue":
-                selectSourceImage.sprite = UIManager.Instance.playerSprite[1];
-                break;
-            case "Gray":
-                selectSourceImage.sprite = UIManager.Instance.playerSprite[2];
-                break;
-            case "Green":
-                selectSourceImage.sprite = UIManager.Instance.playerSprite[3];
-                break;
-            case "Orange":
-                selectSourceImage.sprite = UIManager.Instance.playerSprite[4];
-                break;
-            case "Pink":
-                selectSourceImage.sprite = UIManager.Instance.playerSprite[5];
-                break;
-            case "Purple":
-                selectSourceImage.sprite = UIManager.Instance.playerSprite[6];
-                break;
-            case "Yellow":
-                selectSourceImage.sprite = UIManager.Instance.playerSprite[7];
-                break;
-        }
+        Image userImage = homesInfo.GetChild(1).GetChild(0).GetComponent<Image>();
+        SpriteLibraryAsset sprites = homesInfo.GetChild(1).GetChild(0).GetComponent<SpriteLibrary>().spriteLibraryAsset;
+        userImage.sprite = sprites.GetSprite("Color", _color);
     }
 
     // To modify
