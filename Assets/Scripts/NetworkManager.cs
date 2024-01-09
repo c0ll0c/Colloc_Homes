@@ -68,18 +68,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     #region SET LOBBY SCENE
     public LobbyManager LobbySceneManager;
-    public void JoinDefaultRoom()
-    {
-        PhotonNetwork.NickName = GameManager.Instance.PlayerName;
-
-        RoomOptions roomOptions = new()
-        {
-            IsOpen = true,
-            IsVisible = true,
-            MaxPlayers = maxPlayersPerRoom
-        };
-        PhotonNetwork.JoinOrCreateRoom("gameroom", roomOptions, TypedLobby.Default);
-    }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
@@ -177,11 +165,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 }
             }
         }
+        playersStatus.Sort(delegate (PlayerData p1, PlayerData p2) { return p1.Id.CompareTo(p2.Id); });
 
         if (ReadySceneManager != null)
         {
             PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_SLOTS, out object slots);
-            ReadySceneManager.SetUI(playersStatus, (int)slots, PhotonNetwork.IsMasterClient);
+            ReadySceneManager.SetUI(PhotonNetwork.CurrentRoom.Name, "ABCDEF", playersStatus, (int)slots, PhotonNetwork.IsMasterClient);
         }
     }
 
@@ -209,7 +198,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     private int maxPlayers = StaticVars.MAX_PLAYERS_PER_ROOM;
     // _index: 해제될 슬롯
     // _isAble: true(x->?), false(?->x)
-    public bool SetSlotAble(int _index, bool _isAble)
+    public bool SetSlotAble(int _index, bool _makeAvailable)
     {
         if (!PhotonNetwork.IsMasterClient) return false;
 
@@ -217,7 +206,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         if (!res) return false;
 
         int availableSlots = (int)slots;
-        if (_isAble)
+        if (_makeAvailable)
         {
             maxPlayers++;
             availableSlots |= (1 << _index);
@@ -229,19 +218,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
         else return false;
 
+        // Set as Room's custom properties for new players
         var hash = PhotonNetwork.CurrentRoom.CustomProperties;
         hash[StaticCodes.PHOTON_PROP_SLOTS] = availableSlots;
         PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
 
-        PV.RPC("SetEmptySlots", RpcTarget.AllBuffered);
+        // For current players in the room, notify blocked/unblocked playerSlots
+        PV.RPC("SyncPlayerSlots", RpcTarget.All, availableSlots);
         return true;
     }
 
     [PunRPC]
-    public void SetEmptySlots()
+    public void SyncPlayerSlots(int _slots)
     {
-        PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_SLOTS, out object slots);
-        ReadySceneManager.SetSlotAble((int)slots);
+        ReadySceneManager.SetSlotBlock(_slots);
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)

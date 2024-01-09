@@ -5,51 +5,66 @@ using UnityEngine.UI;
 
 public class HandlePlayerSlot : MonoBehaviour
 {
-    public bool hasPlayer;
-    public bool blocked;
+    public bool IsFilled;
+    public bool IsBlocked;
 
-    private GameObject existingPlayer;
-    private GameObject noPlayer;
-    private Toggle emptySlotToggle;
+    public int SpriteColor;
 
-    public TMP_Text PlayerNameText;
-    public GameObject IsLeaderObj;
-    public GameObject IsReadyObj;
-    
-    public GameObject PlayerImage;
-    private Image playerImg;
+
+    Toggle btnActiveToggle;
+    // Child 0
+    private GameObject playerObj;
+    private TMP_Text playerName;
+    private GameObject isLeaderObj;
+    private GameObject isReadyObj;
+    private Image homesImg;
     private SpriteLibraryAsset sprites;
+    // Child 1
+    private GameObject noPlayerObj;
+    // Child 2
+    private GameObject btnObj;
+    private PlayerSlotBtnOnClick btnHandler;
 
-    public int PlayerColor;
 
     private void Awake()
     {
-        hasPlayer = false;
-        blocked = false;
+        IsFilled = false;
+        IsBlocked = false;
 
-        existingPlayer = transform.GetChild(0).gameObject;
-        noPlayer = transform.GetChild(1).gameObject;
-        
-        playerImg = PlayerImage.GetComponent<Image>();
-        sprites = PlayerImage.GetComponent<SpriteLibrary>().spriteLibraryAsset;
+        btnActiveToggle = GetComponent<Toggle>();
+        btnActiveToggle.interactable = false;
+
+        // Child 0
+        playerObj = transform.GetChild(0).gameObject;
+        playerName = playerObj.transform.GetChild(1).GetComponent<TMP_Text>();
+        isLeaderObj = playerObj.transform.GetChild(2).gameObject;
+        isReadyObj = playerObj.transform.GetChild(3).gameObject;
+        homesImg = playerObj.transform.GetChild(0).GetChild(0).GetComponent<Image>();
+        sprites = playerObj.transform.GetChild(0).GetChild(0).GetComponent<SpriteLibrary>().spriteLibraryAsset;
+
+        // Child 1
+        noPlayerObj = transform.GetChild(1).gameObject;
+
+        // Child 2
+        btnObj = transform.GetChild(2).gameObject;
+        btnHandler = btnObj.GetComponent<PlayerSlotBtnOnClick>();
     }
 
     private void SetSlotState(bool _hasPlayer)
     {
-        hasPlayer = _hasPlayer;
-        existingPlayer.SetActive(_hasPlayer);
-        noPlayer.SetActive(!_hasPlayer);
-        emptySlotToggle = (_hasPlayer) ? null : noPlayer.GetComponent<Toggle>();
+        IsFilled = _hasPlayer;
+        playerObj.SetActive(_hasPlayer);
+        noPlayerObj.SetActive(!_hasPlayer);
     }
 
     public void SetSlot(PlayerData _player)
     {
         SetSlotState(true);
 
-        PlayerNameText.text = _player.Name;
+        playerName.text = _player.Name;
 
-        IsLeaderObj.SetActive(_player.IsMaster);
-        IsReadyObj.SetActive(!_player.IsMaster & _player.IsReady);
+        isLeaderObj.SetActive(_player.IsMaster);
+        isReadyObj.SetActive(!_player.IsMaster & _player.IsReady);
 
         SetPlayerColor(_player.Color);
     }
@@ -57,28 +72,34 @@ public class HandlePlayerSlot : MonoBehaviour
     public void SetEmptySlot(bool _blocked)
     {
         SetSlotState(false);
-        SetNoPlayerImg(_blocked);
-        emptySlotToggle.onValueChanged.AddListener(delegate
-        {
-            OnToggle();
-        });
-    }
 
-    private void OnToggle()
-    {
-        bool res = NetworkManager.Instance.SetSlotAble(transform.GetSiblingIndex(), blocked);
-        if (res) blocked = !blocked;
-    }
+        IsBlocked = _blocked;
 
-    public void SetNoPlayerImg(bool _blocked)
-    {
-        noPlayer.transform.GetChild(0).gameObject.SetActive(!_blocked);
-        noPlayer.transform.GetChild(1).gameObject.SetActive(_blocked);
+        // [TO MODIFY]
+        noPlayerObj.transform.GetChild(0).gameObject.SetActive(!_blocked);
+        noPlayerObj.transform.GetChild(1).gameObject.SetActive(_blocked);
     }
 
     public void SetPlayerColor(int _color)
     {
-        string color = StaticFuncs.GetColorName(_color);
-        playerImg.sprite = sprites.GetSprite("Color", color);
+        homesImg.sprite = sprites.GetSprite("Color", StaticFuncs.GetColorName(_color));
+    }
+
+    public void EnableToggle()
+    {
+        btnActiveToggle.interactable = true;
+        btnActiveToggle.onValueChanged.AddListener(delegate
+        {
+            OnToggle(btnActiveToggle.isOn);
+        });
+    }
+
+    private void OnToggle(bool _isOn)
+    {
+        if (_isOn)
+        {
+            btnHandler.ChangeType(!IsFilled, IsBlocked);
+        }
+        btnObj.SetActive(_isOn);
     }
 }

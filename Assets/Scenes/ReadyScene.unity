@@ -520,6 +520,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7817788034612447381, guid: 9c345961d060e8c44b5d55d3232e8f3f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: OnClickBtn
+      objectReference: {fileID: 0}
+    - target: {fileID: 7817788034612447381, guid: 9c345961d060e8c44b5d55d3232e8f3f,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: ReadyBtnOnClick, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 8931301839462443612, guid: 9c345961d060e8c44b5d55d3232e8f3f,
         type: 3}
       propertyPath: m_IsActive
@@ -2437,11 +2447,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5069d79751ba844d80bc6778787d0ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RoomTitle: {fileID: 860886912}
+  RoomCode: {fileID: 670287666}
   PlayerSlotsObj: {fileID: 171982438}
   StartBtnObj: {fileID: 1647382811}
   ReadyBtnObj: {fileID: 257072585}
-  ColorToggleGroupObj: {fileID: 1637245363}
   color: 0
+  ColorToggleGroupObj: {fileID: 1637245363}
   ColorToggleDeactivatePanelObj: {fileID: 1097485878}
 --- !u!1 &1637245363
 GameObject:

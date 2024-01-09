@@ -1,5 +1,6 @@
 public class PlayerData
 {
+    public int Id { get; set; }
     public string Name { get; set; }
     public bool IsLocal { get; set; }
     public bool IsMaster { get; set; }
@@ -8,6 +9,7 @@ public class PlayerData
 
     public PlayerData(Photon.Realtime.Player _player)
     {
+        Id = _player.ActorNumber;
         Name = _player.NickName;
         IsLocal = _player.IsLocal;
         if (_player.CustomProperties != null)
