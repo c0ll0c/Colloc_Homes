@@ -32,6 +32,20 @@ public class ReadyManager : MonoBehaviour
         NetworkManager.Instance.ReadySceneManager = null;
     }
 
+    // PhotonView Master
+    /// 1. StartBtn Enable
+    /// 2. IsMaster Badge Enable
+    /// 3. Can Toggle EmptySlots
+    /// 4. Can Kick Players out
+
+    // Other Players
+    /// 1. ReadyBtn Enable
+    /// 2. Can Change Color
+    /// 3. Can SetReady to True
+    
+    // All Players
+    /// 1. Set Title, RoomCode
+
     public void SetUI(List<PlayerData> _players, int _availableSlots, bool _isMaster)
     {
         int index = 0;
