@@ -50,6 +50,7 @@ public class PlayerSlotBtnOnClick : MonoBehaviour
         switch (btnType)
         {
             case SlotBtnType.KICK:
+                NetworkManager.Instance.KickPlayerOut(slotIndex);
                 // °­Åð
                 break;
             case SlotBtnType.BLOCK:

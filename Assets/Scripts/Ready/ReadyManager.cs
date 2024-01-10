@@ -19,6 +19,8 @@ public class ReadyManager : MonoBehaviour
     // All Players
     /// 1. Set Title, RoomCode
 
+    public bool FirstRendering = false;
+
     public TMP_Text RoomTitle;
     public TMP_Text RoomCode;
 
@@ -76,7 +78,6 @@ public class ReadyManager : MonoBehaviour
         
         // PlayerSlots UI
         int index = 0;
-        Debug.Log(_availableSlots);
         foreach (PlayerData player in _players)
         {
             while ((_availableSlots & (1 << index)) == 0)
@@ -103,6 +104,7 @@ public class ReadyManager : MonoBehaviour
 
         // Master UI
         if (_isMaster) SetMasterUI();
+        FirstRendering = true;
     }
 
     private void SetMasterUI()

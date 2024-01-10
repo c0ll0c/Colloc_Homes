@@ -13,16 +13,17 @@ public class ColorHandler : MonoBehaviour
         colorToggle = GetComponent<Toggle>();
         colorToggle.onValueChanged.AddListener(delegate
         {
-            OnToggle(colorToggle);
+            OnToggle(colorToggle.isOn);
         });
 
         toggleImg = GetComponent<Image>();
     }
 
     private Color deepGray = new Color(0.2f, 0.2f, 0.2f);
-    private void OnToggle(Toggle change)
+    private void OnToggle(bool _isOn)
     {
-        if (change.isOn)
+        if (!NetworkManager.Instance.ReadySceneManager.FirstRendering) return;
+        if (_isOn)
         {
             NetworkManager.Instance.ReadySceneManager.ChangeLocalColor(SelectionColor);
             toggleImg.color = Color.cyan;

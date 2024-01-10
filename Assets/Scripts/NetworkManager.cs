@@ -282,6 +282,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public void KickPlayerOut(int _playerIndex) 
+    {
+        // TODO;
+    }
+
     // when player leave room
     public void LeaveRoom()
     {
@@ -313,7 +318,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         string code;
         Vector2[] randomCluePosition = ShufflePosition(StaticVars.CluePosition);
         Vector2[] randomSpawnPosition = ShufflePosition(StaticVars.SpawnPosition);
-        List<string> randomColor = StaticVars.Colors.OrderBy(_ => new System.Random().Next()).ToList();
 
         string commonCharacters = "0123456789ABCDEX";
 
@@ -332,11 +336,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 properties.Add("CollocName", player.NickName);
                 PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
             }
+            player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_COLOR, out object color);
+            string colorStr = StaticFuncs.GetColorName((int)color);
 
-            PV.RPC("SetPlayer", player, isColloc, randomSpawnPosition[i], randomColor[i]);
-            PV.RPC("SetUserClue", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code, randomColor[i]);
-            PV.RPC("SetClueNote", RpcTarget.All, player.NickName, randomColor[i], i);
-            PV.RPC("SetUserSelect", RpcTarget.All, player.NickName, randomColor[i], i, code);
+            PV.RPC("SetPlayer", player, isColloc, randomSpawnPosition[i], colorStr);
+            PV.RPC("SetUserClue", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code, colorStr);
+            PV.RPC("SetClueNote", RpcTarget.All, player.NickName, colorStr, i);
+            PV.RPC("SetUserSelect", RpcTarget.All, player.NickName, colorStr, i, code);
 
             i++;
         }
