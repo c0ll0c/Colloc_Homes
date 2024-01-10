@@ -125,6 +125,8 @@ public class ReadyManager : MonoBehaviour
 
     public void SetColorToggle(int _color)
     {
+        color = _color;
+
         int index= 0;
         while (_color > 1)
         {
@@ -145,5 +147,14 @@ public class ReadyManager : MonoBehaviour
     public void DisactivateColorToggle(bool _isReady)
     {
         ColorToggleDeactivatePanelObj.SetActive(_isReady);
+    }
+
+    public int GetPlayerId(int _index)
+    {
+        if (!playerSlots[_index].IsFilled) return -1;
+        else
+        {
+            return playerSlots[_index].PlayerNum;
+        }
     }
 }
