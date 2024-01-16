@@ -14,7 +14,8 @@ public class EndingUI : MonoBehaviour
         "오, 빨리 말해 보게! 이들 중 누가 콜록인가?",
         "... 수사 중 ...",
         "자네는 틀렸어. 앞으로 볼 일 없을 걸세.",
-        "오, 역시! 약속대로 현상금을 주지. 수고했네!"
+        "오, 역시! 약속대로 현상금을 주지. 수고했네!",
+        ", 아직 3분이 되지 않았어. 성급한 판단일세."
     };
     public GameObject FirstSelect;
     public GameObject SecondSelect;
@@ -40,18 +41,29 @@ public class EndingUI : MonoBehaviour
     {
         HomesName = GameManager.Instance.PlayerName;
         dialogBody[0] = ", 범인을 찾은 건가?";
+        dialogBody[6] = ", 아직 3분이 되지 않았어. 성급한 판단일세.";
         dialogBody[0] = HomesName + dialogBody[0];
-        dialogText.GetComponent<Text>().text = dialogBody[0];
-        FirstSelect.SetActive(false);
-        SecondSelect.SetActive(false);
+        dialogBody[6] = HomesName + dialogBody[6];
 
-        for (int i = 0; i < NetworkManager._currentPlayer; i++)
+        if (TimeManager.NPCTime)
         {
-            Debug.Log(UIManager.Instance.HomesInfo.GetChild(i).GetChild(0).GetChild(0).GetComponent<Text>().text);
-            if (UIManager.Instance.HomesInfo.GetChild(i).GetChild(0).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
+            Debug.Log(NetworkManager.Instance.GetServerTime());
+            dialogText.GetComponent<Text>().text = dialogBody[0];
+            FirstSelect.SetActive(false);
+            SecondSelect.SetActive(false);
+
+            for (int i = 0; i < NetworkManager._currentPlayer; i++)
             {
-                HomesImage.sprite = UIManager.Instance.HomesInfo.GetChild(i).GetChild(1).GetChild(0).GetComponent<Image>().sprite;
+                Debug.Log(UIManager.Instance.HomesInfo.GetChild(i).GetChild(2).GetChild(0).GetComponent<Text>().text);
+                if (UIManager.Instance.HomesInfo.GetChild(i).GetChild(2).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
+                {
+                    HomesImage.sprite = UIManager.Instance.HomesInfo.GetChild(i).GetChild(1).GetChild(0).GetComponent<Image>().sprite;
+                }
             }
+        }
+        else
+        {
+            dialogText.GetComponent<Text>().text = dialogBody[6];
         }
     }
 
@@ -68,6 +80,10 @@ public class EndingUI : MonoBehaviour
         {
             FirstSelect.SetActive(true);
         }
+        else if (dialogText.GetComponent<Text>().text == dialogBody[6])
+        {
+            gameObject.SetActive(false);
+        }
         else if (dialogText.GetComponent<Text>().text == dialogBody[1])
         {
             gameObject.SetActive(false);
@@ -77,7 +93,7 @@ public class EndingUI : MonoBehaviour
             SecondSelect.SetActive(true);
             for (int i = 0; i < 6; i++)
                 UIManager.Instance.HomesInfo.GetChild(i).gameObject.SetActive(false);
-            if (UIManager.Instance.HomesInfo.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>().text != GameManager.Instance.PlayerName)
+            if (UIManager.Instance.HomesInfo.GetChild(0).GetChild(2).GetChild(0).GetComponent<Text>().text != GameManager.Instance.PlayerName)
                 UIManager.Instance.HomesInfo.GetChild(0).gameObject.SetActive(true);
             else
                 UIManager.Instance.HomesInfo.GetChild(1).gameObject.SetActive(true);
@@ -90,8 +106,8 @@ public class EndingUI : MonoBehaviour
         if (count > 0)
         {
             count--;
-            
-            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(0).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
+
+            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
                 count--;
 
             if (count < 0)
@@ -107,7 +123,7 @@ public class EndingUI : MonoBehaviour
         {
             count = NetworkManager._currentPlayer - 1;
 
-            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(0).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
+            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
                 count--;
 
             for (int i = 0; i < 6; i++)
@@ -122,7 +138,7 @@ public class EndingUI : MonoBehaviour
         {
             count++;
 
-            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(0).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
+            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
                 count++;
 
             if (count >= NetworkManager._currentPlayer)
@@ -138,7 +154,7 @@ public class EndingUI : MonoBehaviour
         {
             count = 0;
 
-            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(0).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
+            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
                 count++;
 
             for (int i = 0; i < 6; i++)

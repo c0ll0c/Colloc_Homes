@@ -35,6 +35,7 @@ public class Plane : PoolAble
     private void DropVaccine()
     {
         var vaccine = ObjectPoolManager.Instance.GetObject("Vaccine");
+        AudioManager.Instance.PlayEffect(EffectAudioType.DROP);
         vaccine.transform.position = gameObject.transform.position;
     }
 }

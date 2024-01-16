@@ -778,6 +778,7 @@ MonoBehaviour:
   LobbySceneManager: {fileID: 0}
   ReadySceneManager: {fileID: 0}
   PlaySceneManager: {fileID: 0}
+  EndingManager: {fileID: 0}
 --- !u!4 &312669033
 Transform:
   m_ObjectHideFlags: 0
@@ -1719,20 +1720,34 @@ MonoBehaviour:
   AudioClips:
   - EffectType: 0
     Audio: {fileID: 8300000, guid: 2fdc7b407e5a56a4196910ea5855765f, type: 3}
-  - EffectType: 1
-    Audio: {fileID: 8300000, guid: ec5567ea85331be4da5e6703df3c86a6, type: 3}
   - EffectType: 2
-    Audio: {fileID: 8300000, guid: 00319e03b1fe77b429d37b8549376b44, type: 3}
+    Audio: {fileID: 8300000, guid: ec5567ea85331be4da5e6703df3c86a6, type: 3}
   - EffectType: 3
-    Audio: {fileID: 8300000, guid: c788c2d1ba017f34db6f4e2682e9fd3a, type: 3}
+    Audio: {fileID: 8300000, guid: a245ee5d75348c84a89ffb7992f1dc82, type: 3}
   - EffectType: 4
-    Audio: {fileID: 8300000, guid: 52d19ffbe2374b249b40468d22673f8c, type: 3}
+    Audio: {fileID: 8300000, guid: c788c2d1ba017f34db6f4e2682e9fd3a, type: 3}
   - EffectType: 5
-    Audio: {fileID: 8300000, guid: 1ae98cf8b6091d8419b9a8353fc87f6e, type: 3}
+    Audio: {fileID: 8300000, guid: 52d19ffbe2374b249b40468d22673f8c, type: 3}
   - EffectType: 6
-    Audio: {fileID: 8300000, guid: 3cccd74bd48012f458709b49362ffceb, type: 3}
+    Audio: {fileID: 8300000, guid: 1ae98cf8b6091d8419b9a8353fc87f6e, type: 3}
   - EffectType: 7
+    Audio: {fileID: 8300000, guid: 3cccd74bd48012f458709b49362ffceb, type: 3}
+  - EffectType: 8
     Audio: {fileID: 8300000, guid: dfeda759a67fb494786c7b0312184661, type: 3}
+  - EffectType: 9
+    Audio: {fileID: 8300000, guid: fe0b1f9aeb45b41b089175aeeabd5d95, type: 3}
+  - EffectType: 10
+    Audio: {fileID: 8300000, guid: a0010a1a0c474473b81729eb770c485f, type: 3}
+  - EffectType: 11
+    Audio: {fileID: 8300000, guid: d46323e22e74e46baa241cbf48c85671, type: 3}
+  - EffectType: 1
+    Audio: {fileID: 8300000, guid: 5fdb13d3756c84fecac96f5a2d124370, type: 3}
+  - EffectType: 12
+    Audio: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
+  - EffectType: 13
+    Audio: {fileID: 8300000, guid: c5e2a73ad4706440f93bf05df0b465fe, type: 3}
+  - EffectType: 14
+    Audio: {fileID: 8300000, guid: b1b9c1f0ea1fcae439ed1a4d44ff05fd, type: 3}
 --- !u!1 &1549766022
 GameObject:
   m_ObjectHideFlags: 0

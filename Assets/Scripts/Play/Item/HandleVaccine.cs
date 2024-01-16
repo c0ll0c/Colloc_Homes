@@ -29,6 +29,7 @@ public class HandleVaccine : PoolAble
         {
             NetworkManager.Instance.PlaySceneManager.isVaccinated = true;
             NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().VaccineEffect.SetActive(true);
+            AudioManager.Instance.PlayEffect(EffectAudioType.VACCINE);
         }
 
         ReleaseObject();

@@ -207,8 +207,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         PhotonNetwork.LoadLevel("PlayScene");
-        PhotonNetwork.CurrentRoom.IsOpen = false;
-        PhotonNetwork.CurrentRoom.IsVisible = false;
 
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
@@ -418,8 +416,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         // 콜록 고발할 때 -> 몇 번째에 누가 있는지를 네트워크 매니저에서 그냥 박아 둠.
         Transform homesInfo = UIManager.Instance.HomesInfo.GetChild(_index);
-        homesInfo.GetChild(0).GetChild(0).GetComponent<Text>().text = _nickname;
-        homesInfo.GetChild(0).GetChild(1).GetComponent<Text>().text = _code;
+        homesInfo.GetChild(2).GetChild(0).GetComponent<Text>().text = _nickname;
+        homesInfo.GetChild(2).GetChild(1).GetComponent<Text>().text = _code;
 
         Image userImage = homesInfo.GetChild(1).GetChild(0).GetComponent<Image>();
         SpriteLibraryAsset sprites = homesInfo.GetChild(1).GetChild(0).GetComponent<SpriteLibrary>().spriteLibraryAsset;

@@ -21,6 +21,7 @@ public class EndingManager : MonoBehaviour
     private bool result;
     private TMP_Text resultText;
     private Image resultImg;
+    public GameObject falseEnding;
 
     public void Awake()
     {
@@ -28,6 +29,7 @@ public class EndingManager : MonoBehaviour
         resultText = transform.GetChild(1).GetComponent<TMP_Text>();
         resultImg = transform.GetChild(2).GetComponent<Image>();
         gameObject.SetActive(false);
+        falseEnding.SetActive(false);
     }
 
     public void OnDisable()
@@ -65,6 +67,7 @@ public class EndingManager : MonoBehaviour
                 // homes 일 수밖에 없다!
                 // lose _ false alarm
                 result = false;
+                falseEnding.SetActive(true);
                 break;
             case EndingType.TimeOver:
                 if (isHomes)
@@ -103,10 +106,10 @@ public class EndingManager : MonoBehaviour
             case EndingType.CatchColloc: 
                 endGame();
                 break;
-            case EndingType.FalseAlarm:            // 관전 or 로비 -> 버튼 뜨기
+/*            case EndingType.FalseAlarm:            // 관전 or 로비 -> 버튼 뜨기
                                                    // TODO: 버튼 뜨는 걸로 바꿔야 함, 관전하기 구현
                 leaveRoom();
-                break;
+                break;*/
             case EndingType.TimeOver:  
                 endGame();
                 break;
