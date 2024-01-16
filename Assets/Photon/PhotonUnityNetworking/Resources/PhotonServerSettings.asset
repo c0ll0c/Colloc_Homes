@@ -59,6 +59,9 @@ MonoBehaviour:
   - ShowResult
   - ShowResultRPC
   - OutRPC
+  - SetSlotAble_PunRPC
+  - SetEmptySlots
+  - SyncPlayerSlots
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

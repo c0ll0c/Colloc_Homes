@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UI;
 
 public static class StaticFuncs 
 {
@@ -80,5 +79,21 @@ public static class StaticFuncs
         effect.SetActive(true);
         yield return StaticFuncs.WaitForSeconds(3.0f);
         effect.SetActive(false);
+    }
+
+    public static string GetColorName(int _colorCode)
+    {
+        return _colorCode switch
+        {
+            0b00000001 => "Brown",
+            0b00000010 => "Gray",
+            0b00000100 => "Green",
+            0b00001000 => "Yellow",
+            0b00010000 => "Pink",
+            0b00100000 => "Purple",
+            0b01000000 => "Orange",
+            0b10000000 => "Blue",
+            _ => "",
+        };
     }
 }
