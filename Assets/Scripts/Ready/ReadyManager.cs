@@ -95,7 +95,7 @@ public class ReadyManager : MonoBehaviour
         }
         for (; index < StaticVars.MAX_PLAYERS_PER_ROOM; index++)
         {
-            playerSlots[index].SetEmptySlot(false);
+            playerSlots[index].SetEmptySlot((_availableSlots & (1 << index)) == 0);
         }
 
         // Start/Ready Btn UI
