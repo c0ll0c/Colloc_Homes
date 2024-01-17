@@ -7,6 +7,7 @@ using System;
 using UnityEngine.UI;
 using System.Text;
 using UnityEngine.U2D.Animation;
+using Photon.Pun.Demo.Cockpit;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -67,13 +68,37 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     #region SET LOBBY SCENE
     public LobbyManager LobbySceneManager;
+    public Dictionary<string, RoomInfo> CachedRoomList = new Dictionary<string, RoomInfo>();
+
+    public void SetupRoomList()
+    {
+        if(LobbySceneManager != null)
+        {
+            LobbySceneManager.RefreshRoom(CachedRoomList.Values.ToList<RoomInfo>());
+        }
+    }
+
+    public void JoinDefaultRoom()
+    {
+        PhotonNetwork.NickName = GameManager.Instance.PlayerName;
+
+        RoomOptions roomOptions = new()
+        {
+            IsOpen = true,
+            IsVisible = true,
+            MaxPlayers = maxPlayersPerRoom
+        };
+        PhotonNetwork.JoinOrCreateRoom("gameroom", roomOptions, TypedLobby.Default);
+    }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         foreach (RoomInfo roomInfo in roomList)
         {
+            Debug.Log(roomInfo.Name);
             if (roomInfo.RemovedFromList)
             {
+                CachedRoomList.Remove(roomInfo.Name);
                 if (LobbySceneManager != null)
                 {
                     LobbySceneManager.RemoveRoom(roomInfo);
@@ -81,6 +106,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             }
             else
             {
+                CachedRoomList[roomInfo.Name] = roomInfo;
                 if (LobbySceneManager != null)
                 {
                     LobbySceneManager.AddRoom(roomInfo);
@@ -89,7 +115,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void CreateRoom(string _roomName, bool _isVisible, string password)
+    public void CreateRoom(string _roomName, bool _isPrivate)
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
 
@@ -99,11 +125,24 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         RoomOptions roomOptions = new()
         {
             IsOpen = true,
-            IsVisible = _isVisible,
+            IsVisible = true,
             MaxPlayers = 6,
             CustomRoomProperties = hash,
         };
-        PhotonNetwork.CreateRoom(_roomName, roomOptions, TypedLobby.Default);
+
+        string randomCharacters = "0123456789ABCDEFGHIJYZ";
+        string roomCode = this.ShuffleCharacter(randomCharacters).Substring(0, 5);
+
+        ExitGames.Client.Photon.Hashtable roomCustomProps = new ExitGames.Client.Photon.Hashtable();
+        roomCustomProps.Add("RoomName", _roomName);
+        roomCustomProps.Add("Private", _isPrivate);
+        roomCustomProps.Add("State", "waiting");
+        roomOptions.CustomRoomProperties = roomCustomProps;
+
+        string[] customPropsForLobby = { "RoomName", "Private", "State" };
+        roomOptions.CustomRoomPropertiesForLobby = customPropsForLobby;
+
+        PhotonNetwork.CreateRoom(roomCode, roomOptions, TypedLobby.Default);
     }
 
     public void JoinRoom(string _roomName)
@@ -111,6 +150,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
 
         PhotonNetwork.JoinRoom(_roomName);
+    }
+
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        if (returnCode == 32760)
+        {
+            // TODO: 가능한 방이 없습니다
+        }
     }
     #endregion
     #region SET READY SCENE
@@ -301,6 +348,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         PhotonNetwork.LoadLevel("PlayScene");
+
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+        PhotonNetwork.CurrentRoom.IsVisible = false;
 
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
