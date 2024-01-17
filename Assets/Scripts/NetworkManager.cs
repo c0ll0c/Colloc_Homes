@@ -185,7 +185,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 {
                     if ((int)color == ReadySceneManager.color)
                     {
-                        Debug.LogError("other player occupied that color");
+                        AlertManager.Instance.ShowAlert("준비 불가", "다른 플레이어와 색상이 겹칩니다.");
                         return false;
                     }
                 }
@@ -263,7 +263,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             if (isKicked != null)
             {
-                if ((bool)isKicked && targetPlayer.IsLocal) LeaveRoom();
+                if ((bool)isKicked && targetPlayer.IsLocal)
+                {
+                    LeaveRoom();
+                    AlertManager.Instance.ShowAlert("퇴장 알림", "방장으로부터 강제 퇴장당하였습니다.");
+                }
             }
         }
     }
@@ -278,14 +282,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 // Check if player is ready
                 if (player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_ISREADY, out object IsReady))
                 {
-                    if (!(bool)IsReady) return;
+                    if (!(bool)IsReady)
+                    {
+                        AlertManager.Instance.ShowAlert("시작 불가", "아직 준비가 안 된 플레이어들이 있습니다.");
+                        return;
+                    }
                 }
                 else return;
                 if (player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_COLOR, out object color))
                 {
                     if ((int)color == ReadySceneManager.color)
                     {
-                        Debug.LogError("other player occupied that color");
+                        AlertManager.Instance.ShowAlert("시작 불가", "다른 플레이어와 색상이 겹칩니다.");
                         return;
                     }
                 }
