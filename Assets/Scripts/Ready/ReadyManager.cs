@@ -95,7 +95,7 @@ public class ReadyManager : MonoBehaviour
         }
         for (; index < StaticVars.MAX_PLAYERS_PER_ROOM; index++)
         {
-            playerSlots[index].SetEmptySlot(false);
+            playerSlots[index].SetEmptySlot((_availableSlots & (1 << index)) == 0);
         }
 
         // Start/Ready Btn UI
@@ -125,6 +125,8 @@ public class ReadyManager : MonoBehaviour
 
     public void SetColorToggle(int _color)
     {
+        color = _color;
+
         int index= 0;
         while (_color > 1)
         {
@@ -145,5 +147,14 @@ public class ReadyManager : MonoBehaviour
     public void DisactivateColorToggle(bool _isReady)
     {
         ColorToggleDeactivatePanelObj.SetActive(_isReady);
+    }
+
+    public int GetPlayerId(int _index)
+    {
+        if (!playerSlots[_index].IsFilled) return -1;
+        else
+        {
+            return playerSlots[_index].PlayerNum;
+        }
     }
 }
