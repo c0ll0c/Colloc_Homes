@@ -11,8 +11,9 @@ public enum LobbyBtnType
     CLOSE_PANEL,
     SET_NAME,
     SAVE_NAME,
-    SEARCH,
-    ENTER
+    FIND,
+    ENTER,
+    CHECK
 }
 
 public class LobbyBtnsOnClick : MonoBehaviour
@@ -26,6 +27,8 @@ public class LobbyBtnsOnClick : MonoBehaviour
                 transform.parent.GetComponent<CreateRoomOptionsUI>().CreateRoom(); break;
             case LobbyBtnType.JOIN:
                 transform.parent.GetComponent<HandleRoomList>().JoinRoom(); break;
+            case LobbyBtnType.CHECK:
+                transform.parent.parent.GetComponent<HandleRoomList>().CheckCode(); break;
             case LobbyBtnType.BACK:
                 GameManager.Instance.ChangeScene(GameState.INTRO); break;
             case LobbyBtnType.RANDOM_JOIN:
@@ -44,11 +47,11 @@ public class LobbyBtnsOnClick : MonoBehaviour
             case LobbyBtnType.CLOSE_PANEL:
                 transform.parent.gameObject.SetActive(false);
                 break;
-            case LobbyBtnType.SEARCH:
-                transform.parent.GetComponent<CodeInputFieldUI>().SearchRoom();
+            case LobbyBtnType.FIND:
+                transform.parent.GetChild(1).gameObject.SetActive(true);
                 break;
             case LobbyBtnType.ENTER:
-                transform.parent.GetComponent<CodeInputFieldUI>().CheckPassword();
+                transform.parent.GetComponent<CodeInputFieldUI>().FindRoom();
                 break;
         }
     }
