@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     public Canvas ClueUI;
 
     public GameObject StartPanelObj;
+    public GameObject OutPanelObj;
 
     private int i = 0;
     private bool isColloc;

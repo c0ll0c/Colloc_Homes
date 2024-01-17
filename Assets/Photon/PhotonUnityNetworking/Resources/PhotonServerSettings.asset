@@ -56,6 +56,9 @@ MonoBehaviour:
   - SetClueNote
   - SetUserSelect
   - SetGameStart
+  - ShowResult
+  - ShowResultRPC
+  - OutRPC
   - SetSlotAble_PunRPC
   - SetEmptySlots
   - SyncPlayerSlots

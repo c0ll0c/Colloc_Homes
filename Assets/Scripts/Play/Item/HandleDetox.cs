@@ -14,7 +14,6 @@ public class HandleDetox : MonoBehaviour
     private bool isMe;
     private int boothUser;
     
-
     private void Awake()
     {
         isActive = true;
@@ -38,7 +37,10 @@ public class HandleDetox : MonoBehaviour
         if (isMe)
         {
             NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().ChangeStatus("Homes");
+            AudioManager.Instance.PlayEffect(EffectAudioType.DETOX);
         }
+        else
+            AudioManager.Instance.PlayEffect(EffectAudioType.UNDETOX);
         ActivateBooth(false);
     }
 
@@ -59,6 +61,8 @@ public class HandleDetox : MonoBehaviour
             boothUser = collision.gameObject.GetInstanceID();
             UseBooth(true);
         }
+
+        AudioManager.Instance.PlayEffect(EffectAudioType.COOLTIME);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -66,6 +70,7 @@ public class HandleDetox : MonoBehaviour
         if (collision.gameObject.GetInstanceID() == boothUser)
         {
             boothUser = 0;
+            AudioManager.Instance.PauseEffect();
             UseBooth(false);
         }
     }
@@ -93,6 +98,7 @@ public class HandleDetox : MonoBehaviour
     IEnumerator CountDeactivateTime()
     {
         yield return waitSec;
+        AudioManager.Instance.PlayEffect(EffectAudioType.ACTIVE);
         ActivateBooth(true);
     }
 }

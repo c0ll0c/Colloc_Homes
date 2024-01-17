@@ -336,6 +336,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #region SET PLAY SCENE
     // PlaySceneManager
     public PlayManager PlaySceneManager;
+    public EndingManager EndingManager;
 
     // Generate players, codes, items(drop time, position): called by MasterClient
     public void GameSetting()
@@ -510,8 +511,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         // 콜록 고발할 때 -> 몇 번째에 누가 있는지를 네트워크 매니저에서 그냥 박아 둠.
         Transform homesInfo = UIManager.Instance.HomesInfo.GetChild(_index);
-        homesInfo.GetChild(0).GetChild(0).GetComponent<Text>().text = _nickname;
-        homesInfo.GetChild(0).GetChild(1).GetComponent<Text>().text = _code;
+        homesInfo.GetChild(2).GetChild(0).GetComponent<Text>().text = _nickname;
+        homesInfo.GetChild(2).GetChild(1).GetComponent<Text>().text = _code;
 
         Image userImage = homesInfo.GetChild(1).GetChild(0).GetComponent<Image>();
         SpriteLibraryAsset sprites = homesInfo.GetChild(1).GetChild(0).GetComponent<SpriteLibrary>().spriteLibraryAsset;
@@ -533,6 +534,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(15.0f);
         clue.IsHidden = false;
+    }
+
+
+    [PunRPC]
+    public void ShowResultRPC(EndingType _endType, bool invoker)
+    {
+        Debug.Log("RPC 발동!");
+        Debug.Log(_endType);
+        Debug.Log(invoker);
+        EndingManager.ShowResult(_endType, invoker);
+    }
+
+    [PunRPC]
+    IEnumerator OutRPC()
+    {
+        Debug.Log("RPC 발동!");
+        UIManager.Instance.OutPanelObj.SetActive(true);
+        yield return new WaitForSeconds(2.0f);
+        UIManager.Instance.OutPanelObj.SetActive(false);
     }
     #endregion
     #region SERVER UTILS
