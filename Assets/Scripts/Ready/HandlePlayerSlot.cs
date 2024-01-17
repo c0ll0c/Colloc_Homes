@@ -7,9 +7,8 @@ public class HandlePlayerSlot : MonoBehaviour
 {
     public bool IsFilled;
     public bool IsBlocked;
-
+    public int PlayerNum;
     public int SpriteColor;
-
 
     Toggle btnActiveToggle;
     // Child 0
@@ -59,8 +58,8 @@ public class HandlePlayerSlot : MonoBehaviour
 
     public void SetSlot(PlayerData _player)
     {
-        SetSlotState(true);
-
+        SetSlotState(true); ;
+        PlayerNum = _player.Id;
         playerName.text = _player.Name;
 
         isLeaderObj.SetActive(_player.IsMaster);
@@ -72,6 +71,7 @@ public class HandlePlayerSlot : MonoBehaviour
     public void SetEmptySlot(bool _blocked)
     {
         SetSlotState(false);
+        PlayerNum = -1;
 
         IsBlocked = _blocked;
 
