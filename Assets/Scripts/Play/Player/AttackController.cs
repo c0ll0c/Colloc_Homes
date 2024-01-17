@@ -35,6 +35,7 @@ public class AttackController : MonoBehaviour
         if (!NetworkManager.Instance.PlaySceneManager.TryAttack()) return;
         StartCoroutine(StaticFuncs.SetEffect(hit.collider.GetComponentInParent<HandleRPC>().AttackEffect));
         Photon.Realtime.Player targetPlayer = hit.collider.GetComponentInParent<PhotonView>().Owner;
+        AudioManager.Instance.PlayEffect(EffectAudioType.ATTACK);
         pv.RPC("Attack", targetPlayer);
     }
 }

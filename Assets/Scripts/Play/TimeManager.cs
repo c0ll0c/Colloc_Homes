@@ -13,6 +13,7 @@ public class TimeManager : MonoBehaviour
     private int vaccineNum = 0;
 
     private bool gameStart = false;
+    public static bool NPCTime = false;
     public GameObject EndingCanvasObj;
     private EndingManager endingManager;
 
@@ -33,6 +34,9 @@ public class TimeManager : MonoBehaviour
             }
             return;
         }
+
+        if (gameLeftTime < 280)
+            NPCTime = true;
 
         gameLeftTime -= Time.deltaTime;
         timerUI.SetTime(gameLeftTime);
@@ -60,6 +64,7 @@ public class TimeManager : MonoBehaviour
     {
         // drop vaccine
         GameObject plane = ObjectPoolManager.Instance.GetObject("Plane");
+        AudioManager.Instance.PlayEffect(EffectAudioType.PLANE);
         plane.GetComponent<Plane>().InitiateDrop(vaccineNum);
 
         vaccineNum++;

@@ -78,12 +78,14 @@ public class HandleRPC : MonoBehaviour
         {
             NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().VaccineEffect.SetActive(false);
             NetworkManager.Instance.PlaySceneManager.isVaccinated = false;
+            AudioManager.Instance.PlayEffect(EffectAudioType.VACCINE);
         }
         else
         {
             attackController.enabled = false;
             NetworkManager.Instance.PlaySceneManager.gamePlayer.tag = "Infect";
             UIManager.Instance.SetGameUI("Infect");
+            AudioManager.Instance.PlayEffect(EffectAudioType.INFECT);
             StartCoroutine(StaticFuncs.SetEffect(NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect));
         }
     }
@@ -93,6 +95,7 @@ public class HandleRPC : MonoBehaviour
     public void Attack()
     {
         homesController.SetSpeed(0);
+        AudioManager.Instance.PlayEffect(EffectAudioType.ATTACKED);
         StartCoroutine(StaticFuncs.SetEffect(NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().AttackEffect));
         StartCoroutine(ResetSpeed());
     }

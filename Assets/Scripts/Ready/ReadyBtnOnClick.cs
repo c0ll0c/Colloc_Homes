@@ -1,4 +1,3 @@
-using Photon.Pun;
 using UnityEngine;
 
 public enum ReadyBtnType
@@ -18,8 +17,9 @@ public class ReadyBtnOnClick : MonoBehaviour
         switch (BtnType)
         {
             case ReadyBtnType.READY:
-                isReady = !isReady;
-                NetworkManager.Instance.SetPlayerReady(isReady);
+                bool _isReady = NetworkManager.Instance.SetPlayerReady(!isReady);
+                isReady = _isReady;
+                NetworkManager.Instance.ReadySceneManager.DisactivateColorToggle(_isReady);
                 break;
 
             case ReadyBtnType.START:

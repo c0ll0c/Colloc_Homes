@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.U2D.Animation;
 
@@ -16,6 +15,7 @@ public class UIManager : MonoBehaviour
     public Canvas ClueUI;
 
     public GameObject StartPanelObj;
+    public GameObject OutPanelObj;
 
     private int i = 0;
     private bool isColloc;

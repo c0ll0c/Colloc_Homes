@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Photon.Pun;
+using System.Collections;
 
 public enum EndingType
 {
@@ -19,12 +21,15 @@ public class EndingManager : MonoBehaviour
     private bool result;
     private TMP_Text resultText;
     private Image resultImg;
+    public GameObject falseEnding;
 
     public void Awake()
     {
+        NetworkManager.Instance.EndingManager = GetComponent<EndingManager>();
         resultText = transform.GetChild(1).GetComponent<TMP_Text>();
         resultImg = transform.GetChild(2).GetComponent<Image>();
         gameObject.SetActive(false);
+        falseEnding.SetActive(false);
     }
 
     public void OnDisable()
@@ -41,29 +46,28 @@ public class EndingManager : MonoBehaviour
             case EndingType.CatchColloc:
                 if (isHomes)
                 {
-                    Debug.Log("누군가가 콜록 찾음");
                     if (invoker)
                     {
                         // win _ founder homes
                         result = true;
                     }
-                    else
+                    else             
                     {
                         // lose _ other homes
                         result = false;
                     }
                 }
-                else
+                else                
                 {
-                    Debug.Log("발각됨");
                     // lose _ colloc
                     result = false;
                 }
                 break;
             case EndingType.FalseAlarm:
-                // homes 일 수 밖에 없다!
+                // homes 일 수밖에 없다!
                 // lose _ false alarm
                 result = false;
+                falseEnding.SetActive(true);
                 break;
             case EndingType.TimeOver:
                 if (isHomes)
@@ -79,10 +83,51 @@ public class EndingManager : MonoBehaviour
                 break;
             case EndingType.Error:
                 // TODO Error type 세분화
+                // 나 혼자 남았을 경우
+                // 콜록이 나갔을 경우
                 break;
         }
 
         resultText.text = (result) ? "YOU WIN!" : "YOU LOSE...";
         gameObject.SetActive(true);
+
+        // 2초 뒤에 end
+        StartCoroutine(goTo(_endType));
+    }
+
+    public IEnumerator goTo(EndingType _endType)
+    {
+        Debug.Log(_endType);
+
+        yield return new WaitForSecondsRealtime(2f);
+
+        switch (_endType)
+        {
+            case EndingType.CatchColloc: 
+                endGame();
+                break;
+/*            case EndingType.FalseAlarm:            // 관전 or 로비 -> 버튼 뜨기
+                                                   // TODO: 버튼 뜨는 걸로 바꿔야 함, 관전하기 구현
+                leaveRoom();
+                break;*/
+            case EndingType.TimeOver:  
+                endGame();
+                break;
+            case EndingType.Error:
+                // TODO Error type 세분화
+                break;
+        }
+    }
+
+    void leaveRoom()
+    {
+        Time.timeScale = 1;
+        PhotonNetwork.LeaveRoom();
+    }
+    
+    void endGame()
+    {
+        Time.timeScale = 1;
+        PhotonNetwork.LoadLevel("ReadyScene");
     }
 }

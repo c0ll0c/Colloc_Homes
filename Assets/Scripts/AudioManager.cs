@@ -5,13 +5,20 @@ using System;
 public enum EffectAudioType
 {
     DETOX,
+    UNDETOX,
     PORTAL,
     PLANE,
     VACCINE,
     BTN_CLICK,
     BTN_POP,
     WIN,
-    LOSE
+    LOSE,
+    ATTACK,
+    ATTACKED,
+    INFECT,
+    DROP,
+    COOLTIME,
+    ACTIVE
 }
 
 [Serializable]
@@ -56,6 +63,17 @@ public class AudioManager: MonoSingleton<AudioManager>
     public void PlayEffect(EffectAudioType _effectType)
     {
         EffectPlayer.clip = audios[_effectType];
+
+        if (_effectType == EffectAudioType.PLANE || _effectType == EffectAudioType.COOLTIME)
+            EffectPlayer.loop = true;
+        else
+            EffectPlayer.loop = false;
+
         EffectPlayer.Play();
+    }
+
+    public void PauseEffect()
+    {
+        EffectPlayer.Pause();
     }
 }

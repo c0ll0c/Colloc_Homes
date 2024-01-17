@@ -3,7 +3,6 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using System.Collections;
-using System.Linq;
 using System;
 using UnityEngine.UI;
 using System.Text;
@@ -19,7 +18,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     static public int _currentPlayer;
 
-    // Singleton ����
+    // Singleton 선언
     public static NetworkManager Instance;
 
     private void Awake()
@@ -120,11 +119,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
 
+        ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
+        hash.Add(StaticCodes.PHOTON_PROP_SLOTS, 0b111111);
+        
         RoomOptions roomOptions = new()
         {
             IsOpen = true,
             IsVisible = true,
             MaxPlayers = 6,
+            CustomRoomProperties = hash,
         };
 
         string randomCharacters = "0123456789ABCDEFGHIJYZ";
@@ -160,24 +163,32 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #region SET READY SCENE
     public override void OnJoinedRoom()
     {
-        bool checkName = true;
+        int ableColor = 0;
 
-        if (PhotonNetwork.CurrentRoom != null && checkName)
+        if (PhotonNetwork.CurrentRoom != null)
         {
-            checkName = false;
             foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
             {
-                if (player != PhotonNetwork.LocalPlayer && player.NickName == PhotonNetwork.NickName)
+                if (player != PhotonNetwork.LocalPlayer)
                 {
-                    PhotonNetwork.NickName = player.NickName + "1";
-                    checkName = true;
+                    if (player.NickName == PhotonNetwork.NickName)
+                    {
+                        PhotonNetwork.NickName = player.NickName + "1";
+                    }
+                    player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_COLOR, out object color);
+                    ableColor |= (int)color;
                 }
             }
         }
 
+        ableColor ^= StaticVars.PLAYER_COLORS;
+        int playerColor = ableColor & (-ableColor);
+
+        AddCustomPropertiesToPlayer(PhotonNetwork.LocalPlayer, StaticCodes.PHOTON_PROP_COLOR, playerColor);
+
         GameManager.Instance.ChangeScene(GameState.READY);
 
-        PV.RPC("SyncPlayersData", RpcTarget.OthersBuffered);
+        PV.RPC("SyncPlayersData", RpcTarget.All);
     }
 
     public ReadyManager ReadySceneManager;
@@ -200,31 +211,111 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 }
             }
         }
+        playersStatus.Sort(delegate (PlayerData p1, PlayerData p2) { return p1.Id.CompareTo(p2.Id); });
 
         if (ReadySceneManager != null)
         {
-            ReadySceneManager.SetUI(playersStatus, playersStatus.Count, PhotonNetwork.IsMasterClient);
+            PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_SLOTS, out object slots);
+            ReadySceneManager.SetUI(PhotonNetwork.CurrentRoom.Name, "ABCDEF", playersStatus, (int)slots, PhotonNetwork.IsMasterClient);
         }
     }
 
     // Player Ready
-    public void SetPlayerReady(bool _isReady)
+    public bool SetPlayerReady(bool _isReady)
     {
-        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-        properties.Add("IsReady", _isReady);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+        // Check other players' color
+        if (_isReady)
+        {
+            foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
+            {
+                if (!player.IsLocal && player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_COLOR, out object color))
+                {
+                    if ((int)color == ReadySceneManager.color)
+                    {
+                        AlertManager.Instance.ShowAlert("준비 불가", "다른 플레이어와 색상이 겹칩니다.");
+                        return false;
+                    }
+                }
+            }
+        }
+
+        AddCustomPropertiesToPlayer(PhotonNetwork.LocalPlayer, StaticCodes.PHOTON_PROP_ISREADY, _isReady);
+        AddCustomPropertiesToPlayer(PhotonNetwork.LocalPlayer, StaticCodes.PHOTON_PROP_COLOR, ReadySceneManager.color);
+        return _isReady;
     }
 
+    public void SetSlotAble(int _index, bool _makeAvailable)
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        bool res = PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_SLOTS, out object slots);
+        if (!res) return;
+
+        int availableSlots = (int)slots;
+        if (_makeAvailable)
+        {
+            PhotonNetwork.CurrentRoom.MaxPlayers++;
+            availableSlots |= (1 << _index);
+        }
+        else if (PhotonNetwork.CurrentRoom.MaxPlayers > 4)
+        {
+            PhotonNetwork.CurrentRoom.MaxPlayers--;
+            availableSlots &= (~(1 << _index));
+        }
+        else return;
+
+        // Set as Room's custom properties for new players
+        var hash = PhotonNetwork.CurrentRoom.CustomProperties;
+        hash[StaticCodes.PHOTON_PROP_SLOTS] = availableSlots;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+
+        // For current players in the room, notify blocked/unblocked playerSlots
+        PV.RPC("SyncPlayerSlots", RpcTarget.All, availableSlots);
+    }
+
+    [PunRPC]
+    public void SyncPlayerSlots(int _slots)
+    {
+        ReadySceneManager.SetSlotBlock(_slots);
+    }
+
+    public void KickPlayerOut(int _playerIndex)
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        int playerId = ReadySceneManager.GetPlayerId(_playerIndex);
+        if (playerId == -1) return;
+
+        Player player = PhotonNetwork.CurrentRoom.GetPlayer(playerId);
+
+        AddCustomPropertiesToPlayer(player, StaticCodes.PHOTON_PROP_KICKED, true);
+    }
+    
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
-        if (changedProps.ContainsKey("IsReady"))
+        if (changedProps.ContainsKey(StaticCodes.PHOTON_PROP_ISREADY))
         {
             SyncPlayersData();
         }
 
-        if (changedProps.ContainsKey("SettingDone"))
+        if (changedProps.TryGetValue(StaticCodes.PHOTON_PROP_SYNC, out object isSynced))
         {
-            if(PhotonNetwork.IsMasterClient) CheckStart();
+            if (isSynced != null)
+            {
+                if ((bool)isSynced && PhotonNetwork.IsMasterClient) CheckStart();
+            }
+        }
+
+        if (changedProps.TryGetValue(StaticCodes.PHOTON_PROP_KICKED, out object isKicked))
+        {
+            if (isKicked != null)
+            {
+                if ((bool)isKicked && targetPlayer.IsLocal)
+                {
+                    LeaveRoom();
+                    AlertManager.Instance.ShowAlert("퇴장 알림", "방장으로부터 강제 퇴장당하였습니다.");
+                }
+            }
         }
     }
 
@@ -233,12 +324,27 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
-            // Check if player is ready
-            if (!player.IsMasterClient && player.CustomProperties.TryGetValue("IsReady", out object IsReady))
+            if (!player.IsMasterClient)
             {
-                if ((bool)IsReady == false) return;
+                // Check if player is ready
+                if (player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_ISREADY, out object IsReady))
+                {
+                    if (!(bool)IsReady)
+                    {
+                        AlertManager.Instance.ShowAlert("시작 불가", "아직 준비가 안 된 플레이어들이 있습니다.");
+                        return;
+                    }
+                }
+                else return;
+                if (player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_COLOR, out object color))
+                {
+                    if ((int)color == ReadySceneManager.color)
+                    {
+                        AlertManager.Instance.ShowAlert("시작 불가", "다른 플레이어와 색상이 겹칩니다.");
+                        return;
+                    }
+                }
             }
-            else if (!player.IsMasterClient) return;
         }
 
         PhotonNetwork.LoadLevel("PlayScene");
@@ -248,18 +354,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
-            ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-            properties.Add("IsReady", false);
-            player.SetCustomProperties(properties);
+            AddCustomPropertiesToPlayer(player, StaticCodes.PHOTON_PROP_ISREADY, false);
         }
     }
 
     // when player leave room
     public void LeaveRoom()
     {
-        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-        properties.Add("IsReady", false);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+        // CustomProperties Clear
+        ExitGames.Client.Photon.Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+        hash[StaticCodes.PHOTON_PROP_COLOR] = null;
+        hash[StaticCodes.PHOTON_PROP_ISREADY] = null;
+        hash[StaticCodes.PHOTON_PROP_KICKED] = null;
+        hash[StaticCodes.PHOTON_PROP_SYNC] = null;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 
         PhotonNetwork.LeaveRoom();
     }
@@ -278,6 +386,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     #region SET PLAY SCENE
     // PlaySceneManager
     public PlayManager PlaySceneManager;
+    public EndingManager EndingManager;
 
     // Generate players, codes, items(drop time, position): called by MasterClient
     public void GameSetting()
@@ -288,7 +397,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         string code;
         Vector2[] randomCluePosition = ShufflePosition(StaticVars.CluePosition);
         Vector2[] randomSpawnPosition = ShufflePosition(StaticVars.SpawnPosition);
-        List<string> randomColor = StaticVars.Colors.OrderBy(_ => new System.Random().Next()).ToList();
 
         string commonCharacters = "0123456789ABCDEX";
 
@@ -307,11 +415,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 properties.Add("CollocName", player.NickName);
                 PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
             }
+            player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_COLOR, out object color);
+            string colorStr = StaticFuncs.GetColorName((int)color);
 
-            PV.RPC("SetPlayer", player, isColloc, randomSpawnPosition[i], randomColor[i]);
-            PV.RPC("SetUserClue", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code, randomColor[i]);
-            PV.RPC("SetClueNote", RpcTarget.All, player.NickName, randomColor[i], i);
-            PV.RPC("SetUserSelect", RpcTarget.All, player.NickName, randomColor[i], i, code);
+            PV.RPC("SetPlayer", player, isColloc, randomSpawnPosition[i], colorStr);
+            PV.RPC("SetUserClue", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code, colorStr);
+            PV.RPC("SetClueNote", RpcTarget.All, player.NickName, colorStr, i);
+            PV.RPC("SetUserSelect", RpcTarget.All, player.NickName, colorStr, i, code);
 
             i++;
         }
@@ -422,9 +532,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void SetPlayerSettingDone()
     {
-        ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
-        properties.Add("SettingDone", true);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+        AddCustomPropertiesToPlayer(PhotonNetwork.LocalPlayer, StaticCodes.PHOTON_PROP_SYNC, true);
     }
 
     private void CheckStart()
@@ -432,7 +540,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
             // Check if player is ready
-            if (player.CustomProperties.TryGetValue("SettingDone", out object isDone))
+            if (player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_SYNC, out object isDone))
             {
                 if ((bool)isDone == false) return;
             }
@@ -453,8 +561,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         // 콜록 고발할 때 -> 몇 번째에 누가 있는지를 네트워크 매니저에서 그냥 박아 둠.
         Transform homesInfo = UIManager.Instance.HomesInfo.GetChild(_index);
-        homesInfo.GetChild(0).GetChild(0).GetComponent<Text>().text = _nickname;
-        homesInfo.GetChild(0).GetChild(1).GetComponent<Text>().text = _code;
+        homesInfo.GetChild(2).GetChild(0).GetComponent<Text>().text = _nickname;
+        homesInfo.GetChild(2).GetChild(1).GetComponent<Text>().text = _code;
 
         Image userImage = homesInfo.GetChild(1).GetChild(0).GetComponent<Image>();
         SpriteLibraryAsset sprites = homesInfo.GetChild(1).GetChild(0).GetComponent<SpriteLibrary>().spriteLibraryAsset;
@@ -477,11 +585,36 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(15.0f);
         clue.IsHidden = false;
     }
+
+
+    [PunRPC]
+    public void ShowResultRPC(EndingType _endType, bool invoker)
+    {
+        Debug.Log("RPC 발동!");
+        Debug.Log(_endType);
+        Debug.Log(invoker);
+        EndingManager.ShowResult(_endType, invoker);
+    }
+
+    [PunRPC]
+    IEnumerator OutRPC()
+    {
+        Debug.Log("RPC 발동!");
+        UIManager.Instance.OutPanelObj.SetActive(true);
+        yield return new WaitForSeconds(2.0f);
+        UIManager.Instance.OutPanelObj.SetActive(false);
+    }
     #endregion
     #region SERVER UTILS
     public double GetServerTime()
     {
         return PhotonNetwork.Time;
+    }
+    public void AddCustomPropertiesToPlayer(Player _player, string _key, object _value)
+    {
+        ExitGames.Client.Photon.Hashtable hash = _player.CustomProperties;
+        hash[_key] = _value;
+        _player.SetCustomProperties(hash);
     }
     #endregion
 }

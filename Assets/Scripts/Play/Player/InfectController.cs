@@ -46,6 +46,7 @@ public class InfectController : MonoBehaviour
 
         StartCoroutine(StaticFuncs.SetEffect(hit.collider.GetComponentInParent<HandleRPC>().InfectEffect));
         Photon.Realtime.Player targetPlayer = hit.collider.GetComponentInParent<PhotonView>().Owner;
+        AudioManager.Instance.PlayEffect(EffectAudioType.ATTACK);
         pv.RPC("ChangeStatus", targetPlayer, "Infect");
     }
 }
