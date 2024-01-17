@@ -3444,6 +3444,21 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 6672730178422130389, guid: 72dccfdd37bae474aa046998c96c94f3,
         type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672730178422130389, guid: 72dccfdd37bae474aa046998c96c94f3,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672730178422130389, guid: 72dccfdd37bae474aa046998c96c94f3,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672730178422130389, guid: 72dccfdd37bae474aa046998c96c94f3,
+        type: 3}
       propertyPath: m_PixelsPerUnitMultiplier
       value: 3
       objectReference: {fileID: 0}
@@ -5372,6 +5387,21 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 6672730178422130389, guid: 72dccfdd37bae474aa046998c96c94f3,
         type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672730178422130389, guid: 72dccfdd37bae474aa046998c96c94f3,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672730178422130389, guid: 72dccfdd37bae474aa046998c96c94f3,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672730178422130389, guid: 72dccfdd37bae474aa046998c96c94f3,
+        type: 3}
       propertyPath: m_PixelsPerUnitMultiplier
       value: 3
       objectReference: {fileID: 0}
@@ -5815,6 +5845,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 3b5a370bb928e464aa9c985098391aba,
         type: 3}
+    - target: {fileID: 6672730178422130389, guid: 72dccfdd37bae474aa046998c96c94f3,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672730178422130389, guid: 72dccfdd37bae474aa046998c96c94f3,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6672730178422130389, guid: 72dccfdd37bae474aa046998c96c94f3,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6672730178422130389, guid: 72dccfdd37bae474aa046998c96c94f3,
         type: 3}
       propertyPath: m_PixelsPerUnitMultiplier

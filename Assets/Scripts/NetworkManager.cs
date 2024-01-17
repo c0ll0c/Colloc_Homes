@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using System.Text;
 using UnityEngine.U2D.Animation;
 using Photon.Pun.Demo.Cockpit;
+using System.Linq;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
