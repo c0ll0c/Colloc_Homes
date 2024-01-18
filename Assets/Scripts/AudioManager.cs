@@ -32,10 +32,14 @@ public struct EffectAudio
 public class AudioManager: MonoSingleton<AudioManager>
 {
     public AudioSource BgmPlayer;
-    public AudioSource EffectPlayer;
-
     public AudioClip GameBGM;
     public AudioClip LobbyBGM;
+
+    public static int EFFECT_AUDIO_SRC_NUM = 3;
+    public GameObject EffectSourceObj;
+    private AudioSource[] effectPlayers;
+    private Queue<EffectAudioType> audioQueue = new();
+    private EffectAudioType?[] playingAudios = new EffectAudioType?[EFFECT_AUDIO_SRC_NUM];
 
     public EffectAudio[] AudioClips;
     private readonly Dictionary<EffectAudioType, AudioClip> audios = new();
@@ -49,6 +53,34 @@ public class AudioManager: MonoSingleton<AudioManager>
         {
             audios.Add(effectAudio.EffectType, effectAudio.Audio);
         }
+
+        effectPlayers = EffectSourceObj.GetComponentsInChildren<AudioSource>();
+
+        for(int i=0; i< EFFECT_AUDIO_SRC_NUM; i++)
+        {
+            playingAudios[i] = null;
+        }
+    }
+
+    private void Update()
+    {
+        if (audioQueue.Count > 0)
+        {
+            for (int i=0; i< EFFECT_AUDIO_SRC_NUM; i++)
+            {
+                if (!effectPlayers[i].isPlaying)
+                {
+                    EffectAudioType effectToPlay = audioQueue.Dequeue();
+
+                    playingAudios[i] = effectToPlay;
+                    effectPlayers[i].clip = audios[effectToPlay];
+                    effectPlayers[i].loop = (effectToPlay == EffectAudioType.PLANE || effectToPlay == EffectAudioType.COOLTIME);
+                    effectPlayers[i].Play();
+
+                    return;
+                }
+            }
+        }
     }
 
     public void ChangeBGM(GameState _state)
@@ -59,21 +91,20 @@ public class AudioManager: MonoSingleton<AudioManager>
         if (!BgmPlayer.isPlaying) BgmPlayer.Play();
     }
 
-    // [MIGHTDO] Effect Play Queue?
     public void PlayEffect(EffectAudioType _effectType)
     {
-        EffectPlayer.clip = audios[_effectType];
-
-        if (_effectType == EffectAudioType.PLANE || _effectType == EffectAudioType.COOLTIME)
-            EffectPlayer.loop = true;
-        else
-            EffectPlayer.loop = false;
-
-        EffectPlayer.Play();
+        audioQueue.Enqueue(_effectType);
     }
 
-    public void PauseEffect()
+    public void PauseEffect(EffectAudioType _effectType)
     {
-        EffectPlayer.Pause();
+        for (int i = 0; i < EFFECT_AUDIO_SRC_NUM; i++)
+        {
+            if (playingAudios[i] == _effectType)
+            {
+                effectPlayers[i].Pause();
+                playingAudios[i] = null;
+            }
+        }
     }
 }

@@ -70,7 +70,7 @@ public class HandleDetox : MonoBehaviour
         if (collision.gameObject.GetInstanceID() == boothUser)
         {
             boothUser = 0;
-            AudioManager.Instance.PauseEffect();
+            AudioManager.Instance.PauseEffect(EffectAudioType.COOLTIME);
             UseBooth(false);
         }
     }

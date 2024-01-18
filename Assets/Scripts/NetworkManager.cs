@@ -7,7 +7,6 @@ using System;
 using UnityEngine.UI;
 using System.Text;
 using UnityEngine.U2D.Animation;
-using Photon.Pun.Demo.Cockpit;
 using System.Linq;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
@@ -79,19 +78,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void JoinDefaultRoom()
-    {
-        PhotonNetwork.NickName = GameManager.Instance.PlayerName;
-
-        RoomOptions roomOptions = new()
-        {
-            IsOpen = true,
-            IsVisible = true,
-            MaxPlayers = maxPlayersPerRoom
-        };
-        PhotonNetwork.JoinOrCreateRoom("gameroom", roomOptions, TypedLobby.Default);
-    }
-
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         foreach (RoomInfo roomInfo in roomList)
@@ -119,18 +105,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void CreateRoom(string _roomName, bool _isPrivate)
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
-
-        ExitGames.Client.Photon.Hashtable hash = new ExitGames.Client.Photon.Hashtable();
-        hash.Add(StaticCodes.PHOTON_PROP_SLOTS, 0b111111);
-        
-        RoomOptions roomOptions = new()
-        {
-            IsOpen = true,
-            IsVisible = true,
-            MaxPlayers = 6,
-            CustomRoomProperties = hash,
-        };
-
         string randomCharacters = "0123456789ABCDEFGHIJYZ";
         string roomCode = this.ShuffleCharacter(randomCharacters).Substring(0, 5);
 
@@ -138,10 +112,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         roomCustomProps.Add("RoomName", _roomName);
         roomCustomProps.Add("Private", _isPrivate);
         roomCustomProps.Add("State", "waiting");
-        roomOptions.CustomRoomProperties = roomCustomProps;
+        roomCustomProps.Add(StaticCodes.PHOTON_PROP_SLOTS, 0b111111);
 
         string[] customPropsForLobby = { "RoomName", "Private", "State" };
-        roomOptions.CustomRoomPropertiesForLobby = customPropsForLobby;
+
+        RoomOptions roomOptions = new()
+        {
+            IsOpen = true,
+            IsVisible = true,
+            MaxPlayers = 6,
+            CustomRoomProperties = roomCustomProps,
+            CustomRoomPropertiesForLobby = customPropsForLobby,
+        };
 
         PhotonNetwork.CreateRoom(roomCode, roomOptions, TypedLobby.Default);
     }
@@ -216,8 +198,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if (ReadySceneManager != null)
         {
+            PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RoomName", out object roomNm);
             PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_SLOTS, out object slots);
-            ReadySceneManager.SetUI(PhotonNetwork.CurrentRoom.Name, "ABCDEF", playersStatus, (int)slots, PhotonNetwork.IsMasterClient);
+
+            ReadySceneManager.SetUI((string)roomNm, PhotonNetwork.CurrentRoom.Name, playersStatus, (int)slots, PhotonNetwork.IsMasterClient);
         }
     }
 
