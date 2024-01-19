@@ -8,7 +8,6 @@ public class HandlePlayerSlot : MonoBehaviour
     public bool IsFilled;
     public bool IsBlocked;
     public int PlayerNum;
-    public int SpriteColor;
 
     Toggle btnActiveToggle;
     // Child 0
@@ -23,7 +22,6 @@ public class HandlePlayerSlot : MonoBehaviour
     // Child 2
     private GameObject btnObj;
     private PlayerSlotBtnOnClick btnHandler;
-
 
     private void Awake()
     {
