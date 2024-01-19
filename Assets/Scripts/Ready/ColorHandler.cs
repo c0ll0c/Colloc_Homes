@@ -3,10 +3,10 @@ using UnityEngine.UI;
 
 public class ColorHandler : MonoBehaviour
 {
-    //public int Color;
     public int SelectionColor;
     private Toggle colorToggle;
     private Image toggleImg;
+    private GameObject checkObj;
 
     private void Start()
     {
@@ -17,20 +17,28 @@ public class ColorHandler : MonoBehaviour
         });
 
         toggleImg = GetComponent<Image>();
+
+        checkObj = transform.GetChild(0).gameObject;
+        checkObj.SetActive(false);
     }
 
-    private Color deepGray = new Color(0.2f, 0.2f, 0.2f);
     private void OnToggle(bool _isOn)
     {
-        if (!NetworkManager.Instance.ReadySceneManager.FirstRendering) return;
+        if (!NetworkManager.Instance.ReadySceneManager.FirstRendering)
+        {
+            return;
+        }
         if (_isOn)
         {
             NetworkManager.Instance.ReadySceneManager.ChangeLocalColor(SelectionColor);
-            toggleImg.color = Color.cyan;
+            toggleImg.color = Color.gray;
+            checkObj.SetActive(true);
         }
         else
         {
-            toggleImg.color = deepGray;
+            toggleImg.color = Color.white;
+            checkObj.SetActive(false);
+
         }
     }
 }

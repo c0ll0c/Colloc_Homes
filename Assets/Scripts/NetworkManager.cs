@@ -167,11 +167,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         ableColor ^= StaticVars.PLAYER_COLORS;
         int playerColor = ableColor & (-ableColor);
 
-        AddCustomPropertiesToPlayer(PhotonNetwork.LocalPlayer, StaticCodes.PHOTON_PROP_COLOR, playerColor);
-
         GameManager.Instance.ChangeScene(GameState.READY);
-
-        PV.RPC("SyncPlayersData", RpcTarget.All);
+        AddCustomPropertiesToPlayer(PhotonNetwork.LocalPlayer, StaticCodes.PHOTON_PROP_COLOR, playerColor);
     }
 
     public ReadyManager ReadySceneManager;
@@ -201,7 +198,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RoomName", out object roomNm);
             PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_SLOTS, out object slots);
 
-            ReadySceneManager.SetUI((string)roomNm, PhotonNetwork.CurrentRoom.Name, playersStatus, (int)slots, PhotonNetwork.IsMasterClient);
+            ReadySceneManager.SetUI((string)roomNm, PhotonNetwork.CurrentRoom.Name, playersStatus, (int)slots);
         }
     }
 
@@ -278,7 +275,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
-        if (changedProps.ContainsKey(StaticCodes.PHOTON_PROP_ISREADY))
+        if (changedProps.ContainsKey(StaticCodes.PHOTON_PROP_ISREADY) || changedProps.ContainsKey(StaticCodes.PHOTON_PROP_COLOR))
         {
             SyncPlayersData();
         }
@@ -320,7 +317,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                         return;
                     }
                 }
-                else return;
                 if (player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_COLOR, out object color))
                 {
                     if ((int)color == ReadySceneManager.color)

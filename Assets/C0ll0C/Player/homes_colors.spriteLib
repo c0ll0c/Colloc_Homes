@@ -65,8 +65,14 @@ MonoBehaviour:
       m_FromMain: 0
       m_SpriteOverride: {fileID: 528853636, guid: c2354d4f2ff81214690da9b8a6bf3fd6,
         type: 3}
+    - m_Name: Red
+      m_Hash: 36444527
+      m_Sprite: {fileID: 1512831747, guid: d5f1b38c3f730b549ad27d240ad818ef, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1512831747, guid: d5f1b38c3f730b549ad27d240ad818ef,
+        type: 3}
     m_FromMain: 0
-    m_EntryOverrideCount: 8
+    m_EntryOverrideCount: 9
   m_PrimaryLibraryGUID: 
-  m_ModificationHash: 638396326104200045
+  m_ModificationHash: 638412707693814988
   m_Version: 1

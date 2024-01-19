@@ -44,7 +44,6 @@ public class ReadyManager : MonoBehaviour
     private void Start()
     {
         NetworkManager.Instance.ReadySceneManager = this;
-        NetworkManager.Instance.SyncPlayersData();
     }
 
     private void OnDestroy()
@@ -70,12 +69,14 @@ public class ReadyManager : MonoBehaviour
         }
     }
 
-    public void SetUI(string _title, string _code, List<PlayerData> _players, int _availableSlots, bool _isMaster)
+    public void SetUI(string _title, string _code, List<PlayerData> _players, int _availableSlots)
     {
+        bool isMaster = false;
+
         // Title, RoomCode UI
         RoomTitle.text = _title;
         RoomCode.text = "CODE: " + _code;
-        
+
         // PlayerSlots UI
         int index = 0;
         foreach (PlayerData player in _players)
@@ -88,8 +89,10 @@ public class ReadyManager : MonoBehaviour
             playerSlots[index].SetSlot(player);
             if (player.IsLocal)
             {
-                SetColorToggle(player.Color);
                 localSlotIndex = index;
+                isMaster = player.IsMaster;
+                FirstRendering = true;
+                SetColorToggle(player.Color);
             }
             index++;
         }
@@ -99,12 +102,14 @@ public class ReadyManager : MonoBehaviour
         }
 
         // Start/Ready Btn UI
-        StartBtnObj.SetActive(_isMaster);
-        ReadyBtnObj.SetActive(!_isMaster);
+        StartBtnObj.SetActive(isMaster);
+        ReadyBtnObj.SetActive(!isMaster);
 
         // Master UI
-        if (_isMaster) SetMasterUI();
-        FirstRendering = true;
+        if (isMaster) SetMasterUI();
+
+        // [TODO]
+        // if (loadingpanel.isactive) loadingpanel ²ô±â
     }
 
     private void SetMasterUI()
@@ -121,6 +126,8 @@ public class ReadyManager : MonoBehaviour
         ToggleGroup playerSlotToggleGroup = PlayerSlotsObj.GetComponent<ToggleGroup>();
         playerSlotToggleGroup.enabled = true;
         playerSlotToggleGroup.SetAllTogglesOff();
+
+        ColorToggleDeactivatePanelObj.SetActive(false);
     }
 
     public void SetColorToggle(int _color)
