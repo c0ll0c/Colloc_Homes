@@ -85,14 +85,15 @@ public static class StaticFuncs
     {
         return _colorCode switch
         {
-            0b00000001 => "Brown",
-            0b00000010 => "Gray",
-            0b00000100 => "Green",
-            0b00001000 => "Yellow",
-            0b00010000 => "Pink",
-            0b00100000 => "Purple",
-            0b01000000 => "Orange",
-            0b10000000 => "Blue",
+            0b000000001 => "Brown",
+            0b000000010 => "Gray",
+            0b000000100 => "Pink",
+            0b000001000 => "Red",
+            0b000010000 => "Orange",
+            0b000100000 => "Yellow",
+            0b001000000 => "Green",
+            0b010000000 => "Blue",
+            0b100000000 => "Purple",
             _ => "",
         };
     }
