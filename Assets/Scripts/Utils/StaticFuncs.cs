@@ -77,7 +77,16 @@ public static class StaticFuncs
     public static IEnumerator SetEffect(GameObject effect)
     {
         effect.SetActive(true);
-        yield return StaticFuncs.WaitForSeconds(3.0f);
+
+        if (effect != NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect)
+        {
+            yield return WaitForSeconds(3.0f);
+            StopEffect(effect);
+        }
+    }
+
+    public static void StopEffect(GameObject effect)
+    {
         effect.SetActive(false);
     }
 

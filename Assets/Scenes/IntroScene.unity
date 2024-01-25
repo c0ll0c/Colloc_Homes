@@ -1460,6 +1460,12 @@ MonoBehaviour:
     Audio: {fileID: 8300000, guid: c5e2a73ad4706440f93bf05df0b465fe, type: 3}
   - EffectType: 14
     Audio: {fileID: 8300000, guid: b1b9c1f0ea1fcae439ed1a4d44ff05fd, type: 3}
+  - EffectType: 15
+    Audio: {fileID: 8300000, guid: 68f2a802335fe0e4889386c36fb4931b, type: 3}
+  - EffectType: 16
+    Audio: {fileID: 8300000, guid: ffb159a21c8a04135a5616979c828fab, type: 3}
+  - EffectType: 17
+    Audio: {fileID: 8300000, guid: 7deb070df180fb24b9248d469eca97f1, type: 3}
 --- !u!1 &1549766022
 GameObject:
   m_ObjectHideFlags: 0

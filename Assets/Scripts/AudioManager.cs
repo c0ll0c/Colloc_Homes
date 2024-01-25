@@ -18,7 +18,10 @@ public enum EffectAudioType
     INFECT,
     DROP,
     COOLTIME,
-    ACTIVE
+    ACTIVE,
+    PAPER,
+    ENTER,
+    STATE
 }
 
 [Serializable]
@@ -28,7 +31,7 @@ public struct EffectAudio
     public AudioClip Audio;
 }
 
-// ÀüÃ¼ÀûÀÎ À½Çâ °ü¸®
+// ì „ì²´ì ì¸ ìŒí–¥ ê´€ë¦¬
 public class AudioManager: MonoSingleton<AudioManager>
 {
     public AudioSource BgmPlayer;

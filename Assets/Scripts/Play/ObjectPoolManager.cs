@@ -60,12 +60,19 @@ public class ObjectPoolManager : MonoBehaviour
     // 사용
     private void OnTakeFromPool(GameObject _poolGo)
     {
+        Debug.Log(_poolGo.name);
+
         _poolGo.SetActive(true);
     }
 
     // 반환
     private void OnReturnedToPool(GameObject _poolGo)
     {
+        Debug.Log(_poolGo.name);
+
+        if (_poolGo.name == "Plane(Clone)")
+            AudioManager.Instance.PauseEffect(EffectAudioType.PLANE);
+
         _poolGo.SetActive(false);
     }
 

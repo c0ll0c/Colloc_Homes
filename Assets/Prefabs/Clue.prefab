@@ -492,9 +492,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7832317761681859581, guid: dcff01d70d3697a4c838083967d38ae0,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7832317761681859581, guid: dcff01d70d3697a4c838083967d38ae0,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3390692686948355927}
+    - target: {fileID: 7832317761681859581, guid: dcff01d70d3697a4c838083967d38ae0,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 3390692686948355927}
+    - target: {fileID: 7832317761681859581, guid: dcff01d70d3697a4c838083967d38ae0,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: GetClue
+      objectReference: {fileID: 0}
+    - target: {fileID: 7832317761681859581, guid: dcff01d70d3697a4c838083967d38ae0,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: HandleClue, Assembly-CSharp
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -537,9 +557,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5080128747278135906, guid: 78cb078984e7ad74bbb75791d271e8c2,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5080128747278135906, guid: 78cb078984e7ad74bbb75791d271e8c2,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3390692686948355927}
+    - target: {fileID: 5080128747278135906, guid: 78cb078984e7ad74bbb75791d271e8c2,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 3390692686948355927}
+    - target: {fileID: 5080128747278135906, guid: 78cb078984e7ad74bbb75791d271e8c2,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HideClue
+      objectReference: {fileID: 0}
+    - target: {fileID: 5080128747278135906, guid: 78cb078984e7ad74bbb75791d271e8c2,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: HandleClue, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 7382930928948942022, guid: 78cb078984e7ad74bbb75791d271e8c2,
         type: 3}
       propertyPath: m_Layer
