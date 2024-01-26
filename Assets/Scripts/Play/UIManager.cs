@@ -125,8 +125,7 @@ public class UIManager : MonoBehaviour
         StartPanelObj.transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
         StartPanelObj.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
 
-        if (NetworkManager.Instance.PV.IsMine)
-            AudioManager.Instance.PlayEffect(EffectAudioType.STATE);
+        AudioManager.Instance.PlayEffect(EffectAudioType.STATE);
 
         // Status Text
         StartPanelObj.transform.GetChild(1).GetChild(1).gameObject.SetActive(isColloc);

@@ -30,8 +30,8 @@ public class HomesController : MonoBehaviour
     }
 
     // moving & animation function
-    private void FixedUpdate() 
-    { 
+    private void FixedUpdate()
+    {
         moveY = Input.GetAxis("Vertical");
         moveX = Input.GetAxis("Horizontal");
         inputVec = new Vector2(moveX, moveY);
@@ -39,9 +39,24 @@ public class HomesController : MonoBehaviour
         rigid.MovePosition(rigid.position + nextVec);
 
         anim.SetFloat("Speed", inputVec.magnitude);
-        if (inputVec.x != 0) pv.RPC("FlipX", RpcTarget.All, inputVec.x);
+        if (inputVec.x != 0)
+        {
+            pv.RPC("FlipX", RpcTarget.All, inputVec.x);
+        }
+
+        if (pv.IsMine)
+        {
+            if (inputVec.x != 0 || inputVec.y != 0)
+            {
+                AudioManager.Instance.PlayerFootSound();
+            }
+            else
+            {
+                AudioManager.Instance.PauseFootSound();
+            }
+        }
     }
-    
+
     // change speed after attack
     public void SetSpeed(float _speed)
     {

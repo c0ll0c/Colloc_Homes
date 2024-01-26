@@ -540,7 +540,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void SetUserSelect(string _nickname, string _color, int _index, string _code)
     {
-        // 콜록 고발할 때 -> 몇 번째에 누가 있는지를 네트워크 매니저에서 그냥 박아 둠.
         Transform homesInfo = UIManager.Instance.HomesInfo.GetChild(_index);
         homesInfo.GetChild(2).GetChild(0).GetComponent<Text>().text = _nickname;
         homesInfo.GetChild(2).GetChild(1).GetComponent<Text>().text = _code;
@@ -571,7 +570,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void ShowResultRPC(EndingType _endType, bool invoker)
     {
-        Debug.Log("RPC 발동!");
         Debug.Log(_endType);
         Debug.Log(invoker);
         EndingManager.ShowResult(_endType, invoker);
@@ -580,7 +578,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [PunRPC]
     IEnumerator OutRPC()
     {
-        Debug.Log("RPC 발동!");
         UIManager.Instance.OutPanelObj.SetActive(true);
         yield return new WaitForSeconds(2.0f);
         UIManager.Instance.OutPanelObj.SetActive(false);

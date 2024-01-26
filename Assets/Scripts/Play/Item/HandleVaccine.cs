@@ -31,6 +31,10 @@ public class HandleVaccine : PoolAble
             NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().VaccineEffect.SetActive(true);
             AudioManager.Instance.PlayEffect(EffectAudioType.VACCINE);
         }
+        else
+        {
+            AudioManager.Instance.PlayEffect(EffectAudioType.DROP);
+        }
 
         ReleaseObject();
    
