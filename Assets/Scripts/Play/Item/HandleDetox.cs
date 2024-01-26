@@ -61,8 +61,6 @@ public class HandleDetox : MonoBehaviour
             boothUser = collision.gameObject.GetInstanceID();
             UseBooth(true);
         }
-
-        AudioManager.Instance.PlayEffect(EffectAudioType.COOLTIME);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -70,7 +68,6 @@ public class HandleDetox : MonoBehaviour
         if (collision.gameObject.GetInstanceID() == boothUser)
         {
             boothUser = 0;
-            AudioManager.Instance.PauseEffect(EffectAudioType.COOLTIME);
             UseBooth(false);
         }
     }
@@ -81,6 +78,9 @@ public class HandleDetox : MonoBehaviour
         lightOnObj.SetActive(use);
         lightOffObj.SetActive(!use);
         timer3Obj.SetActive(use);
+
+        if (use) AudioManager.Instance.PlayEffect(EffectAudioType.COOLTIME);
+        else AudioManager.Instance.PauseEffect(EffectAudioType.COOLTIME);
     }
 
     private void ActivateBooth(bool activate)

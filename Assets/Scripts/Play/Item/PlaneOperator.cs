@@ -22,11 +22,13 @@ public class Plane : PoolAble
         {
             alreadyDrop = false;
             ReleaseObject();
+            AudioManager.Instance.PauseEffect(EffectAudioType.PLANE);
         }
     }
 
     public void InitiateDrop(int _index)
     {
+        AudioManager.Instance.PlayEffect(EffectAudioType.PLANE);
         transform.position = new Vector3(25.0f, NetworkManager.Instance.PlaySceneManager.RandomDropPos[_index].y, 0f);
         dropPos = NetworkManager.Instance.PlaySceneManager.RandomDropPos[_index];
     }
