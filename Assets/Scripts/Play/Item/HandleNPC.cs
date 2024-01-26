@@ -11,6 +11,7 @@ public class HandleNPC : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Homes"))
         {
+            AudioManager.Instance.PlayEffect(EffectAudioType.ENTER);
             EndingButton.SetActive(true);
         }
     }

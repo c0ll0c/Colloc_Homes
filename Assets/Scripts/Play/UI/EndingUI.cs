@@ -39,11 +39,20 @@ public class EndingUI : MonoBehaviour
 
     private void SetupDialog()
     {
-        HomesName = GameManager.Instance.PlayerName;
+        HomesName = PhotonNetwork.LocalPlayer.NickName;
         dialogBody[0] = ", 범인을 찾은 건가?";
         dialogBody[6] = ", 아직 3분이 되지 않았어. 성급한 판단일세.";
         dialogBody[0] = HomesName + dialogBody[0];
         dialogBody[6] = HomesName + dialogBody[6];
+
+        for (int i = 0; i < NetworkManager._currentPlayer; i++)
+        {
+            Debug.Log(UIManager.Instance.HomesInfo.GetChild(i).GetChild(2).GetChild(0).GetComponent<Text>().text);
+            if (UIManager.Instance.HomesInfo.GetChild(i).GetChild(2).GetChild(0).GetComponent<Text>().text == HomesName)
+            {
+                HomesImage.sprite = UIManager.Instance.HomesInfo.GetChild(i).GetChild(1).GetChild(0).GetComponent<Image>().sprite;
+            }
+        }
 
         if (TimeManager.NPCTime)
         {
@@ -51,15 +60,6 @@ public class EndingUI : MonoBehaviour
             dialogText.GetComponent<Text>().text = dialogBody[0];
             FirstSelect.SetActive(false);
             SecondSelect.SetActive(false);
-
-            for (int i = 0; i < NetworkManager._currentPlayer; i++)
-            {
-                Debug.Log(UIManager.Instance.HomesInfo.GetChild(i).GetChild(2).GetChild(0).GetComponent<Text>().text);
-                if (UIManager.Instance.HomesInfo.GetChild(i).GetChild(2).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
-                {
-                    HomesImage.sprite = UIManager.Instance.HomesInfo.GetChild(i).GetChild(1).GetChild(0).GetComponent<Image>().sprite;
-                }
-            }
         }
         else
         {
@@ -93,7 +93,7 @@ public class EndingUI : MonoBehaviour
             SecondSelect.SetActive(true);
             for (int i = 0; i < 6; i++)
                 UIManager.Instance.HomesInfo.GetChild(i).gameObject.SetActive(false);
-            if (UIManager.Instance.HomesInfo.GetChild(0).GetChild(2).GetChild(0).GetComponent<Text>().text != GameManager.Instance.PlayerName)
+            if (UIManager.Instance.HomesInfo.GetChild(0).GetChild(2).GetChild(0).GetComponent<Text>().text != HomesName)
                 UIManager.Instance.HomesInfo.GetChild(0).gameObject.SetActive(true);
             else
                 UIManager.Instance.HomesInfo.GetChild(1).gameObject.SetActive(true);
@@ -107,7 +107,7 @@ public class EndingUI : MonoBehaviour
         {
             count--;
 
-            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
+            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == HomesName)
                 count--;
 
             if (count < 0)
@@ -123,7 +123,7 @@ public class EndingUI : MonoBehaviour
         {
             count = NetworkManager._currentPlayer - 1;
 
-            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
+            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == HomesName)
                 count--;
 
             for (int i = 0; i < 6; i++)
@@ -138,7 +138,7 @@ public class EndingUI : MonoBehaviour
         {
             count++;
 
-            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
+            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == HomesName)
                 count++;
 
             if (count >= NetworkManager._currentPlayer)
@@ -154,7 +154,7 @@ public class EndingUI : MonoBehaviour
         {
             count = 0;
 
-            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == GameManager.Instance.PlayerName)
+            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == HomesName)
                 count++;
 
             for (int i = 0; i < 6; i++)

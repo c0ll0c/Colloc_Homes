@@ -125,6 +125,8 @@ public class UIManager : MonoBehaviour
         StartPanelObj.transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
         StartPanelObj.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);
 
+        AudioManager.Instance.PlayEffect(EffectAudioType.STATE);
+
         // Status Text
         StartPanelObj.transform.GetChild(1).GetChild(1).gameObject.SetActive(isColloc);
         StartPanelObj.transform.GetChild(1).GetChild(2).gameObject.SetActive(!isColloc);
@@ -160,7 +162,7 @@ public class UIManager : MonoBehaviour
         CodeInfo.GetChild(i).gameObject.SetActive(true);
         CodeInfo.GetChild(i).GetChild(0).GetComponent<Text>().text = _usercode.ToString();
 
-        if(i!=5) i++;
+        if (i != 5) i++;
 
         CluePanelCanvas[1].gameObject.SetActive(true);
     }
@@ -172,20 +174,28 @@ public class UIManager : MonoBehaviour
         CluePanelCanvas[2].gameObject.SetActive(true);
     }
 
-    public void UnactivePanel(int _index)
+    public void UnactivePanel()
     {
         // ´Ü¼­ ÇÁ¸®ÆÕ¿¡ ºÙ¾î ÀÖ´Â ¹öÆ° ´­·¶À» ¶§ ¶á ÆÇ³Ú false
-        CluePanelCanvas[_index].gameObject.SetActive(false);
+        for (int index = 0; index < CluePanelCanvas.Length; index++)
+        {
+            if (CluePanelCanvas[index].gameObject.activeSelf)
+                CluePanelCanvas[index].gameObject.SetActive(false);
+        }
     }
 
     public void UserToColloc()
     {
+        AudioManager.Instance.PlayEffect(EffectAudioType.PAPER);
+
         UserClueUI.SetActive(false);
         CollocClueUI.SetActive(true);
     }
 
     public void CollocToUser()
     {
+        AudioManager.Instance.PlayEffect(EffectAudioType.PAPER);
+
         UserClueUI.SetActive(true);
         CollocClueUI.SetActive(false);
     }

@@ -39,4 +39,3 @@ public class AttackController : MonoBehaviour
         pv.RPC("Attack", targetPlayer);
     }
 }
- 

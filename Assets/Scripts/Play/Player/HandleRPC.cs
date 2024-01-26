@@ -63,6 +63,7 @@ public class HandleRPC : MonoBehaviour
             attackController.enabled = true;
             NetworkManager.Instance.PlaySceneManager.gamePlayer.tag = "Homes";
             UIManager.Instance.SetGameUI("Homes");
+            StaticFuncs.StopEffect(NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect);
         }
         else
         {

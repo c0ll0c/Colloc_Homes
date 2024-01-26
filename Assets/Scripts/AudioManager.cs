@@ -18,7 +18,10 @@ public enum EffectAudioType
     INFECT,
     DROP,
     COOLTIME,
-    ACTIVE
+    ACTIVE,
+    PAPER,
+    ENTER,
+    STATE
 }
 
 [Serializable]
@@ -28,10 +31,11 @@ public struct EffectAudio
     public AudioClip Audio;
 }
 
-// ¿¸√º¿˚¿Œ ¿Ω«‚ ∞¸∏Æ
+// Ï†ÑÏ≤¥Ï†ÅÏù∏ ÏùåÌñ• Í¥ÄÎ¶¨
 public class AudioManager: MonoSingleton<AudioManager>
 {
     public AudioSource BgmPlayer;
+    public AudioSource PlayerFoot;
     public AudioClip GameBGM;
     public AudioClip LobbyBGM;
 
@@ -66,7 +70,7 @@ public class AudioManager: MonoSingleton<AudioManager>
     {
         if (audioQueue.Count > 0)
         {
-            for (int i=0; i< EFFECT_AUDIO_SRC_NUM; i++)
+            for (int i = 0; i < EFFECT_AUDIO_SRC_NUM; i++)
             {
                 if (!effectPlayers[i].isPlaying)
                 {
@@ -89,6 +93,19 @@ public class AudioManager: MonoSingleton<AudioManager>
         else BgmPlayer.clip = LobbyBGM;
 
         if (!BgmPlayer.isPlaying) BgmPlayer.Play();
+    }
+
+    public void PlayerFootSound()
+    {
+        if (!PlayerFoot.isPlaying)
+        {
+            PlayerFoot.Play();
+        }
+    }
+
+    public void PauseFootSound()
+    {
+        PlayerFoot.Pause();
     }
 
     public void PlayEffect(EffectAudioType _effectType)

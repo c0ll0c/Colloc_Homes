@@ -15,16 +15,21 @@ public class HandleClue : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+
         if (collision.gameObject.CompareTag("Homes") && clue.ClueType != ClueType.FAKE)
         {
-            if (collision.gameObject.GetComponent<PhotonView>().IsMine)
+            if (collision.gameObject.GetComponent<PhotonView>().IsMine){
+                AudioManager.Instance.PlayEffect(EffectAudioType.ENTER);
                 ClueGetButton.SetActive(true);
+            }
         }
 
         if (collision.gameObject.CompareTag("Colloc") && clue.ClueType != ClueType.FAKE)
         {
-            if (collision.gameObject.GetComponent<PhotonView>().IsMine)
-                ClueHideButton.SetActive(true);
+            if (collision.gameObject.GetComponent<PhotonView>().IsMine){
+                AudioManager.Instance.PlayEffect(EffectAudioType.ENTER);
+                ClueHideButton.SetActive(true);         
+            }
         }
     }
 
@@ -44,35 +49,31 @@ public class HandleClue : MonoBehaviour
 
     public void GetClue()
     {
+        AudioManager.Instance.PlayEffect(EffectAudioType.PAPER);
+
         if (!clue.IsHidden && !clue.IsGot)
         {
             if (clue.ClueType == ClueType.USER)
             {
-                UIManager.Instance.ChangeUserClueUIText(clue.UserNickName, clue.UserCode, clue.TypeIndex, clue.color);              // «ˆ¿Á ¥©∏• ¥‹º≠¿« ¿Œµ¶Ω∫∏¶ ≥—∞‹ ¡‹. ¥‹º≠∏∂¥Ÿ ¿Œµ¶Ω∫∏¶ ∞°¡ˆ∞Ì ¿’¿∏¥œ±Ó.. 
-
-                StartCoroutine(UnactivePanel(0));
+                UIManager.Instance.ChangeUserClueUIText(clue.UserNickName, clue.UserCode, clue.TypeIndex, clue.color);
             }
 
             else if (clue.ClueType == ClueType.CODE)                // Colloc's code
             {
                 string collocCode = PhotonNetwork.CurrentRoom.CustomProperties["CollocCode"].ToString();
                 UIManager.Instance.ChangeCodeClueUIText(collocCode[clue.TypeIndex]);
-
-                StartCoroutine(UnactivePanel(1));
             }
+
+            StartCoroutine(IsGotTrue());
         }
 
         if (clue.IsGot && !clue.IsHidden)
         {
-            UIManager.Instance.ChangeClueStatusUIText("¿ÃπÃ »πµÊ«— ¥‹º≠!");
-
-            StartCoroutine(UnactivePanel(2));
+            UIManager.Instance.ChangeClueStatusUIText("Ïù¥ÎØ∏ ÌöçÎìùÌïú Îã®ÏÑú!");
         }
         else if (clue.IsHidden)
         {
-            UIManager.Instance.ChangeClueStatusUIText("º˚∞‹¡¯ ¥‹º≠!");
-
-            StartCoroutine(UnactivePanel(2));
+            UIManager.Instance.ChangeClueStatusUIText("Ïà®Í≤®ÏßÑ Îã®ÏÑú!");
         }
     }
 
@@ -81,27 +82,21 @@ public class HandleClue : MonoBehaviour
         if (!clue.IsHidden)
         {
             NetworkManager.Instance.PV.RPC("SyncHiddenCode", RpcTarget.AllBuffered, clue.Index);
-            UIManager.Instance.ChangeClueStatusUIText("¥‹º≠ º˚±Ë!");
-
-            Debug.Log("¥‹º≠ º˚±Ë");
-            StartCoroutine(UnactivePanel(2));
+            UIManager.Instance.ChangeClueStatusUIText("Îã®ÏÑú Ïà®ÍπÄ!");
         }
 
         else
         {
-            UIManager.Instance.ChangeClueStatusUIText("º˚±‰ ¥‹º≠!");
-            StartCoroutine(UnactivePanel(2));
+            UIManager.Instance.ChangeClueStatusUIText("Ïà®Í∏¥ Îã®ÏÑú!");
         }
     }
 
     private WaitForSeconds waitFor1Sec = new WaitForSeconds(1.0f);
-    IEnumerator UnactivePanel(int index)
+
+    IEnumerator IsGotTrue()
     {
         yield return waitFor1Sec;
 
-        UIManager.Instance.UnactivePanel(index);
-
-        if (!clue.IsHidden)
-            clue.IsGot = true;
+        clue.IsGot = true;
     }
 }

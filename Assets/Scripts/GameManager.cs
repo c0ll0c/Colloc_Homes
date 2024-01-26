@@ -35,5 +35,6 @@ public class GameManager : MonoSingleton<GameManager>
     public void EnterGame()
     {
         gameState = GameState.PLAY;
+        AudioManager.Instance.PlayEffect(EffectAudioType.INFECT);
     }
 }

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 
@@ -40,7 +41,10 @@ public class HandleDetox : MonoBehaviour
             AudioManager.Instance.PlayEffect(EffectAudioType.DETOX);
         }
         else
+        {
             AudioManager.Instance.PlayEffect(EffectAudioType.UNDETOX);
+            AudioManager.Instance.PauseEffect(EffectAudioType.COOLTIME);
+        }
         ActivateBooth(false);
     }
 
@@ -59,6 +63,11 @@ public class HandleDetox : MonoBehaviour
         if (isActive && !isUsing)
         {
             boothUser = collision.gameObject.GetInstanceID();
+            if (collision.gameObject.GetComponent<PhotonView>().IsMine)
+            {
+                AudioManager.Instance.PlayEffect(EffectAudioType.COOLTIME);
+            }
+
             UseBooth(true);
         }
     }
