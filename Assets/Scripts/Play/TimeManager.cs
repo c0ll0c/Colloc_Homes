@@ -64,7 +64,6 @@ public class TimeManager : MonoBehaviour
     {
         // drop vaccine
         GameObject plane = ObjectPoolManager.Instance.GetObject("Plane");
-        AudioManager.Instance.PlayEffect(EffectAudioType.PLANE);
         plane.GetComponent<Plane>().InitiateDrop(vaccineNum);
 
         vaccineNum++;
