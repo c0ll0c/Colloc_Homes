@@ -5,6 +5,7 @@ using UnityEngine;
 public class HandleRoomList : MonoBehaviour
 {
     public TextMeshProUGUI RoomName;
+    public TextMeshProUGUI RoomPlayers;
     public RoomInfo RoomInfo { get; private set; }
     public TMP_InputField CodeField;
 
@@ -12,8 +13,8 @@ public class HandleRoomList : MonoBehaviour
     {
         //RoomName.text = _roomInfo.CustomProperties["RoomName"].ToString();
         RoomName.text = _roomInfo.Name;
+        RoomPlayers.text = _roomInfo.PlayerCount.ToString() + "/" + _roomInfo.MaxPlayers.ToString();
         RoomInfo = _roomInfo;
-        Debug.Log(RoomInfo);
         if ((bool)RoomInfo.CustomProperties["Private"])
         {
             transform.GetChild(1).gameObject.SetActive(true);

@@ -22,11 +22,11 @@ public class RoomOptionBtnsOnClick : MonoBehaviour
         {
             case RoomOptionBtnType.PUBLIC:
                 CreateRoomManager.RoomPublic = true;
-                transform.parent.GetChild(3).GetComponent<Image>().color = Color.gray;
+                transform.parent.GetChild(2).GetComponent<Image>().color = Color.gray;
                 break;
             case RoomOptionBtnType.PRIVATE:
                 CreateRoomManager.RoomPublic = false;
-                transform.parent.GetChild(2).GetComponent<Image>().color = Color.gray;
+                transform.parent.GetChild(1).GetComponent<Image>().color = Color.gray;
                 break;
         }
     }
