@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 140}
+  m_SizeDelta: {x: 0, y: 60}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &8548701717785374149
 CanvasRenderer:
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bb5c6a96ff0eb0e498261e010df166d6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9d039a4ed1891114098c01214f7c3f5a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -700,6 +700,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RoomName: {fileID: 5836776544952749279}
+  RoomPlayers: {fileID: 5353941933226262507}
   CodeField: {fileID: 1750340757044199676}
 --- !u!1 &6480799160887041290
 GameObject:
@@ -871,7 +872,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 140}
+  m_SizeDelta: {x: 0, y: 60}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &4906278334145976532
 CanvasRenderer:
@@ -901,7 +902,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8e5be3444199e3141a84d97c47b2b99f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 14659b37e2f411a4b9c5b698770a2d21, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
