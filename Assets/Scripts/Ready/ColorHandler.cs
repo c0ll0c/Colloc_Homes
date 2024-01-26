@@ -30,7 +30,7 @@ public class ColorHandler : MonoBehaviour
         }
         if (_isOn)
         {
-            NetworkManager.Instance.ReadySceneManager.ChangeLocalColor(SelectionColor);
+            NetworkManager.Instance.ChangeLocalColor(SelectionColor);
             toggleImg.color = Color.gray;
             checkObj.SetActive(true);
         }

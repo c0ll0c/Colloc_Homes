@@ -32,7 +32,6 @@ public class ReadyManager : MonoBehaviour
     public GameObject StartBtnObj;
     public GameObject ReadyBtnObj;
 
-    public int color;
     public GameObject ColorToggleGroupObj;
     public GameObject ColorToggleDeactivatePanelObj;
 
@@ -132,8 +131,6 @@ public class ReadyManager : MonoBehaviour
 
     public void SetColorToggle(int _color)
     {
-        color = _color;
-
         int index= 0;
         while (_color > 1)
         {
@@ -145,12 +142,6 @@ public class ReadyManager : MonoBehaviour
         toggle.isOn = true;
     }
     
-    public void ChangeLocalColor(int _color)
-    {
-        color = _color;
-        playerSlots[localSlotIndex].SetPlayerColor(_color);
-    }
-
     public void DisactivateColorToggle(bool _isReady)
     {
         ColorToggleDeactivatePanelObj.SetActive(_isReady);

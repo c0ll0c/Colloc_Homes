@@ -79,6 +79,7 @@ public class PlayManager : MonoBehaviour
 
     public void SpawnHomes(bool _isColloc, Vector2 _spawnPos, string _color)
     {
+        Debug.Log(_color);
         gamePlayer = PhotonNetwork.Instantiate("Homes_" + _color, _spawnPos, Quaternion.identity);
         if (_isColloc)
         {
