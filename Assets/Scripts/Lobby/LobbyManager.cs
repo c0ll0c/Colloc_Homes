@@ -32,8 +32,10 @@ public class LobbyManager : MonoBehaviour
     public void AddRoom(RoomInfo _roomInfo)
     {
         int index = roomCollection.FindIndex(x => x.RoomInfo.Name == _roomInfo.Name);
+
         if (index != -1)
         {
+            roomCollection[index].SetRoomInfo(_roomInfo);
             return;
         }
         HandleRoomList newRoom = Instantiate(RoomList, Content);

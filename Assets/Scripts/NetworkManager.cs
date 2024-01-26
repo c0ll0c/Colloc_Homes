@@ -82,7 +82,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         foreach (RoomInfo roomInfo in roomList)
         {
-            Debug.Log(roomInfo.Name);
             if (roomInfo.RemovedFromList)
             {
                 CachedRoomList.Remove(roomInfo.Name);
@@ -135,11 +134,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(_roomName);
     }
 
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Debug.Log(returnCode);
+        Debug.Log(message);
+        if (returnCode == 32758)
+        {
+            AlertManager.Instance.WarnAlert("코드를 다시 확인해주세요");
+        }
+        if (returnCode == 32764)
+        {
+            AlertManager.Instance.WarnAlert("이미 게임이 시작된 방입니다");
+        }
+    }
+
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         if (returnCode == 32760)
         {
-            // TODO: 가능한 방이 없습니다
+            
         }
     }
     #endregion

@@ -1,5 +1,6 @@
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum LobbyBtnType
 {
@@ -26,7 +27,8 @@ public class LobbyBtnsOnClick : MonoBehaviour
             case LobbyBtnType.CREATE:
                 transform.parent.GetComponent<CreateRoomOptionsUI>().CreateRoom(); break;
             case LobbyBtnType.JOIN:
-                transform.parent.GetComponent<HandleRoomList>().JoinRoom(); break;
+                transform.parent.GetComponent<HandleRoomList>().JoinRoom();
+                transform.GetComponent<Button>().interactable = false; break;
             case LobbyBtnType.CHECK:
                 transform.parent.parent.GetComponent<HandleRoomList>().CheckCode(); break;
             case LobbyBtnType.BACK:
