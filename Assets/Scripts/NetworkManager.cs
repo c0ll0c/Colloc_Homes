@@ -147,14 +147,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             AlertManager.Instance.WarnAlert("이미 게임이 시작된 방입니다");
         }
     }
-
-    public override void OnJoinRandomFailed(short returnCode, string message)
-    {
-        if (returnCode == 32760)
-        {
-            
-        }
-    }
     #endregion
     #region SET READY SCENE
     public override void OnJoinedRoom()

@@ -37,10 +37,10 @@ public class LobbyBtnsOnClick : MonoBehaviour
                 PhotonNetwork.JoinRandomRoom();
                 break;
             case LobbyBtnType.SET_ROOM:
-                transform.parent.GetChild(1).gameObject.SetActive(true);
+                transform.parent.GetChild(9).gameObject.SetActive(true);
                 break;
             case LobbyBtnType.SET_NAME:
-                transform.parent.GetChild(1).gameObject.SetActive(true);
+                transform.parent.GetChild(7).gameObject.SetActive(true);
                 break;
             case LobbyBtnType.SAVE_NAME:
                 transform.parent.GetComponent<NicknameInputFieldUI>().SaveNickname();
@@ -50,7 +50,7 @@ public class LobbyBtnsOnClick : MonoBehaviour
                 transform.parent.gameObject.SetActive(false);
                 break;
             case LobbyBtnType.FIND:
-                transform.parent.GetChild(1).gameObject.SetActive(true);
+                transform.parent.GetChild(8).gameObject.SetActive(true);
                 break;
             case LobbyBtnType.ENTER:
                 transform.parent.GetComponent<CodeInputFieldUI>().FindRoom();
