@@ -52,7 +52,12 @@ public class PlayManager : MonoBehaviour
             NetworkManager.Instance.GameSetting();
         }
     }
-    
+
+    private void OnDestroy()
+    {
+        NetworkManager.Instance.PlaySceneManager = null;
+    }
+
     public void CheckReady(GameSettings _type)
     {
         readyStatus |= (int)_type;
@@ -156,10 +161,5 @@ public class PlayManager : MonoBehaviour
         index++;
 
         CheckReady(GameSettings.READY_USERCLUE);
-    }
-    
-    private void OnDestroy()
-    {
-        NetworkManager.Instance.PlaySceneManager = null;
     }
 }

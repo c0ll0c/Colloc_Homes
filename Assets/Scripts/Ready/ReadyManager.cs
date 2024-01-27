@@ -43,6 +43,7 @@ public class ReadyManager : MonoBehaviour
     private void Start()
     {
         NetworkManager.Instance.ReadySceneManager = this;
+        NetworkManager.Instance.SyncPlayersData();
     }
 
     private void OnDestroy()
