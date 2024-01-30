@@ -50,23 +50,27 @@ public class EndingManager : MonoBehaviour
                     {
                         // win _ founder homes
                         result = true;
+                        AudioManager.Instance.ChangeBGM(GameState.WIN);
                     }
                     else             
                     {
                         // lose _ other homes
                         result = false;
+                        AudioManager.Instance.ChangeBGM(GameState.LOSE);
                     }
                 }
                 else                
                 {
                     // lose _ colloc
                     result = false;
+                    AudioManager.Instance.ChangeBGM(GameState.LOSE);
                 }
                 break;
             case EndingType.FalseAlarm:
                 // homes 일 수밖에 없다!
                 // lose _ false alarm
                 result = false;
+                AudioManager.Instance.ChangeBGM(GameState.LOSE);
                 falseEnding.SetActive(true);
                 break;
             case EndingType.TimeOver:
@@ -74,17 +78,21 @@ public class EndingManager : MonoBehaviour
                 {
                     // lose
                     result = false;
+                    AudioManager.Instance.ChangeBGM(GameState.LOSE);
                 }
                 else
                 {
                     // win 
                     result = true;
+                    AudioManager.Instance.ChangeBGM(GameState.WIN);
                 }
                 break;
             case EndingType.Error:
                 // TODO Error type 세분화
                 // 나 혼자 남았을 경우
                 // 콜록이 나갔을 경우
+                result = true;
+                AudioManager.Instance.ChangeBGM(GameState.WIN);
                 break;
         }
 
@@ -97,9 +105,10 @@ public class EndingManager : MonoBehaviour
 
     public IEnumerator goTo(EndingType _endType)
     {
-        Debug.Log(_endType);
+        AudioManager.Instance.PauseEffect(EffectAudioType.COOLTIME);
+        AudioManager.Instance.PauseEffect(EffectAudioType.PLANE);
 
-        yield return new WaitForSecondsRealtime(2f);
+        yield return new WaitForSecondsRealtime(4f);
 
         switch (_endType)
         {
@@ -115,6 +124,7 @@ public class EndingManager : MonoBehaviour
                 break;
             case EndingType.Error:
                 // TODO Error type 세분화
+                endGame();
                 break;
         }
     }
@@ -128,6 +138,6 @@ public class EndingManager : MonoBehaviour
     void endGame()
     {
         Time.timeScale = 1;
-        PhotonNetwork.LoadLevel("ReadyScene");
+        GameManager.Instance.ChangeScene(GameState.READY);
     }
 }

@@ -31,7 +31,7 @@ public class ObjectPoolManager : MonoBehaviour
         Init();
     }
 
-    // pool ±âº» ¼³Á¤
+    // pool ï¿½âº» ï¿½ï¿½ï¿½ï¿½
     private void Init()
     {
         Debug.Log("INIT");
@@ -49,7 +49,7 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
-    // »ý¼º
+    // ï¿½ï¿½ï¿½ï¿½
     private GameObject CreatePooledItem()
     {
         GameObject poolGo = Instantiate(objectDic[objectName]);
@@ -57,26 +57,22 @@ public class ObjectPoolManager : MonoBehaviour
         return poolGo;
     }
 
-    // »ç¿ë
+    // ï¿½ï¿½ï¿½
     private void OnTakeFromPool(GameObject _poolGo)
     {
-        Debug.Log(_poolGo.name);
-
         _poolGo.SetActive(true);
     }
 
-    // ¹ÝÈ¯
+    // ï¿½ï¿½È¯
     private void OnReturnedToPool(GameObject _poolGo)
     {
-        Debug.Log(_poolGo.name);
-
         if (_poolGo.name == "Plane(Clone)")
             AudioManager.Instance.PauseEffect(EffectAudioType.PLANE);
 
         _poolGo.SetActive(false);
     }
 
-    // »èÁ¦
+    // ï¿½ï¿½ï¿½ï¿½
     private void OnDestroyPoolObject(GameObject _poolGo)
     {
         Destroy(_poolGo);

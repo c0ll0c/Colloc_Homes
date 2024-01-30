@@ -396,6 +396,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (otherPlayer == PhotonNetwork.LocalPlayer) return;
         SyncPlayersData();
+        if(PhotonNetwork.PlayerList.Length == 1)
+        {
+            EndingManager.ShowResult(EndingType.Error, true);
+        }
     }
     #endregion
     #region SET PLAY SCENE

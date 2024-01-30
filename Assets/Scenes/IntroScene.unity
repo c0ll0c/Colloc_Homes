@@ -1727,6 +1727,8 @@ MonoBehaviour:
   PlayerFoot: {fileID: 3200604}
   GameBGM: {fileID: 8300000, guid: 822e90773d066fb409cdddb97a39d593, type: 3}
   LobbyBGM: {fileID: 8300000, guid: ca45fdb4ac5c8bf4ba481652e0d1ddac, type: 3}
+  WinBGM: {fileID: 8300000, guid: 3cccd74bd48012f458709b49362ffceb, type: 3}
+  LoseBGM: {fileID: 8300000, guid: dfeda759a67fb494786c7b0312184661, type: 3}
   EffectSourceObj: {fileID: 23810867}
   AudioClips:
   - EffectType: 0
