@@ -14,7 +14,8 @@ public enum LobbyBtnType
     SAVE_NAME,
     FIND,
     ENTER,
-    CHECK
+    CHECK,
+    SETTINGS,
 }
 
 public class LobbyBtnsOnClick : MonoBehaviour
@@ -54,6 +55,9 @@ public class LobbyBtnsOnClick : MonoBehaviour
                 break;
             case LobbyBtnType.ENTER:
                 transform.parent.GetComponent<CodeInputFieldUI>().FindRoom();
+                break;
+            case LobbyBtnType.SETTINGS:
+                AudioManager.Instance.OpenAudioSettingPanel();
                 break;
         }
     }
