@@ -141,14 +141,14 @@ public class UIManager : MonoBehaviour
     public void ChangeUserClueUIText(string _username, string _usercode, int _index, string _color)
     {
         // 단서 보기 눌렀을 때 나오는 탐정 카드
-        CluePanelCanvas[0].GetChild(0).GetComponent<Text>().text = _username;
-        CluePanelCanvas[0].GetChild(1).GetComponent<Text>().text = _usercode;
+        CluePanelCanvas[0].GetChild(1).GetComponent<Text>().text = _username;
+        CluePanelCanvas[0].GetChild(2).GetComponent<Text>().text = _usercode;
 
         UserInfo.GetChild(_index).GetChild(1).GetComponent<Text>().text = _usercode;
 
-        Image cardImage = CluePanelCanvas[0].GetChild(2).GetChild(0).GetComponent<Image>();
-        SpriteLibraryAsset sprites = CluePanelCanvas[0].GetChild(2).GetChild(0).GetComponent<SpriteLibrary>().spriteLibraryAsset;
-        cardImage.sprite = sprites.GetSprite("Color", _color);
+        Image homesImg = CluePanelCanvas[0].GetChild(3).GetChild(0).GetComponent<Image>();
+        SpriteLibraryAsset sprites = CluePanelCanvas[0].GetChild(3).GetChild(0).GetComponent<SpriteLibrary>().spriteLibraryAsset;
+        homesImg.sprite = sprites.GetSprite("Color", _color);
 
         CluePanelCanvas[0].gameObject.SetActive(true);
     }
@@ -156,7 +156,7 @@ public class UIManager : MonoBehaviour
     public void ChangeCodeClueUIText(char _usercode)
     {
         // 단서 보기 눌렀을 때 나오는 단서 조각
-        CluePanelCanvas[1].GetChild(0).GetComponent<Text>().text = _usercode.ToString();
+        CluePanelCanvas[1].GetChild(1).GetComponent<Text>().text = _usercode.ToString();
 
         // gameUI 버튼 눌렀을 때 나오는 collocInfo 동기화 (get)
         CodeInfo.GetChild(i).gameObject.SetActive(true);
@@ -170,18 +170,8 @@ public class UIManager : MonoBehaviour
     public void ChangeClueStatusUIText(string _status)
     {
         // 숨김, 이미 본 단서, 숨긴 단서 등 상태 표시
-        CluePanelCanvas[2].GetChild(0).GetComponent<Text>().text = _status;
+        CluePanelCanvas[2].GetChild(1).GetComponent<Text>().text = _status;
         CluePanelCanvas[2].gameObject.SetActive(true);
-    }
-
-    public void UnactivePanel()
-    {
-        // 단서 프리팹에 붙어 있는 버튼 눌렀을 때 뜬 판넬 false
-        for (int index = 0; index < CluePanelCanvas.Length; index++)
-        {
-            if (CluePanelCanvas[index].gameObject.activeSelf)
-                CluePanelCanvas[index].gameObject.SetActive(false);
-        }
     }
 
     public void UserToColloc()

@@ -34,6 +34,9 @@ public struct EffectAudio
 // 전체적인 음향 관리
 public class AudioManager: MonoSingleton<AudioManager>
 {
+    private static readonly float MAX_BGM = 0.4f;
+    private static readonly float MAX_EFFECT = 1f;
+
     public AudioSource BgmPlayer;
     public AudioSource PlayerFoot;
     public AudioClip GameBGM;
@@ -50,6 +53,7 @@ public class AudioManager: MonoSingleton<AudioManager>
     public EffectAudio[] AudioClips;
     private readonly Dictionary<EffectAudioType, AudioClip> audios = new();
 
+    public GameObject AudioSettingPanel;
     private void Start()
     {
         BgmPlayer.clip = LobbyBGM;
@@ -65,6 +69,22 @@ public class AudioManager: MonoSingleton<AudioManager>
         for(int i=0; i< EFFECT_AUDIO_SRC_NUM; i++)
         {
             playingAudios[i] = null;
+        }
+
+        foreach(SettingSliderType soundType in Enum.GetValues(typeof(SettingSliderType)))
+        {
+            string typeStr = soundType.ToString();
+            float volume = 1f;
+            if (PlayerPrefs.HasKey(typeStr))
+            {
+                volume = PlayerPrefs.GetFloat(typeStr);
+            }
+            typeStr += "_m";
+            if (PlayerPrefs.HasKey(typeStr) && PlayerPrefs.GetFloat(typeStr) == 1)
+            {
+                volume = 0f;
+            }
+            SetVolume(soundType, volume);
         }
     }
 
@@ -127,5 +147,27 @@ public class AudioManager: MonoSingleton<AudioManager>
                 playingAudios[i] = null;
             }
         }
+    }
+
+    public void SetVolume(SettingSliderType _type, float _volume)
+    {
+        switch (_type)
+        {
+            case SettingSliderType.BGM:
+                BgmPlayer.volume = _volume * MAX_BGM;
+                break;
+            case SettingSliderType.EFT:
+                _volume *= MAX_EFFECT;
+                foreach(AudioSource effectPlayer in effectPlayers)
+                {
+                    effectPlayer.volume = _volume;
+                }
+                break;
+        }
+    }
+
+    public void OpenAudioSettingPanel()
+    {
+        AudioSettingPanel.SetActive(true);
     }
 }

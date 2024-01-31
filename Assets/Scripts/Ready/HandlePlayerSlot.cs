@@ -14,6 +14,7 @@ public class HandlePlayerSlot : MonoBehaviour
     private GameObject playerObj;
     private TMP_Text playerName;
     private GameObject isLeaderObj;
+    private GameObject isLocalObj;
     private GameObject isReadyObj;
     private Image homesImg;
     private SpriteLibraryAsset sprites;
@@ -35,7 +36,8 @@ public class HandlePlayerSlot : MonoBehaviour
         playerObj = transform.GetChild(0).gameObject;
         playerName = playerObj.transform.GetChild(1).GetComponent<TMP_Text>();
         isLeaderObj = playerObj.transform.GetChild(2).gameObject;
-        isReadyObj = playerObj.transform.GetChild(3).gameObject;
+        isLocalObj = playerObj.transform.GetChild(3).gameObject;
+        isReadyObj = playerObj.transform.GetChild(4).gameObject;
         homesImg = playerObj.transform.GetChild(0).GetChild(0).GetComponent<Image>();
         sprites = playerObj.transform.GetChild(0).GetChild(0).GetComponent<SpriteLibrary>().spriteLibraryAsset;
 
@@ -61,6 +63,7 @@ public class HandlePlayerSlot : MonoBehaviour
         playerName.text = _player.Name;
 
         isLeaderObj.SetActive(_player.IsMaster);
+        isLocalObj.SetActive(_player.IsLocal);
         isReadyObj.SetActive(!_player.IsMaster & _player.IsReady);
 
         SetPlayerColor(_player.Color);

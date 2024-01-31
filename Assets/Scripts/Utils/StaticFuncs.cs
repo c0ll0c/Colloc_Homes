@@ -1,19 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public static class StaticFuncs 
 {
+    // just shuffle...
+    public static string ShuffleString(string _characters)
+    {
+        System.Random rand = new System.Random();
+
+        StringBuilder result = new StringBuilder(_characters);
+
+        for (int i = result.Length - 1; i > 0; i--)
+        {
+            int index = rand.Next(i + 1);
+
+            char temp = result[index];
+            result[index] = result[i];
+            result[i] = temp;
+        }
+
+        return result.ToString();
+    }
+
     public static string GeneratePlayerCode(string _commoncharacters)
     {
         string code;
         string randomCharacters = "0123456789ABCDEFGHIJYZ";
 
-        randomCharacters = NetworkManager.Instance.ShuffleCharacter(randomCharacters).Substring(0, 2);          // 랜덤으로 세 글자
+        randomCharacters = ShuffleString(randomCharacters).Substring(0, 2);          // 랜덤으로 세 글자
         code = _commoncharacters + randomCharacters;
 
-        return NetworkManager.Instance.ShuffleCharacter(code);
+        return ShuffleString(code);
     }
 
     // sprite renderer setting
@@ -77,6 +97,7 @@ public static class StaticFuncs
     public static IEnumerator SetEffect(GameObject effect)
     {
         effect.SetActive(true);
+        effect.GetComponent<SpriteRenderer>().sortingLayerID = effect.transform.parent.GetComponentInParent<SpriteRenderer>().sortingLayerID;
 
         if (effect != NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect)
         {
