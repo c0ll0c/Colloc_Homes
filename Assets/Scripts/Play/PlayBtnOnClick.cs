@@ -5,6 +5,7 @@ public enum PlayBtnType
 {
     BACK_TO_LOBBY,
     SPECTATOR_MODE,
+    CLOSE_PANEL,
 }
 
 public class PlayBtnOnClick : MonoBehaviour
@@ -21,6 +22,9 @@ public class PlayBtnOnClick : MonoBehaviour
                 break;
             case PlayBtnType.SPECTATOR_MODE:
                 Time.timeScale = 1;
+                break;
+            case PlayBtnType.CLOSE_PANEL:
+                transform.parent.gameObject.SetActive(false);
                 break;
         }
     }

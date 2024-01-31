@@ -31,7 +31,6 @@ public class EndingManager : MonoBehaviour
         gameObject.SetActive(false);
         falseEnding.SetActive(false);
     }
-
     public void OnDisable()
     {
         Time.timeScale = 1;

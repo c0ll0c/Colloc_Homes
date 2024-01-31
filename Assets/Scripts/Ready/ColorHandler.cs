@@ -6,7 +6,6 @@ public class ColorHandler : MonoBehaviour
     public int SelectionColor;
     private Toggle colorToggle;
     private Image toggleImg;
-    private GameObject checkObj;
 
     private void Start()
     {
@@ -17,9 +16,6 @@ public class ColorHandler : MonoBehaviour
         });
 
         toggleImg = GetComponent<Image>();
-
-        checkObj = transform.GetChild(0).gameObject;
-        checkObj.SetActive(false);
     }
 
     private void OnToggle(bool _isOn)
@@ -32,12 +28,10 @@ public class ColorHandler : MonoBehaviour
         {
             NetworkManager.Instance.ChangeLocalColor(SelectionColor);
             toggleImg.color = Color.gray;
-            checkObj.SetActive(true);
         }
         else
         {
             toggleImg.color = Color.white;
-            checkObj.SetActive(false);
 
         }
     }

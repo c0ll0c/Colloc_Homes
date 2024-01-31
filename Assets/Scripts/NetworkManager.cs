@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections;
 using System;
 using UnityEngine.UI;
-using System.Text;
 using UnityEngine.U2D.Animation;
 using System.Linq;
 
@@ -105,7 +104,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
         string randomCharacters = "0123456789ABCDEFGHIJYZ";
-        string roomCode = this.ShuffleCharacter(randomCharacters).Substring(0, 5);
+        string roomCode = StaticFuncs.ShuffleString(randomCharacters).Substring(0, 5);
 
         ExitGames.Client.Photon.Hashtable roomCustomProps = new ExitGames.Client.Photon.Hashtable();
         roomCustomProps.Add("RoomName", _roomName);
@@ -130,7 +129,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void JoinRoom(string _roomName)
     {
         PhotonNetwork.NickName = GameManager.Instance.PlayerName;
-
         PhotonNetwork.JoinRoom(_roomName);
     }
 
@@ -408,18 +406,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         int i = 0;
         int colloc = UnityEngine.Random.Range(0, PhotonNetwork.CurrentRoom.PlayerCount);
-        bool isColloc = false;
         string code;
         Vector2[] randomCluePosition = ShufflePosition(StaticVars.CluePosition);
         Vector2[] randomSpawnPosition = ShufflePosition(StaticVars.SpawnPosition);
 
         string commonCharacters = "0123456789ABCDEX";
 
-        commonCharacters = ShuffleCharacter(commonCharacters).Substring(0, 3);          // 랜덤으로 세 글자
+        commonCharacters = StaticFuncs.ShuffleString(commonCharacters).Substring(0, 3);          // 랜덤으로 세 글자
 
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
-            isColloc = false;
+            bool isColloc = false;
             code = StaticFuncs.GeneratePlayerCode(commonCharacters);
 
             if (i == colloc)
@@ -432,7 +429,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             }
             player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_COLOR, out object color);
             string colorStr = StaticFuncs.GetColorName((int)color);
-            Debug.Log(color + " : " + colorStr);
 
             PV.RPC("SetPlayer", player, isColloc, randomSpawnPosition[i], colorStr);
             PV.RPC("SetUserClue", RpcTarget.AllBuffered, randomCluePosition, player.NickName, code, colorStr);
@@ -470,26 +466,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         return _position;
     }
-
-    // just shuffle...
-    public string ShuffleCharacter(string _characters)
-    {
-        System.Random rand = new System.Random();
-
-        StringBuilder result = new StringBuilder(_characters);
-
-        for (int i = result.Length - 1; i > 0; i--)
-        {
-            int index = rand.Next(i + 1);
-
-            char temp = result[index];
-            result[index] = result[i];
-            result[i] = temp;
-        }
-
-        return result.ToString();
-    }
-
 
     // Set where item will drop
     private Vector3 SetDropPos()
@@ -564,11 +540,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         double endTime = PhotonNetwork.Time + StaticVars.GAME_TIME + StaticVars.START_PANEL_TIME;
         PV.RPC("SetGameStart", RpcTarget.AllBuffered, endTime);
+
+        foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            AddCustomPropertiesToPlayer(player, StaticCodes.PHOTON_PROP_SYNC, false);
+        }
     }
 
     [PunRPC]
     public void SetGameStart(double _endTime)
     {
+        if (PlaySceneManager == null) return;
         PlaySceneManager.StartGame(_endTime);
     }
 
