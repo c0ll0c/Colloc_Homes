@@ -470,7 +470,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // Set where item will drop
     private Vector3 SetDropPos()
     {
-        Vector3 randomDropPos = new Vector3(UnityEngine.Random.Range(-3f, 10f), UnityEngine.Random.Range(-8f, 17f), 0f);
+        Vector3 randomDropPos = new Vector3(UnityEngine.Random.Range(0f, 6f), UnityEngine.Random.Range(-8f, 17f), 0f);
         if (StaticFuncs.CheckOnWall(randomDropPos))
         {
             return SetDropPos();
