@@ -14,7 +14,7 @@ public class HandleDetox : MonoBehaviour
     private bool isUsing;
     private bool isMe;
     private int boothUser;
-    
+
     private void Awake()
     {
         isActive = true;
@@ -51,13 +51,14 @@ public class HandleDetox : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (
-            collision.gameObject.CompareTag("Player") || 
-            collision.gameObject.CompareTag("Homes") || 
+            collision.gameObject.CompareTag("Player") ||
+            collision.gameObject.CompareTag("Homes") ||
             collision.gameObject.CompareTag("Colloc")
-            ) { 
-            isMe = false; 
+            )
+        {
+            isMe = false;
         }
-        else if ( collision.gameObject.CompareTag("Infect") ) { isMe = true; }
+        else if (collision.gameObject.CompareTag("Infect")) { isMe = true; }
         else { return; }
 
         if (isActive && !isUsing)
@@ -77,6 +78,10 @@ public class HandleDetox : MonoBehaviour
         if (collision.gameObject.GetInstanceID() == boothUser)
         {
             boothUser = 0;
+            if (collision.gameObject.GetComponent<PhotonView>().IsMine)
+            {
+                AudioManager.Instance.PauseEffect(EffectAudioType.COOLTIME);
+            }
             UseBooth(false);
         }
     }
@@ -87,9 +92,6 @@ public class HandleDetox : MonoBehaviour
         lightOnObj.SetActive(use);
         lightOffObj.SetActive(!use);
         timer3Obj.SetActive(use);
-
-        if (use) AudioManager.Instance.PlayEffect(EffectAudioType.COOLTIME);
-        else AudioManager.Instance.PauseEffect(EffectAudioType.COOLTIME);
     }
 
     private void ActivateBooth(bool activate)
@@ -102,7 +104,7 @@ public class HandleDetox : MonoBehaviour
             StartCoroutine(CountDeactivateTime());
         }
     }
-    
+
     private readonly WaitForSecondsRealtime waitSec = new WaitForSecondsRealtime(StaticVars.DETOX_DEACTIVE_TIME);
     IEnumerator CountDeactivateTime()
     {

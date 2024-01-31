@@ -22,7 +22,6 @@ public class Plane : PoolAble
         {
             alreadyDrop = false;
             ReleaseObject();
-            AudioManager.Instance.PauseEffect(EffectAudioType.PLANE);
         }
     }
 

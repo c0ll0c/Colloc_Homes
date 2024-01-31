@@ -41,6 +41,8 @@ public class AudioManager: MonoSingleton<AudioManager>
     public AudioSource PlayerFoot;
     public AudioClip GameBGM;
     public AudioClip LobbyBGM;
+    public AudioClip WinBGM;
+    public AudioClip LoseBGM;
 
     public static int EFFECT_AUDIO_SRC_NUM = 3;
     public GameObject EffectSourceObj;
@@ -110,6 +112,8 @@ public class AudioManager: MonoSingleton<AudioManager>
     public void ChangeBGM(GameState _state)
     {
         if (_state == GameState.READY) BgmPlayer.clip = GameBGM;
+        else if(_state == GameState.WIN) BgmPlayer.clip = WinBGM;
+        else if(_state == GameState.LOSE) BgmPlayer.clip = LoseBGM;
         else BgmPlayer.clip = LobbyBGM;
 
         if (!BgmPlayer.isPlaying) BgmPlayer.Play();

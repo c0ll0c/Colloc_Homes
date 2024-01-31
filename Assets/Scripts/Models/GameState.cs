@@ -5,4 +5,6 @@ public enum GameState
     LOBBY = 1,
     READY = 2,
     PLAY = 3,
+    WIN = 4,
+    LOSE = 5,
 }

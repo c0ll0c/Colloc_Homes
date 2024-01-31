@@ -1,4 +1,5 @@
 // Scene 전환 등 게임 전반 관리하는 manager script
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
