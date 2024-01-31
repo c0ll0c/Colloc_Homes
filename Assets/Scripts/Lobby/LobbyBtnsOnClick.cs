@@ -25,7 +25,8 @@ public class LobbyBtnsOnClick : MonoBehaviour
         switch (BtnType)
         {
             case LobbyBtnType.CREATE:
-                transform.parent.GetComponent<CreateRoomOptionsUI>().CreateRoom(); break;
+                transform.parent.GetComponent<CreateRoomOptionsUI>().CreateRoom();
+                transform.GetComponent<Button>().interactable = false; break;
             case LobbyBtnType.JOIN:
                 transform.parent.GetComponent<HandleRoomList>().JoinRoom();
                 transform.GetComponent<Button>().interactable = false; break;
