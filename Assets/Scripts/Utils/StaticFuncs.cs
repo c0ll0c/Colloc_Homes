@@ -77,6 +77,7 @@ public static class StaticFuncs
     public static IEnumerator SetEffect(GameObject effect)
     {
         effect.SetActive(true);
+        effect.GetComponent<SpriteRenderer>().sortingLayerID = effect.transform.parent.GetComponentInParent<SpriteRenderer>().sortingLayerID;
 
         if (effect != NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect)
         {

@@ -6,6 +6,7 @@ public class HandleVaccine : PoolAble
 {
     private Rigidbody2D rigid;
     private int num = 0;
+
     private void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -28,7 +29,9 @@ public class HandleVaccine : PoolAble
         if (collision.collider.GetComponent<PhotonView>().IsMine && collision.collider.gameObject.CompareTag("Homes"))
         {
             NetworkManager.Instance.PlaySceneManager.isVaccinated = true;
-            NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().VaccineEffect.SetActive(true);
+            GameObject effect = NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().VaccineEffect;
+            effect.SetActive(true);
+            effect.GetComponent<SpriteRenderer>().sortingLayerID = effect.transform.parent.GetComponentInParent<SpriteRenderer>().sortingLayerID;
             AudioManager.Instance.PlayEffect(EffectAudioType.VACCINE);
         }
         else
