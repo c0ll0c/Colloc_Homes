@@ -543,7 +543,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {
-            AddCustomPropertiesToPlayer(player, StaticCodes.PHOTON_PROP_ISREADY, false);
+            AddCustomPropertiesToPlayer(player, StaticCodes.PHOTON_PROP_SYNC, false);
         }
     }
 
