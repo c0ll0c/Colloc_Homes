@@ -38,4 +38,46 @@ public class GameManager : MonoSingleton<GameManager>
         gameState = GameState.PLAY;
         AudioManager.Instance.PlayEffect(EffectAudioType.INFECT);
     }
+
+    // BackButton Disable
+    private bool clickedBefore = false;
+    private void Update()
+    {
+        // 안드로이드 back button
+        // [TODO] iOS back button
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            if (clickedBefore)
+            {
+                Application.Quit();
+                return;
+            }
+            clickedBefore = true;
+            ShowAndroidToastMessage("게임을 종료하려면 뒤로 가기를 한 번 더 눌러주세요");
+            StartCoroutine(QuitTimer());
+        }
+    }
+
+    WaitForSecondsRealtime threeSecsWait = new WaitForSecondsRealtime(3f);
+    IEnumerator QuitTimer()
+    {
+        yield return threeSecsWait;
+        clickedBefore = false;
+    }
+
+    private void ShowAndroidToastMessage(string message)
+    {
+        AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject unityActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
+        if (unityActivity != null)
+        {
+            AndroidJavaClass toastClass = new AndroidJavaClass("android.widget.Toast");
+            unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+            {
+                AndroidJavaObject toastObject = toastClass.CallStatic<AndroidJavaObject>("makeText", unityActivity, message, 0);
+                toastObject.Call("show");
+            }));
+        }
+    }
 }
