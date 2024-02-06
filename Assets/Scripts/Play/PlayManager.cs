@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 // game manage & photon communication script
 public class PlayManager : MonoBehaviour
 {
+    public Joystick Joystick;
     public GameObject ObjectManager;
     public GameObject gamePlayer;
     public Tilemap[] LayerGrass;

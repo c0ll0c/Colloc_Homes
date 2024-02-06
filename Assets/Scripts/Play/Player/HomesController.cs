@@ -4,6 +4,7 @@ using Photon.Pun;
 // Photon player movement control script
 public class HomesController : MonoBehaviour
 {
+    private Joystick joystick;
     private Vector2 inputVec;
     private Vector2 nextVec;
     private float speed;
@@ -18,7 +19,7 @@ public class HomesController : MonoBehaviour
         pv = transform.parent.GetComponent<PhotonView>();
         rigid = transform.parent.GetComponent<Rigidbody2D>();
         anim = transform.parent.GetComponent<Animator>();
-        speed = 3.0f;
+        speed = 3.5f;
 
         if (!pv.IsMine) { gameObject.SetActive(false); return; }
 
@@ -26,14 +27,19 @@ public class HomesController : MonoBehaviour
         Camera cam = Camera.main;
         cam.transform.SetParent(transform.parent);
         cam.transform.localPosition = new Vector3(0f, 0f, -5f);
-        
+
+        joystick = NetworkManager.Instance.PlaySceneManager.Joystick;
     }
 
     // moving & animation function
     private void FixedUpdate()
     {
-        moveY = Input.GetAxis("Vertical");
-        moveX = Input.GetAxis("Horizontal");
+        //moveY = Input.GetAxis("Vertical");
+        //moveX = Input.GetAxis("Horizontal");
+
+        moveY = joystick.Vertical;
+        moveX = joystick.Horizontal;
+
         inputVec = new Vector2(moveX, moveY);
         nextVec = inputVec.normalized * speed * Time.fixedDeltaTime;
         rigid.MovePosition(rigid.position + nextVec);
