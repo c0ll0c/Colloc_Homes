@@ -25,7 +25,7 @@ public class IntroBtnOnClick : MonoBehaviour
                 StartGame();
                 break;
             case IntroBtnType.CLOSE_PANEL:
-                transform.parent.gameObject.SetActive(false);
+                transform.parent.parent.gameObject.SetActive(false);
                 break;
         }
     }
