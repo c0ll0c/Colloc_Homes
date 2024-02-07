@@ -61,7 +61,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        Debug.LogErrorFormat("Disconnected from server cause of {0}", cause);
+        Debug.LogErrorFormat("Disconnected from server cause of {0}", cause);   
         GameManager.Instance.ChangeScene(GameState.INTRO);
     }
 

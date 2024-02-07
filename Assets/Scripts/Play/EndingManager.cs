@@ -19,14 +19,16 @@ public enum EndingType
 public class EndingManager : MonoBehaviour
 {
     private bool result;
-    private TMP_Text resultText;
+    private Image resultText;
     private Image resultImg;
+    public Sprite[] EndingImage;
+    public Sprite[] ResultImage;
     public GameObject falseEnding;
 
     public void Awake()
     {
         NetworkManager.Instance.EndingManager = GetComponent<EndingManager>();
-        resultText = transform.GetChild(1).GetComponent<TMP_Text>();
+        resultText = transform.GetChild(1).GetComponent<Image>();
         resultImg = transform.GetChild(2).GetComponent<Image>();
         gameObject.SetActive(false);
         falseEnding.SetActive(false);
@@ -49,12 +51,14 @@ public class EndingManager : MonoBehaviour
                     {
                         // win _ founder homes
                         result = true;
+                        resultImg.sprite = EndingImage[1];
                         AudioManager.Instance.ChangeBGM(GameState.WIN);
                     }
                     else             
                     {
                         // lose _ other homes
                         result = false;
+                        resultImg.sprite = EndingImage[4];
                         AudioManager.Instance.ChangeBGM(GameState.LOSE);
                     }
                 }
@@ -62,6 +66,7 @@ public class EndingManager : MonoBehaviour
                 {
                     // lose _ colloc
                     result = false;
+                    resultImg.sprite = EndingImage[3];
                     AudioManager.Instance.ChangeBGM(GameState.LOSE);
                 }
                 break;
@@ -69,6 +74,7 @@ public class EndingManager : MonoBehaviour
                 // homes 일 수밖에 없다!
                 // lose _ false alarm
                 result = false;
+                resultImg.sprite = EndingImage[4];
                 AudioManager.Instance.ChangeBGM(GameState.LOSE);
                 falseEnding.SetActive(true);
                 break;
@@ -77,12 +83,14 @@ public class EndingManager : MonoBehaviour
                 {
                     // lose
                     result = false;
+                    resultImg.sprite = EndingImage[2];
                     AudioManager.Instance.ChangeBGM(GameState.LOSE);
                 }
                 else
                 {
                     // win 
                     result = true;
+                    resultImg.sprite = EndingImage[0];
                     AudioManager.Instance.ChangeBGM(GameState.WIN);
                 }
                 break;
@@ -91,11 +99,12 @@ public class EndingManager : MonoBehaviour
                 // 나 혼자 남았을 경우
                 // 콜록이 나갔을 경우
                 result = true;
+                resultImg.sprite = EndingImage[1];
                 AudioManager.Instance.ChangeBGM(GameState.WIN);
                 break;
         }
 
-        resultText.text = (result) ? "YOU WIN!" : "YOU LOSE...";
+        resultText.sprite = (result) ? ResultImage[0] : ResultImage[1];
         gameObject.SetActive(true);
 
         // 2초 뒤에 end
