@@ -26877,7 +26877,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: fb560034354976c47b92e217d0e2e241, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.7882353}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -43650,7 +43650,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 7340097
+    m_Bits: 7340096
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: bb1c4d71f38b18f469dcde66b48cb1ad, type: 2}
   m_TargetDisplay: 0
