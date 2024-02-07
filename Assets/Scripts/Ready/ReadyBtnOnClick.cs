@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public enum ReadyBtnType
@@ -10,6 +11,7 @@ public enum ReadyBtnType
 public class ReadyBtnOnClick : MonoBehaviour
 {
     public ReadyBtnType BtnType;
+    public TMP_Text BtnText;
 
     private bool isReady = false;
     public void OnClickBtn()
@@ -19,6 +21,7 @@ public class ReadyBtnOnClick : MonoBehaviour
             case ReadyBtnType.READY:
                 bool _isReady = NetworkManager.Instance.SetPlayerReady(!isReady);
                 isReady = _isReady;
+                BtnText.text = (isReady) ? "준비 해제" : "준비";
                 NetworkManager.Instance.ReadySceneManager.DisactivateColorToggle(_isReady);
                 break;
 

@@ -16,13 +16,15 @@ public class SliderController : MonoBehaviour
     private float volume;
 
     private Button muteBtn;
-    private GameObject muteObj;
+    private GameObject soundOnObj;
+    private GameObject soundOffObj;
     private Slider slider;
     // Start is called before the first frame update
     void Start()
     {
         muteBtn = transform.GetChild(1).GetComponent<Button>();
-        muteObj = transform.GetChild(1).GetChild(0).gameObject;
+        soundOnObj = transform.GetChild(1).GetChild(0).gameObject;
+        soundOffObj = transform.GetChild(1).GetChild(1).gameObject;
         slider = transform.GetChild(2).GetComponent<Slider>();
 
         sliderType = Type.ToString();
@@ -38,12 +40,14 @@ public class SliderController : MonoBehaviour
 
         if (PlayerPrefs.HasKey(sliderType_mute) && PlayerPrefs.GetFloat(sliderType_mute) == 1)
         {
-            muteObj.SetActive(true);
+            soundOffObj.SetActive(true);
+            soundOnObj.SetActive(false);
             slider.value = 0;
         }
         else
         {
-            muteObj.SetActive(false);
+            soundOffObj.SetActive(false);
+            soundOnObj.SetActive(true);
         }
 
         slider.onValueChanged.AddListener(delegate
@@ -58,7 +62,7 @@ public class SliderController : MonoBehaviour
 
     private void OnDisable()
     {
-        if (muteObj.activeSelf)
+        if (soundOffObj.activeSelf)
             PlayerPrefs.SetFloat(sliderType_mute, 1);
         else
             PlayerPrefs.SetFloat(sliderType_mute, 0);
@@ -72,21 +76,24 @@ public class SliderController : MonoBehaviour
 
         if (_sliderValue == 0)
         {
-            muteObj.SetActive(true);
+            soundOffObj.SetActive(true);
+            soundOnObj.SetActive(false);
         }
         else
         {
             volume = _sliderValue;
-            muteObj.SetActive(false);
+            soundOffObj.SetActive(false);
+            soundOnObj.SetActive(true);
         }
     }
 
     private void MuteBtnOnClick()
     {
         // muted -> sound
-        if (muteObj.activeSelf)
+        if (soundOffObj.activeSelf)
         {
-            muteObj.SetActive(false);
+            soundOffObj.SetActive(false);
+            soundOnObj.SetActive(true);
 
             if (volume == 0) volume = 0.5f;
             slider.value = volume;
@@ -94,7 +101,8 @@ public class SliderController : MonoBehaviour
         }
         else
         {
-            muteObj.SetActive(true);
+            soundOffObj.SetActive(true);
+            soundOnObj.SetActive(false);
             slider.value = 0;
             AudioManager.Instance.SetVolume(Type, 0);
         }

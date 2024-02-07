@@ -707,7 +707,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &356581013
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1037,7 +1037,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffe2eaf0a7cd0d044ba5d07e01c65ac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AlertModal: {fileID: 1086016166}
+  AlertModal: {fileID: 1118836933}
 --- !u!1 &629514844
 GameObject:
   m_ObjectHideFlags: 0
@@ -1310,7 +1310,7 @@ PrefabInstance:
     - target: {fileID: 3564560761598546118, guid: a039c2a5a280bfa429eaf7c8604487b6,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4411496730537850527, guid: a039c2a5a280bfa429eaf7c8604487b6,
         type: 3}
@@ -1438,12 +1438,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1086016164}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1086016166 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3564560761598546118, guid: a039c2a5a280bfa429eaf7c8604487b6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1086016164}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1118836933
 GameObject:
   m_ObjectHideFlags: 0
@@ -1462,7 +1456,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1118836934
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1902,7 +1896,7 @@ MonoBehaviour:
     Audio: {fileID: 8300000, guid: ffb159a21c8a04135a5616979c828fab, type: 3}
   - EffectType: 17
     Audio: {fileID: 8300000, guid: 7deb070df180fb24b9248d469eca97f1, type: 3}
-  AudioSettingPanel: {fileID: 3564560759920901792}
+  AudioSettingPanel: {fileID: 356581012}
 --- !u!1 &1549766022
 GameObject:
   m_ObjectHideFlags: 0
@@ -2890,7 +2884,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4411496731007539449
 RectTransform:
   m_ObjectHideFlags: 0
