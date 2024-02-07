@@ -2,22 +2,17 @@ using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackController : MonoBehaviour
+public class AttackBtnOnClick : MonoBehaviour
 {
-    private Camera cam;
-    private GameObject player;
-    private PhotonView pv;
+    public PhotonView pv;
     private List<HandleCollider> colliderList;
 
     private void Start()
     {
-        cam = Camera.main;
-        player = NetworkManager.Instance.PlaySceneManager.gamePlayer;
-        pv = player.GetComponent<PhotonView>();
         colliderList = NetworkManager.Instance.PlaySceneManager.ColliderList;
     }
 
-    private void onAttack()
+    public void onAttack()
     {
         if (colliderList.Count < 1) return;
 
@@ -29,7 +24,7 @@ public class AttackController : MonoBehaviour
         pv.RPC("Attack", targetPlayer);
     }
 
-    private void onInfect()
+    public void onInfect()
     {
         if (colliderList.Count < 1) return;
 

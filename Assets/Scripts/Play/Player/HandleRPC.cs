@@ -2,6 +2,7 @@ using UnityEngine;
 using Photon.Pun;
 using System.Collections;
 using TMPro;
+using UnityEngine.UI;
 
 public class HandleRPC : MonoBehaviour
 {
@@ -12,8 +13,10 @@ public class HandleRPC : MonoBehaviour
     [SerializeField] private TextMeshProUGUI nickname;
     private SpriteRenderer spriter;
     private PhotonView pv;
-    private AttackController attackController;
+    //private AttackController attackController;
     private HomesController homesController;
+    private Button infectBtn;
+    private Button attackBtn;
 
     private void Awake()
     {
@@ -23,17 +26,15 @@ public class HandleRPC : MonoBehaviour
 
     private void Start()
     {
+        infectBtn = NetworkManager.Instance.PlaySceneManager.InfectBtn;
+        attackBtn = NetworkManager.Instance.PlaySceneManager.AttackBtn;
+
         pv.RPC("SetNickname", RpcTarget.AllBuffered, pv.Owner.NickName);
         AttackEffect.SetActive(false);
         InfectEffect.SetActive(false);
         VaccineEffect.SetActive(false);
 
-        if (gameObject.CompareTag("Colloc"))
-        {
-            transform.GetChild(2).GetComponent<AttackController>().enabled = false;
-        }
-
-        attackController = NetworkManager.Instance.PlaySceneManager.gamePlayer.transform.GetChild(2).GetComponent<AttackController>();
+        //attackController = NetworkManager.Instance.PlaySceneManager.gamePlayer.transform.GetChild(2).GetComponent<AttackController>();
         homesController = NetworkManager.Instance.PlaySceneManager.gamePlayer.transform.GetChild(2).GetComponent<HomesController>();
     }
 
@@ -60,7 +61,9 @@ public class HandleRPC : MonoBehaviour
 
         if (_status == "Homes")
         {
-            attackController.enabled = true;
+            //attackController.enabled = true;
+            attackBtn.gameObject.SetActive(true);
+            infectBtn.gameObject.SetActive(false);
             NetworkManager.Instance.PlaySceneManager.gamePlayer.tag = "Homes";
             UIManager.Instance.SetGameUI("Homes");
             StaticFuncs.StopEffect(NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect);
@@ -83,7 +86,9 @@ public class HandleRPC : MonoBehaviour
         }
         else
         {
-            attackController.enabled = false;
+            //attackController.enabled = false;
+            infectBtn.gameObject.SetActive(true);
+            attackBtn.gameObject.SetActive(false);
             NetworkManager.Instance.PlaySceneManager.gamePlayer.tag = "Infect";
             UIManager.Instance.SetGameUI("Infect");
             AudioManager.Instance.PlayEffect(EffectAudioType.INFECT);

@@ -1,11 +1,15 @@
 using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 // game manage & photon communication script
 public class PlayManager : MonoBehaviour
 {
     public Joystick Joystick;
+    public Button AttackBtn;
+    public Button InfectBtn;
     public GameObject ObjectManager;
     public GameObject gamePlayer;
     public Tilemap[] LayerGrass;
@@ -15,6 +19,7 @@ public class PlayManager : MonoBehaviour
 
     public Vector3[] RandomDropPos;
     public bool isVaccinated = false;
+    public List<HandleCollider> ColliderList = new List<HandleCollider>();
 
     //private int currentPlayer = 4;
     private GameObject[] CodeClueInstances = new GameObject[5];
@@ -90,13 +95,18 @@ public class PlayManager : MonoBehaviour
         if (_isColloc)
         {
             gamePlayer.tag = "Colloc";
+            AttackBtn.gameObject.SetActive(false);
             UIManager.Instance.SetGameUI("Colloc");
         }
         else
         {
             gamePlayer.tag = "Homes";
+            InfectBtn.gameObject.SetActive(false);
             UIManager.Instance.SetGameUI("Homes");
         }
+
+        AttackBtn.GetComponent<AttackBtnOnClick>().pv = gamePlayer.GetComponent<PhotonView>();
+        InfectBtn.GetComponent<AttackBtnOnClick>().pv = gamePlayer.GetComponent<PhotonView>();
 
         UIManager.Instance.LoadStartPanel(_isColloc);
         CheckReady(GameSettings.READY_PLAYER);
