@@ -28,6 +28,16 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 1334695400232203692}
+    - target: {fileID: 6774798478285345021, guid: cc5364c039b57ba44a2fbe0baba6a512,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: OnClickBtn
+      objectReference: {fileID: 0}
+    - target: {fileID: 6774798478285345021, guid: cc5364c039b57ba44a2fbe0baba6a512,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: ReadyBtnOnClick, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 8257770008860391427, guid: cc5364c039b57ba44a2fbe0baba6a512,
         type: 3}
       propertyPath: m_Pivot.x
@@ -156,3 +166,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BtnType: 0
+  BtnText: {fileID: 255437667840479118}
+--- !u!114 &255437667840479118 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3598878212982249446, guid: cc5364c039b57ba44a2fbe0baba6a512,
+    type: 3}
+  m_PrefabInstance: {fileID: 3637421539887011944}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

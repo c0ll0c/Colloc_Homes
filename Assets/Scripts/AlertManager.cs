@@ -14,9 +14,9 @@ public class AlertManager : MonoSingleton<AlertManager>
     void Start()
     {
         AlertModal.SetActive(false);
-        warningIcon = AlertModal.transform.GetChild(1).gameObject;
-        alertTitle = AlertModal.transform.GetChild(3).GetComponent<TMP_Text>();
-        alertContent = AlertModal.transform.GetChild(4).GetComponent<TMP_Text>();
+        warningIcon = AlertModal.transform.GetChild(0).GetChild(1).gameObject;
+        alertTitle = AlertModal.transform.GetChild(0).GetChild(3).GetComponent<TMP_Text>();
+        alertContent = AlertModal.transform.GetChild(0).GetChild(4).GetComponent<TMP_Text>();
     }
 
     public void CloseBtnOnClick()
