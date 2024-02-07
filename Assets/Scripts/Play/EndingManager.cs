@@ -146,6 +146,8 @@ public class EndingManager : MonoBehaviour
     void endGame()
     {
         Time.timeScale = 1;
+        PhotonNetwork.CurrentRoom.IsOpen = true;
+        PhotonNetwork.CurrentRoom.IsVisible = true;
         GameManager.Instance.ChangeScene(GameState.READY);
     }
 }

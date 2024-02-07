@@ -161,8 +161,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                     {
                         PhotonNetwork.NickName = player.NickName + "1";
                     }
-                    player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_COLOR, out object color);
-                    ableColor |= (int)color;
+                    if (player.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_COLOR, out object color))
+                    {
+                        ableColor |= (int)color;
+                    }
                 }
             }
         }
