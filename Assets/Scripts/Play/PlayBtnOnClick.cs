@@ -6,6 +6,8 @@ public enum PlayBtnType
     BACK_TO_LOBBY,
     SPECTATOR_MODE,
     CLOSE_PANEL,
+    ATTACK,
+    INFECT,
 }
 
 public class PlayBtnOnClick : MonoBehaviour
@@ -25,6 +27,12 @@ public class PlayBtnOnClick : MonoBehaviour
                 break;
             case PlayBtnType.CLOSE_PANEL:
                 transform.parent.gameObject.SetActive(false);
+                break;
+            case PlayBtnType.ATTACK:
+
+                break;
+            case PlayBtnType.INFECT:
+
                 break;
         }
     }

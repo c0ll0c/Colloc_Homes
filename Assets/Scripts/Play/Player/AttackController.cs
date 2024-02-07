@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AttackController : MonoBehaviour
@@ -6,36 +7,37 @@ public class AttackController : MonoBehaviour
     private Camera cam;
     private GameObject player;
     private PhotonView pv;
+    private List<HandleCollider> colliderList;
 
     private void Start()
     {
         cam = Camera.main;
-        player = transform.parent.gameObject;
+        player = NetworkManager.Instance.PlaySceneManager.gamePlayer;
         pv = player.GetComponent<PhotonView>();
-    }
-
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            onAttack();
-        }
+        colliderList = NetworkManager.Instance.PlaySceneManager.ColliderList;
     }
 
     private void onAttack()
     {
-        Vector3 mousePosition = Input.mousePosition;
-        mousePosition = cam.ScreenToWorldPoint(mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(mousePosition, transform.forward, 15f);
-
-        if (hit.collider == null) return;
-        if (hit.collider.name != "PlayerTrigger") return;
-        if (hit.collider.GetComponentInParent<PhotonView>().IsMine) return;
+        if (colliderList.Count < 1) return;
 
         if (!NetworkManager.Instance.PlaySceneManager.TryAttack()) return;
-        StartCoroutine(StaticFuncs.SetEffect(hit.collider.GetComponentInParent<HandleRPC>().AttackEffect));
-        Photon.Realtime.Player targetPlayer = hit.collider.GetComponentInParent<PhotonView>().Owner;
+
+        StartCoroutine(StaticFuncs.SetEffect(colliderList[0].collider.GetComponent<HandleRPC>().AttackEffect));
+        Photon.Realtime.Player targetPlayer = colliderList[0].collider.GetComponent<PhotonView>().Owner;
         AudioManager.Instance.PlayEffect(EffectAudioType.ATTACK);
         pv.RPC("Attack", targetPlayer);
+    }
+
+    private void onInfect()
+    {
+        if (colliderList.Count < 1) return;
+
+        if (!NetworkManager.Instance.PlaySceneManager.TryAttack()) return;
+
+        StartCoroutine(StaticFuncs.SetEffect(colliderList[0].collider.GetComponent<HandleRPC>().InfectEffect));
+        Photon.Realtime.Player targetPlayer = colliderList[0].collider.GetComponent<PhotonView>().Owner;
+        AudioManager.Instance.PlayEffect(EffectAudioType.ATTACK);
+        pv.RPC("ChangeStatus", targetPlayer, "Infect");
     }
 }
