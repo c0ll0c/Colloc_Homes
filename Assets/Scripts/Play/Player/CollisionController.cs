@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class CollisionController : MonoBehaviour
 {
+    private GameObject player;
     private PhotonView pv;
     private SpriteRenderer spriter;
     private List<HandleCollider> colliderList;
 
     private void Start()
     {
-        pv = transform.parent.GetComponent<PhotonView>();
+        player = transform.parent.gameObject;
+        pv = player.GetComponent<PhotonView>();
         spriter = transform.GetChild(0).GetComponent<SpriteRenderer>();
         colliderList = NetworkManager.Instance.PlaySceneManager.ColliderList;
         spriter.color = Color.gray;
@@ -21,7 +23,14 @@ public class CollisionController : MonoBehaviour
     {
         if (collider.gameObject.CompareTag("Player"))
         {
-            spriter.color = Color.red;
+            if (player.CompareTag("Homes"))
+            {
+                spriter.color = Color.blue;
+            }
+            else
+            {
+                spriter.color = Color.red;
+            }
             colliderList.Add(new HandleCollider(collider.gameObject.name, collider.gameObject));
         }
     }
