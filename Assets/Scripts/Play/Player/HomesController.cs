@@ -25,8 +25,12 @@ public class HomesController : MonoBehaviour
 
         // camera setting (focus on my player)
         Camera cam = Camera.main;
+        Camera minimap = GameObject.FindGameObjectWithTag("MinimapCamera").GetComponent<Camera>();
         cam.transform.SetParent(transform.parent);
         cam.transform.localPosition = new Vector3(0f, 0f, -5f);
+
+        minimap.transform.SetParent(transform.parent);
+        minimap.transform.localPosition = new Vector3(0f, 0f, -50f);
 
         joystick = NetworkManager.Instance.PlaySceneManager.Joystick;
     }

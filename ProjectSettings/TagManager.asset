@@ -9,6 +9,7 @@ TagManager:
   - Infect
   - Clue
   - NPC
+  - MinimapCamera
   layers:
   - Default
   - TransparentFX

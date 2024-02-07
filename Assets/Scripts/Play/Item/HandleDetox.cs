@@ -37,7 +37,6 @@ public class HandleDetox : MonoBehaviour
     {
         if (isMe)
         {
-            Debug.Log("쿨타임 그만");
             NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().ChangeStatus("Homes");
             AudioManager.Instance.PlayEffect(EffectAudioType.DETOX);
             AudioManager.Instance.PauseEffect(EffectAudioType.COOLTIME);
