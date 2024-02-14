@@ -1,6 +1,7 @@
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using System.Collections;
+using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,15 +9,7 @@ using UnityEngine.UI;
 public class EndingUI : MonoBehaviour
 {
     public GameObject dialogText;
-    private string[] dialogBody = {
-        ", 범인을 찾은 건가?",
-        "싱겁긴.",
-        "오, 빨리 말해 보게! 이들 중 누가 콜록인가?",
-        "... 수사 중 ...",
-        "자네는 틀렸어. 앞으로 볼 일 없을 걸세.",
-        "오, 역시! 약속대로 현상금을 주지. 수고했네!",
-        ", 아직 3분이 되지 않았어. 성급한 판단일세."
-    };
+    private string[] dialogBody = StaticVars.dialogBody;
     public GameObject FirstSelect;
     public GameObject SecondSelect;
     public string HomesName;
@@ -24,6 +17,7 @@ public class EndingUI : MonoBehaviour
     public GameObject[] UserButton;
     public GameObject EndingCanvasObj;
     private EndingManager endingManager;
+
 
     int count = 0;
 
@@ -39,16 +33,27 @@ public class EndingUI : MonoBehaviour
 
     private void SetupDialog()
     {
+        var builder = new StringBuilder();
+
         HomesName = PhotonNetwork.LocalPlayer.NickName;
+
+
         dialogBody[0] = ", 범인을 찾은 건가?";
+        builder.Append(HomesName);
+        builder.Append(dialogBody[0]);
+        dialogBody[0] = builder.ToString();
+        builder.Clear();
+
         dialogBody[6] = ", 아직 3분이 되지 않았어. 성급한 판단일세.";
-        dialogBody[0] = HomesName + dialogBody[0];
-        dialogBody[6] = HomesName + dialogBody[6];
+        builder.Append(HomesName);
+        builder.Append(dialogBody[6]);
+        dialogBody[6] = builder.ToString();
+        builder.Clear();
 
         for (int i = 0; i < NetworkManager._currentPlayer; i++)
         {
             Debug.Log(UIManager.Instance.HomesInfo.GetChild(i).GetChild(2).GetChild(0).GetComponent<Text>().text);
-            if (UIManager.Instance.HomesInfo.GetChild(i).GetChild(2).GetChild(0).GetComponent<Text>().text == HomesName)
+            if (UIManager.Instance.HomesInfo.GetChild(i).GetChild(2).GetChild(0).GetComponent<Text>().text.Equals(HomesName))
             {
                 HomesImage.sprite = UIManager.Instance.HomesInfo.GetChild(i).GetChild(1).GetChild(0).GetComponent<Image>().sprite;
             }
@@ -76,24 +81,24 @@ public class EndingUI : MonoBehaviour
     // next 버튼 눌럿을 때, 
     public void OnClickNextButton()
     {
-        if (dialogText.GetComponent<Text>().text == dialogBody[0])
+        if (dialogText.GetComponent<Text>().text.Equals(dialogBody[0]))
         {
             FirstSelect.SetActive(true);
         }
-        else if (dialogText.GetComponent<Text>().text == dialogBody[6])
+        else if (dialogText.GetComponent<Text>().text.Equals(dialogBody[6]))
         {
             gameObject.SetActive(false);
         }
-        else if (dialogText.GetComponent<Text>().text == dialogBody[1])
+        else if (dialogText.GetComponent<Text>().text.Equals(dialogBody[1]))
         {
             gameObject.SetActive(false);
         }
-        else if (dialogText.GetComponent<Text>().text == dialogBody[2])
+        else if (dialogText.GetComponent<Text>().text.Equals(dialogBody[2]))
         {
             SecondSelect.SetActive(true);
             for (int i = 0; i < 6; i++)
                 UIManager.Instance.HomesInfo.GetChild(i).gameObject.SetActive(false);
-            if (UIManager.Instance.HomesInfo.GetChild(0).GetChild(2).GetChild(0).GetComponent<Text>().text != HomesName)
+            if (!UIManager.Instance.HomesInfo.GetChild(0).GetChild(2).GetChild(0).GetComponent<Text>().text.Equals(HomesName))
                 UIManager.Instance.HomesInfo.GetChild(0).gameObject.SetActive(true);
             else
                 UIManager.Instance.HomesInfo.GetChild(1).gameObject.SetActive(true);
@@ -107,7 +112,7 @@ public class EndingUI : MonoBehaviour
         {
             count--;
 
-            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == HomesName)
+            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text.Equals(HomesName))
                 count--;
 
             if (count < 0)
@@ -123,7 +128,7 @@ public class EndingUI : MonoBehaviour
         {
             count = NetworkManager._currentPlayer - 1;
 
-            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == HomesName)
+            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text.Equals(HomesName))
                 count--;
 
             for (int i = 0; i < 6; i++)
@@ -138,7 +143,7 @@ public class EndingUI : MonoBehaviour
         {
             count++;
 
-            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == HomesName)
+            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text.Equals(HomesName))
                 count++;
 
             if (count >= NetworkManager._currentPlayer)
@@ -154,7 +159,7 @@ public class EndingUI : MonoBehaviour
         {
             count = 0;
 
-            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text == HomesName)
+            if (UIManager.Instance.HomesInfo.GetChild(count).GetChild(2).GetChild(0).GetComponent<Text>().text.Equals(HomesName))
                 count++;
 
             for (int i = 0; i < 6; i++)

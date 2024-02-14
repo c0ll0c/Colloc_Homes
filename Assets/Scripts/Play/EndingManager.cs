@@ -41,7 +41,7 @@ public class EndingManager : MonoBehaviour
     public void ShowResult(EndingType _endType, bool invoker)
     {
         Time.timeScale = 0;
-        bool isHomes = NetworkManager.Instance.PlaySceneManager.gamePlayer.tag != "Colloc";
+        bool isHomes = NetworkManager.Instance.PlaySceneManager.gamePlayer.CompareTag("Colloc");
         switch (_endType)
         {
             case EndingType.CatchColloc:
@@ -137,11 +137,11 @@ public class EndingManager : MonoBehaviour
         }
     }
 
-    void leaveRoom()
+/*    void leaveRoom()
     {
         Time.timeScale = 1;
         PhotonNetwork.LeaveRoom();
-    }
+    }*/
     
     void endGame()
     {

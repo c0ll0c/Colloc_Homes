@@ -17,6 +17,10 @@ public class PlayManager : MonoBehaviour
     public GameObject CluePrefab;
     public GameObject[] ClueInstances = new GameObject[16];
 
+    private PhotonView AttackBtnPV;
+    private PhotonView InfectBtnPV;
+    private PhotonView PlayerPV;
+
     public Vector3[] RandomDropPos;
     public bool isVaccinated = false;
     public List<HandleCollider> ColliderList = new List<HandleCollider>();
@@ -51,6 +55,9 @@ public class PlayManager : MonoBehaviour
         GameManager.Instance.EnterGame();
 
         timeManager = transform.GetComponent<TimeManager>();
+
+        AttackBtnPV = AttackBtn.GetComponent<AttackBtnOnClick>().pv;
+        InfectBtnPV = InfectBtn.GetComponent<AttackBtnOnClick>().pv;
 
         readyStatus = 0;
         if (PhotonNetwork.IsMasterClient)
@@ -104,9 +111,10 @@ public class PlayManager : MonoBehaviour
             InfectBtn.gameObject.SetActive(false);
             UIManager.Instance.SetGameUI("Homes");
         }
+        PlayerPV = gamePlayer.GetComponent<PhotonView>();
 
-        AttackBtn.GetComponent<AttackBtnOnClick>().pv = gamePlayer.GetComponent<PhotonView>();
-        InfectBtn.GetComponent<AttackBtnOnClick>().pv = gamePlayer.GetComponent<PhotonView>();
+        AttackBtnPV = PlayerPV;
+        InfectBtnPV = PlayerPV;
 
         UIManager.Instance.LoadStartPanel(_isColloc);
         CheckReady(GameSettings.READY_PLAYER);
