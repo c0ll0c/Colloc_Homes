@@ -16,17 +16,17 @@ public class RoomOptionBtnsOnClick : MonoBehaviour
 
     public void OnClickBtn()
     {
-        transform.GetComponent<Image>().color = Color.white;
+        transform.GetComponent<Image>().color = Color.gray;
 
         switch (BtnType)
         {
             case RoomOptionBtnType.PUBLIC:
                 CreateRoomManager.RoomPublic = true;
-                transform.parent.GetChild(2).GetComponent<Image>().color = Color.gray;
+                transform.parent.GetChild(2).GetComponent<Image>().color = Color.white;
                 break;
             case RoomOptionBtnType.PRIVATE:
                 CreateRoomManager.RoomPublic = false;
-                transform.parent.GetChild(1).GetComponent<Image>().color = Color.gray;
+                transform.parent.GetChild(1).GetComponent<Image>().color = Color.white;
                 break;
         }
     }

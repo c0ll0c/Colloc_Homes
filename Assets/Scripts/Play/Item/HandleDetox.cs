@@ -76,7 +76,7 @@ public class HandleDetox : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.GetInstanceID() == boothUser)
+        if (Equals(collision.gameObject.GetInstanceID(), boothUser))
         {
             boothUser = 0;
             if (collision.gameObject.GetComponent<PhotonView>().IsMine)

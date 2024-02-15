@@ -6,8 +6,6 @@ public class DetoxTimerUI : MonoBehaviour
 {
     private HandleDetox detoxHandler;
     private Image timerProgressBar;
-
-    private static readonly float enumTime = 0.25f;
     private float progress;
     private float progressIncrement;
 
@@ -15,8 +13,7 @@ public class DetoxTimerUI : MonoBehaviour
     {
         detoxHandler = transform.parent.parent.GetComponent<HandleDetox>();
         timerProgressBar = transform.GetChild(1).GetComponent<Image>();
-        progressIncrement = enumTime / StaticVars.DETOX_USE_TIME;
-
+        progressIncrement = StaticVars.ENUM_TIME / StaticVars.DETOX_USE_TIME;
     }
 
     private void OnEnable()
@@ -24,7 +21,7 @@ public class DetoxTimerUI : MonoBehaviour
         StartCoroutine(CountDetoxTime());
     }
 
-    private readonly WaitForSecondsRealtime waitSec = new WaitForSecondsRealtime(enumTime);
+    private readonly WaitForSecondsRealtime waitSec = new WaitForSecondsRealtime(StaticVars.ENUM_TIME);
     IEnumerator CountDetoxTime()
     {
         progress = 0f;
