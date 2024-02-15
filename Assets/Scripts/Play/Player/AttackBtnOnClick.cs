@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class AttackBtnOnClick : MonoBehaviour
 {
-    public PhotonView pv;
+    public PhotonView PV;
+
     private List<HandleCollider> colliderList;
+    private Photon.Realtime.Player targetPlayer;
 
     private void Start()
     {
@@ -19,9 +21,9 @@ public class AttackBtnOnClick : MonoBehaviour
         if (!NetworkManager.Instance.PlaySceneManager.TryAttack()) return;
 
         StartCoroutine(StaticFuncs.SetEffect(colliderList[0].collider.GetComponent<HandleRPC>().AttackEffect));
-        Photon.Realtime.Player targetPlayer = colliderList[0].collider.GetComponent<PhotonView>().Owner;
+        targetPlayer = colliderList[0].collider.GetComponent<PhotonView>().Owner;
         AudioManager.Instance.PlayEffect(EffectAudioType.ATTACK);
-        pv.RPC("Attack", targetPlayer);
+        PV.RPC("Attack", targetPlayer);
     }
 
     public void onInfect()
@@ -31,8 +33,8 @@ public class AttackBtnOnClick : MonoBehaviour
         if (!NetworkManager.Instance.PlaySceneManager.TryAttack()) return;
 
         StartCoroutine(StaticFuncs.SetEffect(colliderList[0].collider.GetComponent<HandleRPC>().InfectEffect));
-        Photon.Realtime.Player targetPlayer = colliderList[0].collider.GetComponent<PhotonView>().Owner;
+        targetPlayer = colliderList[0].collider.GetComponent<PhotonView>().Owner;
         AudioManager.Instance.PlayEffect(EffectAudioType.ATTACK);
-        pv.RPC("ChangeStatus", targetPlayer, "Infect");
+        PV.RPC("ChangeStatus", targetPlayer, "Infect");
     }
 }

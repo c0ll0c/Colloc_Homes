@@ -38,9 +38,6 @@ public class HomesController : MonoBehaviour
     // moving & animation function
     private void FixedUpdate()
     {
-        //moveY = Input.GetAxis("Vertical");
-        //moveX = Input.GetAxis("Horizontal");
-
         moveY = joystick.Vertical;
         moveX = joystick.Horizontal;
 
@@ -49,7 +46,7 @@ public class HomesController : MonoBehaviour
         rigid.MovePosition(rigid.position + nextVec);
 
         anim.SetFloat("Speed", inputVec.magnitude);
-        if (inputVec.x != 0)
+        if (!Equals(speed, 0))
         {
             pv.RPC("FlipX", RpcTarget.All, inputVec.x);
         }

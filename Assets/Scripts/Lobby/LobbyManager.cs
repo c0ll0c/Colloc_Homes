@@ -9,6 +9,8 @@ public class LobbyManager : MonoBehaviour
     public Transform Content;
     public HandleRoomList RoomList;
     private List<HandleRoomList> roomCollection = new List<HandleRoomList>();
+    private int index;
+
     private void Start()
     {
         NetworkManager.Instance.LobbySceneManager = this;
@@ -21,7 +23,7 @@ public class LobbyManager : MonoBehaviour
         foreach (RoomInfo roomInfo in _roomInfos)
         {
             HandleRoomList newRoom = Instantiate(RoomList, Content);
-            if (newRoom != null)
+            if (!Equals(newRoom, null))
             {
                 newRoom.SetRoomInfo(roomInfo);
                 roomCollection.Add(newRoom);
@@ -31,15 +33,15 @@ public class LobbyManager : MonoBehaviour
 
     public void AddRoom(RoomInfo _roomInfo)
     {
-        int index = roomCollection.FindIndex(x => x.RoomInfo.Name == _roomInfo.Name);
-
-        if (index != -1)
+        index = roomCollection.FindIndex(x => x.RoomInfo.Name == _roomInfo.Name);
+        if (!Equals(index, -1))
         {
             roomCollection[index].SetRoomInfo(_roomInfo);
             return;
         }
+
         HandleRoomList newRoom = Instantiate(RoomList, Content);
-        if (newRoom != null)
+        if (!Equals(newRoom, null))
         {
             newRoom.SetRoomInfo(_roomInfo);
             roomCollection.Add(newRoom);
@@ -48,8 +50,8 @@ public class LobbyManager : MonoBehaviour
 
     public void RemoveRoom(RoomInfo _roomInfo)
     {
-        int index = roomCollection.FindIndex(x => x.RoomInfo.Name == _roomInfo.Name);
-        if (index != -1)
+        index = roomCollection.FindIndex(x => x.RoomInfo.Name == _roomInfo.Name);
+        if (!Equals(index, -1))
         {
             Destroy(roomCollection[index].gameObject);
             roomCollection.RemoveAt(index);
