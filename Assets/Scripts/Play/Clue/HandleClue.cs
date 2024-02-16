@@ -7,6 +7,7 @@ public class HandleClue : MonoBehaviour
     public Clue clue;
     public GameObject ClueGetButton;
     public GameObject ClueHideButton;
+    private bool isMine;
 
     private void Start()
     {
@@ -15,10 +16,12 @@ public class HandleClue : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        isMine = collision.gameObject.GetComponent<PhotonView>().IsMine;
 
         if (collision.gameObject.CompareTag("Homes") && clue.ClueType != ClueType.FAKE)
         {
-            if (collision.gameObject.GetComponent<PhotonView>().IsMine){
+            if (isMine)
+            {
                 AudioManager.Instance.PlayEffect(EffectAudioType.ENTER);
                 ClueGetButton.SetActive(true);
             }
@@ -26,7 +29,8 @@ public class HandleClue : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Colloc") && clue.ClueType != ClueType.FAKE)
         {
-            if (collision.gameObject.GetComponent<PhotonView>().IsMine){
+            if (isMine)
+            {
                 AudioManager.Instance.PlayEffect(EffectAudioType.ENTER);
                 ClueHideButton.SetActive(true);         
             }
@@ -35,7 +39,9 @@ public class HandleClue : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.GetComponent<PhotonView>().IsMine)
+        isMine = collision.gameObject.GetComponent<PhotonView>().IsMine;
+
+        if (isMine)
         {
             ClueGetButton.SetActive(false);
             ClueHideButton.SetActive(false);

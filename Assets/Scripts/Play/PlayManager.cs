@@ -17,6 +17,8 @@ public class PlayManager : MonoBehaviour
     public GameObject CluePrefab;
     public GameObject[] ClueInstances = new GameObject[16];
 
+    private PhotonView PlayerPV;
+
     public Vector3[] RandomDropPos;
     public bool isVaccinated = false;
     public List<HandleCollider> ColliderList = new List<HandleCollider>();
@@ -105,6 +107,7 @@ public class PlayManager : MonoBehaviour
             gamePlayer.transform.GetChild(1).GetComponent<CircleCollider2D>().radius = 3;
             gamePlayer.transform.GetChild(1).GetChild(0).localScale = new Vector3(3, 3, 3);
         }
+        PlayerPV = gamePlayer.GetComponent<PhotonView>();
 
         AttackBtn.GetComponent<AttackBtnOnClick>().PV = gamePlayer.GetComponent<PhotonView>();
         InfectBtn.GetComponent<AttackBtnOnClick>().PV = gamePlayer.GetComponent<PhotonView>();

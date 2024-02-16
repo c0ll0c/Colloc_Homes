@@ -13,14 +13,15 @@ public class UIManager : MonoBehaviour
     public Transform CodeInfo;
     public Transform HomesInfo;
     public Canvas ClueUI;
+    public GameObject CoolTimeText;
 
     public GameObject StartPanelObj;
     public GameObject OutPanelObj;
 
     private int i = 0;
-    private bool isColloc;
+    public bool isColloc;
 
-    [SerializeField] private GameObject[] gameIcon = new GameObject[5];
+    [SerializeField] private GameObject[] gameIcon = new GameObject[4];
 
     private static UIManager instance;
 
@@ -46,7 +47,7 @@ public class UIManager : MonoBehaviour
     {
         if (instance == null)
         {
-            instance = this as UIManager;
+            instance = this;
         }
         else
         {
@@ -54,6 +55,8 @@ public class UIManager : MonoBehaviour
         }
 
         ClueUI.gameObject.SetActive(false);
+        CoolTimeText.SetActive(false);
+
         for (int i = 0; i < gameIcon.Length - 1; i++)
         {
             gameIcon[i].SetActive(false);
@@ -73,7 +76,6 @@ public class UIManager : MonoBehaviour
             case "Colloc":
                 gameIcon[2].SetActive(true);
                 gameIcon[3].SetActive(false);
-                gameIcon[4].GetComponent<Image>().color = Color.red;
                 break;
 
             case "Homes":
@@ -82,7 +84,6 @@ public class UIManager : MonoBehaviour
                 gameIcon[3].SetActive(true);
                 gameIcon[3].GetComponent<Image>().color = Color.white;
                 gameIcon[3].GetComponent<Button>().enabled = true;
-                gameIcon[4].GetComponent<Image>().color = Color.blue;
                 break;
 
             case "Infect":
@@ -90,7 +91,6 @@ public class UIManager : MonoBehaviour
                 gameIcon[1].SetActive(true);
                 gameIcon[3].GetComponent<Image>().color = Color.gray;
                 gameIcon[3].GetComponent<Button>().enabled = false;
-                gameIcon[4].GetComponent<Image>().color = Color.red;
                 break;
         }
     }
