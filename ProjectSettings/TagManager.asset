@@ -35,7 +35,7 @@ TagManager:
   - Layer 2
   - Layer 3
   - 
-  - 
+  - minimap
   - 
   - 
   - 
@@ -58,4 +58,7 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 3318054165
+    locked: 0
+  - name: minimap
+    uniqueID: 2090975209
     locked: 0
