@@ -30,7 +30,7 @@ public static class StaticFuncs
         string code;
         string randomCharacters = "0123456789ABCDEFGHIJYZ";
 
-        randomCharacters = ShuffleString(randomCharacters).Substring(0, 2);          // ·£´ýÀ¸·Î ¼¼ ±ÛÀÚ
+        randomCharacters = ShuffleString(randomCharacters).Substring(0, 2);          // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         code = _commoncharacters + randomCharacters;
 
         return ShuffleString(code);
@@ -101,7 +101,7 @@ public static class StaticFuncs
 
         if (effect != NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect)
         {
-            yield return WaitForSeconds(3.0f);
+            yield return WaitForSeconds(StaticVars.DELAY_TIME);
             StopEffect(effect);
         }
     }

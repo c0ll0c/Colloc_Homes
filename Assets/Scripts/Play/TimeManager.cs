@@ -4,9 +4,11 @@ using UnityEngine;
 public class TimeManager : MonoBehaviour
 {
     public GameObject TimerObj;
-    public GameObject CooltimeObj;
+    public GameObject InfectCooltimeObj;
+    public GameObject AttackCooltimeObj;
     private TimeCanvasUI timerUI;
-    private CoolTimeUI coolTimeUI;
+    private CoolTimeUI InfectCoolTimeUI;
+    private CoolTimeUI AttackCoolTimeUI;
 
     private double gameLeftTime = 0;
     private double vaccineDropTime;
@@ -20,7 +22,10 @@ public class TimeManager : MonoBehaviour
     private void Start()
     {
         timerUI = TimerObj.GetComponent<TimeCanvasUI>();
-        coolTimeUI = CooltimeObj.GetComponent<CoolTimeUI>();
+
+        InfectCoolTimeUI = InfectCooltimeObj.GetComponent<CoolTimeUI>();
+        AttackCoolTimeUI = AttackCooltimeObj.GetComponent<CoolTimeUI>(); 
+
         endingManager = EndingCanvasObj.GetComponent<EndingManager>();
     }
 
@@ -76,6 +81,7 @@ public class TimeManager : MonoBehaviour
 
     static float incrementTime = 0.25f;
     static float incrementProg = incrementTime / StaticVars.ATTACK_TIME;
+
     private IEnumerator AttackCooltimeBar()
     {
         float prog = 0;
@@ -83,7 +89,8 @@ public class TimeManager : MonoBehaviour
         {
             yield return StaticFuncs.WaitForSeconds(incrementTime);
             prog += incrementProg;
-            coolTimeUI.SetCoolTimeBar(prog);
+            InfectCoolTimeUI.SetCoolTimeBar(prog);
+            AttackCoolTimeUI.SetCoolTimeBar(prog);
         }
 
         NetworkManager.Instance.PlaySceneManager.ActivateAttack();

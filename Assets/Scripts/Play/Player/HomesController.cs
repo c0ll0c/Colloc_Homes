@@ -27,9 +27,9 @@ public class HomesController : MonoBehaviour
         Camera cam = Camera.main;
         GameObject playerDot;
 
-        playerDot = GameObject.FindGameObjectWithTag("MinimapCamera");
-        playerDot.transform.SetParent(transform.parent);
-        playerDot.transform.localPosition = new Vector3(0f, 0f, 0f);
+        playerDot = GameObject.Find("Panel_MinimapDot");
+        playerDot.transform.SetParent(transform.parent.GetChild(4));
+        playerDot.transform.localPosition = new Vector3(0f, 0f, -1f);
 
         cam.transform.SetParent(transform.parent);
         cam.transform.localPosition = new Vector3(0f, 0f, -5f);
@@ -40,9 +40,6 @@ public class HomesController : MonoBehaviour
     // moving & animation function
     private void FixedUpdate()
     {
-        //moveY = Input.GetAxis("Vertical");
-        //moveX = Input.GetAxis("Horizontal");
-
         moveY = joystick.Vertical;
         moveX = joystick.Horizontal;
 
@@ -51,7 +48,7 @@ public class HomesController : MonoBehaviour
         rigid.MovePosition(rigid.position + nextVec);
 
         anim.SetFloat("Speed", inputVec.magnitude);
-        if (inputVec.x != 0)
+        if (!Equals(speed, 0))
         {
             pv.RPC("FlipX", RpcTarget.All, inputVec.x);
         }

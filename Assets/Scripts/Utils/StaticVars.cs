@@ -2,10 +2,11 @@ using UnityEngine;
 
 public static class StaticVars
 {
+    // network variables
     public static string PREFS_NICKNAE = "nickname";
     public static byte MAX_PLAYERS_PER_ROOM = 6;
-    public static int PLAYER_SLOTS = 0b111111; // 6¸íÀÇ players
-    public static int PLAYER_COLORS = 0b11111111; // 8Á¾·ù
+    public static int PLAYER_SLOTS = 0b111111; // 6ï¿½ï¿½ï¿½ï¿½ players
+    public static int PLAYER_COLORS = 0b11111111; // 8ï¿½ï¿½ï¿½ï¿½
 
     // time variables
     public static double GAME_TIME = 300.0f; // 5m
@@ -14,8 +15,15 @@ public static class StaticVars
     public static float DETOX_USE_TIME = 3.0f; // 3s
     public static float DETOX_DEACTIVE_TIME = 15.0f; // 15s
     public static float ATTACK_TIME = 15.0f; // 15s
+    public static float DELAY_TIME = 3.0f; // 3s
+    public static readonly float ENUM_TIME = 0.25f; // 0.25s
 
-    // homes spawn position
+    // item variables
+    public static float PLANE_SPEED = 5.0f; 
+
+    // homes variables
+    public static float HOMES_SPEED = 3.0f;
+
     public static Vector2[] SpawnPosition =
     {
         new Vector2(-9.0f, -6.0f),
@@ -61,12 +69,12 @@ public static class StaticVars
     };
 
     public static string[] dialogBody = {
-        ", ¹üÀÎÀ» Ã£Àº °Ç°¡?",
-        "½Ì°Ì±ä.",
-        "¿À, »¡¸® ¸»ÇØ º¸°Ô! ÀÌµé Áß ´©°¡ Äİ·ÏÀÎ°¡?",
-        "... ¼ö»ç Áß ...",
-        "ÀÚ³×´Â Æ²·È¾î. ¾ÕÀ¸·Î º¼ ÀÏ ¾øÀ» °É¼¼.",
-        "¿À, ¿ª½Ã! ¾à¼Ó´ë·Î Çö»ó±İÀ» ÁÖÁö. ¼ö°íÇß³×!",
-        ", ¾ÆÁ÷ 3ºĞÀÌ µÇÁö ¾Ê¾Ò¾î. ¼º±ŞÇÑ ÆÇ´ÜÀÏ¼¼."
+        ", ë²”ì¸ì„ ì°¾ì€ ê±´ê°€?",
+        "ì‹±ê²ê¸´.",
+        "ì˜¤, ë¹¨ë¦¬ ë§í•´ ë³´ê²Œ! ì´ë“¤ ì¤‘ ëˆ„ê°€ ì½œë¡ì¸ê°€?",
+        "... ìˆ˜ì‚¬ ì¤‘ ...",
+        "ìë„¤ëŠ” í‹€ë ¸ì–´. ì•ìœ¼ë¡œ ë³¼ ì¼ ì—†ì„ ê±¸ì„¸.",
+        "ì˜¤, ì—­ì‹œ! ì•½ì†ëŒ€ë¡œ í˜„ìƒê¸ˆì„ ì£¼ì§€. ìˆ˜ê³ í–ˆë„¤!",
+        ", ì•„ì§ 3ë¶„ì´ ë˜ì§€ ì•Šì•˜ì–´. ì„±ê¸‰í•œ íŒë‹¨ì¼ì„¸."
     };
 }

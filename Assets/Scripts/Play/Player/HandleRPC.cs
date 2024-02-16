@@ -13,10 +13,10 @@ public class HandleRPC : MonoBehaviour
     [SerializeField] private TextMeshProUGUI nickname;
     private SpriteRenderer spriter;
     private PhotonView pv;
-    //private AttackController attackController;
     private HomesController homesController;
     private Button infectBtn;
     private Button attackBtn;
+    private GameObject playerTrigger;
 
     private void Awake()
     {
@@ -34,8 +34,8 @@ public class HandleRPC : MonoBehaviour
         InfectEffect.SetActive(false);
         VaccineEffect.SetActive(false);
 
-        //attackController = NetworkManager.Instance.PlaySceneManager.gamePlayer.transform.GetChild(2).GetComponent<AttackController>();
         homesController = NetworkManager.Instance.PlaySceneManager.gamePlayer.transform.GetChild(2).GetComponent<HomesController>();
+        playerTrigger = transform.GetChild(1).gameObject;
     }
 
     // sync player direction
@@ -59,24 +59,27 @@ public class HandleRPC : MonoBehaviour
         if (NetworkManager.Instance.PlaySceneManager.gamePlayer.CompareTag(_status)) return;
         if (NetworkManager.Instance.PlaySceneManager.gamePlayer.CompareTag("Colloc")) return;
 
-        if (_status == "Homes")
+        if (Equals(string.Compare(_status, "Homes", true), 0))
         {
-            //attackController.enabled = true;
             attackBtn.gameObject.SetActive(true);
             infectBtn.gameObject.SetActive(false);
             NetworkManager.Instance.PlaySceneManager.gamePlayer.tag = "Homes";
             UIManager.Instance.SetGameUI("Homes");
+            playerTrigger.GetComponent<CircleCollider2D>().radius = 3;
+            playerTrigger.transform.GetChild(0).localScale = new Vector3(3, 3, 3);
             StaticFuncs.StopEffect(NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect);
         }
         else
         {
+            playerTrigger.GetComponent<CircleCollider2D>().radius = 2;
+            playerTrigger.transform.GetChild(0).localScale = new Vector3(2, 2, 2);
             StartCoroutine(DelayInfect());
         }
     }
 
     private IEnumerator DelayInfect()
     {
-        yield return StaticFuncs.WaitForSeconds(3.0f);
+        yield return StaticFuncs.WaitForSeconds(StaticVars.DELAY_TIME);
 
         if (NetworkManager.Instance.PlaySceneManager.isVaccinated)
         {
@@ -86,7 +89,6 @@ public class HandleRPC : MonoBehaviour
         }
         else
         {
-            //attackController.enabled = false;
             infectBtn.gameObject.SetActive(true);
             attackBtn.gameObject.SetActive(false);
             NetworkManager.Instance.PlaySceneManager.gamePlayer.tag = "Infect";
@@ -108,7 +110,7 @@ public class HandleRPC : MonoBehaviour
 
     private IEnumerator ResetSpeed()
     {
-        yield return StaticFuncs.WaitForSeconds(3.0f);
-        homesController.SetSpeed(3.0f);
+        yield return StaticFuncs.WaitForSeconds(StaticVars.DELAY_TIME);
+        homesController.SetSpeed(StaticVars.HOMES_SPEED);
     }
 }

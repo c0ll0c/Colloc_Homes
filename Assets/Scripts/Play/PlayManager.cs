@@ -17,8 +17,6 @@ public class PlayManager : MonoBehaviour
     public GameObject CluePrefab;
     public GameObject[] ClueInstances = new GameObject[16];
 
-    private PhotonView AttackBtnPV;
-    private PhotonView InfectBtnPV;
     private PhotonView PlayerPV;
 
     public Vector3[] RandomDropPos;
@@ -55,9 +53,6 @@ public class PlayManager : MonoBehaviour
         GameManager.Instance.EnterGame();
 
         timeManager = transform.GetComponent<TimeManager>();
-
-        AttackBtnPV = AttackBtn.GetComponent<AttackBtnOnClick>().pv;
-        InfectBtnPV = InfectBtn.GetComponent<AttackBtnOnClick>().pv;
 
         readyStatus = 0;
         if (PhotonNetwork.IsMasterClient)
@@ -97,7 +92,6 @@ public class PlayManager : MonoBehaviour
 
     public void SpawnHomes(bool _isColloc, Vector2 _spawnPos, string _color)
     {
-        Debug.Log(_color);
         gamePlayer = PhotonNetwork.Instantiate("Homes_" + _color, _spawnPos, Quaternion.identity);
         if (_isColloc)
         {
@@ -110,11 +104,13 @@ public class PlayManager : MonoBehaviour
             gamePlayer.tag = "Homes";
             InfectBtn.gameObject.SetActive(false);
             UIManager.Instance.SetGameUI("Homes");
+            gamePlayer.transform.GetChild(1).GetComponent<CircleCollider2D>().radius = 3;
+            gamePlayer.transform.GetChild(1).GetChild(0).localScale = new Vector3(3, 3, 3);
         }
         PlayerPV = gamePlayer.GetComponent<PhotonView>();
 
-        AttackBtnPV = PlayerPV;
-        InfectBtnPV = PlayerPV;
+        AttackBtn.GetComponent<AttackBtnOnClick>().PV = gamePlayer.GetComponent<PhotonView>();
+        InfectBtn.GetComponent<AttackBtnOnClick>().PV = gamePlayer.GetComponent<PhotonView>();
 
         UIManager.Instance.LoadStartPanel(_isColloc);
         CheckReady(GameSettings.READY_PLAYER);

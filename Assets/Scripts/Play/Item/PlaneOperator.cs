@@ -5,12 +5,11 @@ public class Plane : PoolAble
 {
     private Vector3 dropPos;
     private Vector3 direction = new Vector3(-1, 0, 0);
-    private float speed = 5.0f;
     private bool alreadyDrop = false;
 
     private void Update()
     {
-        transform.Translate(direction * speed * Time.deltaTime);
+        transform.Translate(direction * StaticVars.PLANE_SPEED * Time.deltaTime);
 
         if (!alreadyDrop && transform.position.x < dropPos.x)
         {

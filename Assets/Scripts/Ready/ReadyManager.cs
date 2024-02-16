@@ -75,7 +75,7 @@ public class ReadyManager : MonoBehaviour
 
         // Title, RoomCode UI
         RoomTitle.text = _title;
-        RoomCode.text = "CODE: " + _code;
+        RoomCode.text = "ROOM CODE : " + _code;
 
         // PlayerSlots UI
         int index = 0;

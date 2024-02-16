@@ -11,8 +11,7 @@ public class HandleRoomList : MonoBehaviour
 
     public void SetRoomInfo(RoomInfo _roomInfo)
     {
-        //RoomName.text = _roomInfo.CustomProperties["RoomName"].ToString();
-        RoomName.text = _roomInfo.Name;
+        RoomName.text = _roomInfo.CustomProperties["RoomName"].ToString();
         RoomPlayers.text = _roomInfo.PlayerCount.ToString() + "/" + _roomInfo.MaxPlayers.ToString();
         RoomInfo = _roomInfo;
         if ((bool)RoomInfo.CustomProperties["Private"])
@@ -35,7 +34,7 @@ public class HandleRoomList : MonoBehaviour
 
     public void CheckCode()
     {
-        if (RoomInfo.Name == CodeField.text)
+        if (Equals(string.Compare(RoomInfo.Name, CodeField.text, false), 0))
         {
             NetworkManager.Instance.JoinRoom(RoomInfo.Name);
         }

@@ -76,7 +76,7 @@ public class EndingManager : MonoBehaviour
                 result = false;
                 resultImg.sprite = EndingImage[4];
                 AudioManager.Instance.ChangeBGM(GameState.LOSE);
-                falseEnding.SetActive(true);
+                // falseEnding.SetActive(true);
                 break;
             case EndingType.TimeOver:
                 if (isHomes)
@@ -123,10 +123,10 @@ public class EndingManager : MonoBehaviour
             case EndingType.CatchColloc: 
                 endGame();
                 break;
-/*            case EndingType.FalseAlarm:            // 관전 or 로비 -> 버튼 뜨기
+            case EndingType.FalseAlarm:            // 관전 or 로비 -> 버튼 뜨기
                                                    // TODO: 버튼 뜨는 걸로 바꿔야 함, 관전하기 구현
                 leaveRoom();
-                break;*/
+                break;
             case EndingType.TimeOver:  
                 endGame();
                 break;
@@ -137,12 +137,12 @@ public class EndingManager : MonoBehaviour
         }
     }
 
-/*    void leaveRoom()
+    void leaveRoom()
     {
         Time.timeScale = 1;
         PhotonNetwork.LeaveRoom();
-    }*/
-    
+    }
+
     void endGame()
     {
         Time.timeScale = 1;
