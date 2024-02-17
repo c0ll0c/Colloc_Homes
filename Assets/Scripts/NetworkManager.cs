@@ -12,6 +12,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     private byte maxPlayersPerRoom = StaticVars.MAX_PLAYERS_PER_ROOM;
+    private byte minPlayerPerRoom = StaticVars.MIN_PLAYERS_PER_ROOM;
 
     public PhotonView PV;
 
@@ -118,7 +119,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             IsOpen = true,
             IsVisible = true,
-            MaxPlayers = 6,
+            MaxPlayers = maxPlayersPerRoom,
             CustomRoomProperties = roomCustomProps,
             CustomRoomPropertiesForLobby = customPropsForLobby,
         };
@@ -331,6 +332,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void StartGame()
     {
         PhotonNetwork.MasterClient.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_COLOR, out object masterColor);
+
+        if (PhotonNetwork.CurrentRoom.PlayerCount < minPlayerPerRoom)
+        {
+            AlertManager.Instance.ShowAlert("시작 불가", "4명 이상의 플레이어가 필요합니다.");
+            return;
+        }
 
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
         {

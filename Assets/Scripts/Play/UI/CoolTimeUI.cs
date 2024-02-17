@@ -15,7 +15,6 @@ public class CoolTimeUI : MonoBehaviour
 
         Init_UI();
         cooltimeBar.fillAmount = 0;
-        Debug.Log(cooltimeBar);
     }
 
     private void Init_UI()

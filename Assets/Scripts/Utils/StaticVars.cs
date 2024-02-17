@@ -5,6 +5,7 @@ public static class StaticVars
     // network variables
     public static string PREFS_NICKNAE = "nickname";
     public static byte MAX_PLAYERS_PER_ROOM = 6;
+    public static byte MIN_PLAYERS_PER_ROOM = 4;
     public static int PLAYER_SLOTS = 0b111111; // 6���� players
     public static int PLAYER_COLORS = 0b11111111; // 8����
 
