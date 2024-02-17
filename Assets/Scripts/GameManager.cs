@@ -58,10 +58,9 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
-    WaitForSecondsRealtime threeSecsWait = new WaitForSecondsRealtime(3f);
     IEnumerator QuitTimer()
     {
-        yield return threeSecsWait;
+        yield return StaticFuncs.WaitForSeconds(3f);
         clickedBefore = false;
     }
 

@@ -2173,6 +2173,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button_Intro_startBtn
       objectReference: {fileID: 0}
+    - target: {fileID: 2513068202169049828, guid: 530d530da531a224ba84e03003db1365,
+        type: 3}
+      propertyPath: m_text
+      value: "\uAC8C\uC784 \uC2DC\uC791"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2513068202169049828, guid: 530d530da531a224ba84e03003db1365,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 2513068202169049828, guid: 530d530da531a224ba84e03003db1365,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 36
+      objectReference: {fileID: 0}
     - target: {fileID: 3678771495597185955, guid: 530d530da531a224ba84e03003db1365,
         type: 3}
       propertyPath: m_Color.b

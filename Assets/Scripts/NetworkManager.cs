@@ -244,7 +244,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_COLOR, out object color)){
             if ((int)color == _color) return;
 
-            if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_ISREADY, out object isReady))
+            if (!PhotonNetwork.LocalPlayer.IsMasterClient && PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(StaticCodes.PHOTON_PROP_ISREADY, out object isReady))
             {
                 if ((bool)isReady) return;
             }
