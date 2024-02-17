@@ -8,6 +8,6 @@ public class CodeInputFieldUI : MonoBehaviour
     public void FindRoom()
     {
         if (string.IsNullOrEmpty(CodeField.text)) return;
-        NetworkManager.Instance.JoinRoom(CodeField.text);
+        NetworkManager.Instance.JoinRoom(CodeField.text.ToUpper());
     }
 }

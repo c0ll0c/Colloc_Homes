@@ -65,14 +65,14 @@ public class HandleRPC : MonoBehaviour
             infectBtn.gameObject.SetActive(false);
             NetworkManager.Instance.PlaySceneManager.gamePlayer.tag = "Homes";
             UIManager.Instance.SetGameUI("Homes");
-            playerTrigger.GetComponent<CircleCollider2D>().radius = 3;
-            playerTrigger.transform.GetChild(0).localScale = new Vector3(3, 3, 3);
+            playerTrigger.GetComponent<CircleCollider2D>().radius = 2;
+            playerTrigger.transform.GetChild(0).localScale = new Vector3(2, 2, 2);
             StaticFuncs.StopEffect(NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect);
         }
         else
         {
-            playerTrigger.GetComponent<CircleCollider2D>().radius = 2;
-            playerTrigger.transform.GetChild(0).localScale = new Vector3(2, 2, 2);
+            playerTrigger.GetComponent<CircleCollider2D>().radius = 1.3f;
+            playerTrigger.transform.GetChild(0).localScale = new Vector3(1.3f, 1.3f, 1.3f);
             StartCoroutine(DelayInfect());
         }
     }

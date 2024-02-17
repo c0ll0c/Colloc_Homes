@@ -98,14 +98,14 @@ public class PlayManager : MonoBehaviour
             gamePlayer.tag = "Colloc";
             AttackBtn.gameObject.SetActive(false);
             UIManager.Instance.SetGameUI("Colloc");
+            gamePlayer.transform.GetChild(1).GetComponent<CircleCollider2D>().radius = 1.3f;
+            gamePlayer.transform.GetChild(1).GetChild(0).localScale = new Vector3(1.3f, 1.3f, 1.3f);
         }
         else
         {
             gamePlayer.tag = "Homes";
             InfectBtn.gameObject.SetActive(false);
             UIManager.Instance.SetGameUI("Homes");
-            gamePlayer.transform.GetChild(1).GetComponent<CircleCollider2D>().radius = 3;
-            gamePlayer.transform.GetChild(1).GetChild(0).localScale = new Vector3(3, 3, 3);
         }
         PlayerPV = gamePlayer.GetComponent<PhotonView>();
 
