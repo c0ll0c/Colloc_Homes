@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -10,18 +8,16 @@ public class AlertManager : MonoSingleton<AlertManager>
     private TMP_Text alertTitle;
     private TMP_Text alertContent;
 
+    public GameObject NoNetworkModal;
+
     // Start is called before the first frame update
     void Start()
     {
         AlertModal.SetActive(false);
+        NoNetworkModal.SetActive(false);
         warningIcon = AlertModal.transform.GetChild(0).GetChild(1).gameObject;
         alertTitle = AlertModal.transform.GetChild(0).GetChild(3).GetComponent<TMP_Text>();
         alertContent = AlertModal.transform.GetChild(0).GetChild(4).GetComponent<TMP_Text>();
-    }
-
-    public void CloseBtnOnClick()
-    {
-        AlertModal.SetActive(false);
     }
 
     public void ShowAlert(string _alertTitle, string _alertContent)
@@ -41,5 +37,11 @@ public class AlertManager : MonoSingleton<AlertManager>
         alertContent.text = _alertContent;
 
         AlertModal.SetActive(true);
+    }
+
+    public void NoNetworkAlert()
+    {
+        if (NoNetworkModal.activeSelf) return;
+        NoNetworkModal.SetActive(true);
     }
 }

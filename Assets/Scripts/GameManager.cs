@@ -12,6 +12,8 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if (PlayerPrefs.HasKey(StaticVars.PREFS_NICKNAE))
             PlayerName = PlayerPrefs.GetString(StaticVars.PREFS_NICKNAE);
+
+        StartCoroutine(CheckInternetConnection());
     }
 
     public void ChangeScene (GameState _state)
@@ -39,6 +41,35 @@ public class GameManager : MonoSingleton<GameManager>
         AudioManager.Instance.PlayEffect(EffectAudioType.INFECT);
     }
 
+    #region Check Internet Connection
+    IEnumerator CheckInternetConnection()
+    {
+        while (true)
+        {
+            // 3초마다 인터넷 연결 확인
+            if (Application.internetReachability == NetworkReachability.NotReachable)
+            {
+                switch (gameState)
+                {
+                    case GameState.INTRO:
+                        AlertManager.Instance.NoNetworkAlert();
+                        break;
+                    case GameState.LOBBY:
+                    case GameState.READY:
+                    case GameState.PLAY:
+                    case GameState.WIN:
+                    case GameState.LOSE:
+                        ChangeScene(GameState.INTRO);
+                        AlertManager.Instance.NoNetworkAlert();
+                        break;
+                }
+            }
+            yield return StaticFuncs.WaitForSeconds(3f);
+        }
+    }
+    #endregion
+
+    #region Android Backbutton Control
     // BackButton Disable
     private bool clickedBefore = false;
     private void Update()
@@ -79,4 +110,5 @@ public class GameManager : MonoSingleton<GameManager>
             }));
         }
     }
+    #endregion
 }
