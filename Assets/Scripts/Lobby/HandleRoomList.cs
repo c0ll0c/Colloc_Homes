@@ -38,5 +38,9 @@ public class HandleRoomList : MonoBehaviour
         {
             NetworkManager.Instance.JoinRoom(RoomInfo.Name);
         }
+        else
+        {
+            AlertManager.Instance.WarnAlert("코드를 다시 확인해주세요");
+        }
     }
 }
