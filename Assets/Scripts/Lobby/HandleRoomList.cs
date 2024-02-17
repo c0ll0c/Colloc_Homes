@@ -11,10 +11,10 @@ public class HandleRoomList : MonoBehaviour
 
     public void SetRoomInfo(RoomInfo _roomInfo)
     {
-        RoomName.text = _roomInfo.CustomProperties["RoomName"].ToString();
+        RoomName.text = _roomInfo.CustomProperties[StaticCodes.PHOTON_R_RNAME].ToString();
         RoomPlayers.text = _roomInfo.PlayerCount.ToString() + "/" + _roomInfo.MaxPlayers.ToString();
         RoomInfo = _roomInfo;
-        if ((bool)RoomInfo.CustomProperties["Private"])
+        if ((bool)RoomInfo.CustomProperties[StaticCodes.PHOTON_R_MODE])
         {
             transform.GetChild(1).gameObject.SetActive(true);
         }
@@ -22,7 +22,7 @@ public class HandleRoomList : MonoBehaviour
 
     public void JoinRoom()
     {
-        if ((bool)RoomInfo.CustomProperties["Private"])
+        if ((bool)RoomInfo.CustomProperties[StaticCodes.PHOTON_R_MODE])
         {
             transform.GetChild(5).gameObject.SetActive(true);
         }

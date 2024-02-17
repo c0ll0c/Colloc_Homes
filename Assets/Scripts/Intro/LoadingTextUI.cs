@@ -14,8 +14,7 @@ public class LoadingTextUI : MonoBehaviour
         StopAllCoroutines();
     }
 
-    private readonly WaitForSeconds halfSec = new WaitForSeconds (0.5f);
-    private readonly string[] loadingText = { "Loading", "Loading.", "Loading..", "Loading..." };
+    private readonly string[] loadingText = { "로딩 중", "로딩 중.", "로딩 중..", "로딩 중..." };
     private IEnumerator StartTextAnimation()
     {
         while (true)
@@ -23,7 +22,7 @@ public class LoadingTextUI : MonoBehaviour
             foreach (string _text in loadingText)
             {
                 Loading.text = _text;
-                yield return halfSec;
+                yield return StaticFuncs.WaitForSeconds(0.5f);
             }
         }
     }

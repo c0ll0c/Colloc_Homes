@@ -75,7 +75,7 @@ public class ReadyManager : MonoBehaviour
 
         // Title, RoomCode UI
         RoomTitle.text = _title;
-        RoomCode.text = "ROOM CODE : " + _code;
+        RoomCode.text = "방 코드 : " + _code;
 
         // PlayerSlots UI
         int index = 0;
@@ -114,6 +114,7 @@ public class ReadyManager : MonoBehaviour
 
     private void SetMasterUI()
     {
+        Debug.Log("im the master");
         for(int index=0; index<StaticVars.MAX_PLAYERS_PER_ROOM; index++)
         {
             // 자신의 슬롯은 toggle 키지 않기
