@@ -66,7 +66,7 @@ public class HandleClue : MonoBehaviour
 
             else if (clue.ClueType == ClueType.CODE)                // Colloc's code
             {
-                string collocCode = PhotonNetwork.CurrentRoom.CustomProperties["CollocCode"].ToString();
+                string collocCode = PhotonNetwork.CurrentRoom.CustomProperties[StaticCodes.PHOTON_R_CCODE].ToString();
                 UIManager.Instance.ChangeCodeClueUIText(collocCode[clue.TypeIndex]);
             }
 

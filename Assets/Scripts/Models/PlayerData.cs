@@ -14,13 +14,13 @@ public class PlayerData
         IsLocal = _player.IsLocal;
         if (_player.CustomProperties != null)
         {
-            if (_player.CustomProperties.ContainsKey(StaticCodes.PHOTON_PROP_ISREADY))
+            if (_player.CustomProperties.ContainsKey(StaticCodes.PHOTON_P_ISREADY))
             {
-                IsReady = (bool)_player.CustomProperties[StaticCodes.PHOTON_PROP_ISREADY] ? (bool)_player.CustomProperties[StaticCodes.PHOTON_PROP_ISREADY] : false;
+                IsReady = (bool)_player.CustomProperties[StaticCodes.PHOTON_P_ISREADY] ? (bool)_player.CustomProperties[StaticCodes.PHOTON_P_ISREADY] : false;
             }
-            if (_player.CustomProperties.ContainsKey(StaticCodes.PHOTON_PROP_COLOR))
+            if (_player.CustomProperties.ContainsKey(StaticCodes.PHOTON_P_COLOR))
             {
-                Color = (int)_player.CustomProperties[StaticCodes.PHOTON_PROP_COLOR];
+                Color = (int)_player.CustomProperties[StaticCodes.PHOTON_P_COLOR];
             }
         }
     }

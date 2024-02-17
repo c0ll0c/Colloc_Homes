@@ -190,7 +190,7 @@ public class EndingUI : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);               // 결과를 말하고 나서 2초 뒤에 win, lose가 뜨도록!
 
-        if (_name == PhotonNetwork.CurrentRoom.CustomProperties["CollocName"].ToString())       // 맞았음
+        if (_name == PhotonNetwork.CurrentRoom.CustomProperties[StaticCodes.PHOTON_R_CNAME].ToString())       // 맞았음
         {
             dialogText.GetComponent<Text>().text = dialogBody[5];
             yield return new WaitForSeconds(2f);
