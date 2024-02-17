@@ -111,10 +111,26 @@ public class AudioManager: MonoSingleton<AudioManager>
 
     public void ChangeBGM(GameState _state)
     {
-        if (_state == GameState.READY) BgmPlayer.clip = GameBGM;
-        else if(_state == GameState.WIN) BgmPlayer.clip = WinBGM;
-        else if(_state == GameState.LOSE) BgmPlayer.clip = LoseBGM;
-        else BgmPlayer.clip = LobbyBGM;
+        if (_state == GameState.READY)
+        {
+            BgmPlayer.clip = GameBGM;
+            BgmPlayer.loop = true;
+        }
+        else if (_state == GameState.WIN)
+        {
+            BgmPlayer.clip = WinBGM;
+            BgmPlayer.loop = false;
+        }
+        else if (_state == GameState.LOSE)
+        {
+            BgmPlayer.clip = LoseBGM;
+            BgmPlayer.loop = false;
+        }
+        else
+        {
+            BgmPlayer.clip = LobbyBGM;
+            BgmPlayer.loop = true;
+        }
 
         if (!BgmPlayer.isPlaying) BgmPlayer.Play();
     }

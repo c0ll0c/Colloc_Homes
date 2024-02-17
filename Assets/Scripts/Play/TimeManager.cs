@@ -40,7 +40,7 @@ public class TimeManager : MonoBehaviour
             return;
         }
 
-        if (gameLeftTime < 280)
+        if (gameLeftTime < StaticVars.NPC_TIME)
             NPCTime = true;
 
         gameLeftTime -= Time.deltaTime;

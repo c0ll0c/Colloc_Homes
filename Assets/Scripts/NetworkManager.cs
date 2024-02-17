@@ -595,7 +595,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     IEnumerator UnHiddenClue(Clue clue)
     {
-        yield return new WaitForSeconds(15.0f);
+        yield return new WaitForSeconds(StaticVars.Hidden_TIME);
         clue.IsHidden = false;
     }
 
