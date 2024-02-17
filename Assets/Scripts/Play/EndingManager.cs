@@ -41,7 +41,7 @@ public class EndingManager : MonoBehaviour
     public void ShowResult(EndingType _endType, bool invoker)
     {
         Time.timeScale = 0;
-        bool isHomes = NetworkManager.Instance.PlaySceneManager.gamePlayer.CompareTag("Colloc");
+        bool isHomes = !NetworkManager.Instance.PlaySceneManager.gamePlayer.CompareTag("Colloc");
         switch (_endType)
         {
             case EndingType.CatchColloc:
@@ -116,7 +116,7 @@ public class EndingManager : MonoBehaviour
         AudioManager.Instance.PauseEffect(EffectAudioType.COOLTIME);
         AudioManager.Instance.PauseEffect(EffectAudioType.PLANE);
 
-        yield return new WaitForSecondsRealtime(4f);
+        yield return new WaitForSecondsRealtime(StaticVars.Ending_TIME);
 
         switch (_endType)
         {
