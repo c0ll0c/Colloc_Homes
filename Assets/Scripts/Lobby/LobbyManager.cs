@@ -8,6 +8,8 @@ public class LobbyManager : MonoBehaviour
 {
     public Transform Content;
     public HandleRoomList RoomList;
+    public GameObject RoomCodeCheckUI;
+
     private List<HandleRoomList> roomCollection = new List<HandleRoomList>();
     private int index;
 

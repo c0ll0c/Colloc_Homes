@@ -16,7 +16,6 @@ public enum LobbyBtnType
 public class LobbyBtnsOnClick : MonoBehaviour
 {
     public LobbyBtnType BtnType;
-    public Button JoinRoom;
     public void OnClickBtn()
     {
         switch (BtnType)
@@ -28,10 +27,9 @@ public class LobbyBtnsOnClick : MonoBehaviour
             case LobbyBtnType.JOIN:
                 if (!PhotonNetwork.InLobby) return;
                 transform.parent.GetComponent<HandleRoomList>().JoinRoom();
-                transform.GetComponent<Button>().interactable = false; 
                 break;
             case LobbyBtnType.CHECK:
-                transform.parent.parent.GetComponent<HandleRoomList>().CheckCode(); break;
+                transform.parent.GetComponent<HandleCodeCheck>().CheckCode(); break;
             case LobbyBtnType.BACK:
                 GameManager.Instance.ChangeScene(GameState.INTRO); break;
             case LobbyBtnType.SAVE_NAME:
@@ -39,7 +37,6 @@ public class LobbyBtnsOnClick : MonoBehaviour
                 transform.parent.gameObject.SetActive(false);
                 break;
             case LobbyBtnType.CLOSE_PANEL:
-                if (JoinRoom != null) JoinRoom.interactable = true;
                 transform.parent.gameObject.SetActive(false);
                 break;
             case LobbyBtnType.ENTER:

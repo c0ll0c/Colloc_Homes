@@ -1,13 +1,13 @@
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HandleRoomList : MonoBehaviour
 {
     public TextMeshProUGUI RoomName;
     public TextMeshProUGUI RoomPlayers;
     public RoomInfo RoomInfo { get; private set; }
-    public TMP_InputField CodeField;
 
     public void SetRoomInfo(RoomInfo _roomInfo)
     {
@@ -24,17 +24,19 @@ public class HandleRoomList : MonoBehaviour
     {
         if ((bool)RoomInfo.CustomProperties[StaticCodes.PHOTON_R_MODE])
         {
-            transform.GetChild(5).gameObject.SetActive(true);
+            NetworkManager.Instance.LobbySceneManager.RoomCodeCheckUI.GetComponent<HandleCodeCheck>().RoomButton = this.gameObject;
+            NetworkManager.Instance.LobbySceneManager.RoomCodeCheckUI.SetActive(true);
         }
         else
         {
             NetworkManager.Instance.JoinRoom(RoomInfo.Name);
+            transform.GetComponent<Button>().interactable = false;
         }
     }
 
-    public void CheckCode()
+    public void CheckCode(string _codefield)
     {
-        if (Equals(string.Compare(RoomInfo.Name, CodeField.text, false), 0))
+        if (Equals(string.Compare(RoomInfo.Name, _codefield, true), 0))
         {
             NetworkManager.Instance.JoinRoom(RoomInfo.Name);
         }
