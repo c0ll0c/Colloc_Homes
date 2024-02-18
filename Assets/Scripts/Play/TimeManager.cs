@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ public class TimeManager : MonoBehaviour
     private double gameLeftTime = 0;
     private double vaccineDropTime;
     private int vaccineNum = 0;
+    private bool notice = false;
 
     private bool gameStart = false;
     public static bool NPCTime = false;
@@ -43,6 +45,11 @@ public class TimeManager : MonoBehaviour
         if (gameLeftTime < StaticVars.NPC_TIME)
             NPCTime = true;
 
+        if(NPCTime && !notice)
+        {
+            StartCoroutine(NpcTime());
+        }
+
         gameLeftTime -= Time.deltaTime;
         timerUI.SetTime(gameLeftTime);
 
@@ -52,6 +59,15 @@ public class TimeManager : MonoBehaviour
             DropVaccine();
             vaccineDropTime += StaticVars.VACCINE_DROP_INTERVAL;
         }
+    }
+
+    IEnumerator NpcTime()
+    {
+        notice = true;
+        UIManager.Instance.NoticeText.text = "지금부터 고발이 가능합니다!";
+        UIManager.Instance.NoticePanelObj.SetActive(true);
+        yield return new WaitForSeconds(2.0f);
+        UIManager.Instance.NoticePanelObj.SetActive(false);
     }
 
     public void SetDropTime(double _dropTime)

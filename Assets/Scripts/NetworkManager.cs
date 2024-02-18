@@ -611,9 +611,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [PunRPC]
     IEnumerator OutRPC()
     {
-        UIManager.Instance.OutPanelObj.SetActive(true);
+        UIManager.Instance.NoticeText.text = "무능력한 홈즈가 실직되었습니다.";
+        UIManager.Instance.NoticePanelObj.SetActive(true);
         yield return new WaitForSeconds(2.0f);
-        UIManager.Instance.OutPanelObj.SetActive(false);
+        UIManager.Instance.NoticePanelObj.SetActive(false);
+    }
+
+    [PunRPC]
+    IEnumerator StartNPC()
+    {
+        UIManager.Instance.NoticeText.text = "누군가가 콜록을 고발 중입니다.";
+        UIManager.Instance.NoticePanelObj.SetActive(true);
+        yield return new WaitForSeconds(2.0f);
+        UIManager.Instance.NoticePanelObj.SetActive(false);
     }
     #endregion
     #region SERVER UTILS
