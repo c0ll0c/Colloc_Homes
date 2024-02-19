@@ -23,6 +23,8 @@ public class ReadyManager : MonoBehaviour
 
     public TMP_Text RoomTitle;
     public TMP_Text RoomCode;
+    public Button RoomCodeCopyBtn;
+    private string roomCodeStr = string.Empty;
 
     public GameObject PlayerSlotsObj;
     private HandlePlayerSlot[] playerSlots = new HandlePlayerSlot[6];
@@ -44,6 +46,11 @@ public class ReadyManager : MonoBehaviour
     {
         NetworkManager.Instance.ReadySceneManager = this;
         NetworkManager.Instance.SyncPlayersData();
+
+        RoomCodeCopyBtn.onClick.AddListener(delegate
+        {
+            ClickCopyBtn();
+        });
     }
 
     private void OnDestroy()
@@ -76,6 +83,7 @@ public class ReadyManager : MonoBehaviour
         // Title, RoomCode UI
         RoomTitle.text = _title;
         RoomCode.text = "방 코드 : " + _code;
+        roomCodeStr = _code;
 
         // PlayerSlots UI
         int index = 0;
@@ -155,5 +163,12 @@ public class ReadyManager : MonoBehaviour
         {
             return playerSlots[_index].PlayerNum;
         }
+    }
+
+    private void ClickCopyBtn()
+    {
+        GUIUtility.systemCopyBuffer = roomCodeStr;
+        StaticFuncs.ShowAndroidToastMessage("방 참여 코드가 복사되었습니다.");
+        // [TODO] iOS toast message
     }
 }
