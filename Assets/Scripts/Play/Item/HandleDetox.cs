@@ -49,23 +49,37 @@ public class HandleDetox : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D _collision)
     {
+        if (_collision.gameObject.name.StartsWith("Homes"))
+        {
+            _collision.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        }
+        else return;
+
         if (!isActive || isUsing) return; 
         if (isUsing) return;
 
-        Debug.Log(_collision.gameObject.name);
-        if (_collision.gameObject.GetComponent<PhotonView>().IsMine)
+        if (
+            _collision.gameObject.TryGetComponent(out PhotonView _pv) &&
+            _pv.IsMine
+            )
         {
             AudioManager.Instance.PlayEffect(EffectAudioType.COOLTIME);
-
+            
             if (_collision.gameObject.CompareTag("Infect")) localNeedsDetox = true;
         }
 
         boothUser = _collision.gameObject.GetInstanceID();
         UseBooth(true);
+
     }
 
     private void OnTriggerExit2D(Collider2D _collision)
     {
+        if (_collision.gameObject.name.StartsWith("Homes"))
+        {
+            _collision.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 2;
+        }
+
         if (Equals(_collision.gameObject.GetInstanceID(), boothUser))
         {
             boothUser = 0;
