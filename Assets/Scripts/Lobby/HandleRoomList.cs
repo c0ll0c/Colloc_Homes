@@ -36,7 +36,10 @@ public class HandleRoomList : MonoBehaviour
         else
         {
             NetworkManager.Instance.JoinRoom(RoomInfo.Name);
-            transform.GetComponentInChildren<Button>().interactable = false;
+            if (RoomInfo.IsOpen)
+            {
+                transform.GetComponentInChildren<Button>().interactable = false;
+            }
         }
     }
 
