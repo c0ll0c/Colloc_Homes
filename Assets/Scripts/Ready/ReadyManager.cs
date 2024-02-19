@@ -21,9 +21,12 @@ public class ReadyManager : MonoBehaviour
 
     public bool FirstRendering = false;
 
-    public TMP_Text RoomTitle;
-    public TMP_Text RoomCode;
-    public Button RoomCodeCopyBtn;
+    public Transform TitleObj;
+    public Transform CodeObj;
+    private TMP_Text titleTxt;
+    private TMP_Text codeTxt;
+    private Button titleBtn;
+    private Button codeBtn;
     private string roomCodeStr = string.Empty;
 
     public GameObject PlayerSlotsObj;
@@ -47,7 +50,16 @@ public class ReadyManager : MonoBehaviour
         NetworkManager.Instance.ReadySceneManager = this;
         NetworkManager.Instance.SyncPlayersData();
 
-        RoomCodeCopyBtn.onClick.AddListener(delegate
+        titleTxt = TitleObj.GetChild(0).GetComponent<TMP_Text>();
+        titleBtn = TitleObj.GetComponent<Button>();
+        titleBtn.onClick.AddListener(delegate
+        {
+            //ShowTitleChange();
+        });
+
+        codeTxt = CodeObj.GetChild(0).GetComponent<TMP_Text>();
+        codeBtn = CodeObj.GetComponent<Button>();
+        codeBtn.onClick.AddListener(delegate
         {
             ClickCopyBtn();
         });
@@ -81,8 +93,8 @@ public class ReadyManager : MonoBehaviour
         bool isMaster = false;
 
         // Title, RoomCode UI
-        RoomTitle.text = _title;
-        RoomCode.text = "방 코드 : " + _code;
+        titleTxt.text = _title;
+        codeTxt.text = "방 코드 : " + _code;
         roomCodeStr = _code;
 
         // PlayerSlots UI
@@ -170,5 +182,10 @@ public class ReadyManager : MonoBehaviour
         GUIUtility.systemCopyBuffer = roomCodeStr;
         StaticFuncs.ShowAndroidToastMessage("방 참여 코드가 복사되었습니다.");
         // [TODO] iOS toast message
+    }
+
+    private void ShowTitleChange()
+    {
+        // [TODO] after making panel prefab
     }
 }
