@@ -140,14 +140,12 @@ public class EndingManager : MonoBehaviour
     void leaveRoom()
     {
         Time.timeScale = 1;
-        PhotonNetwork.LeaveRoom();
+        NetworkManager.Instance.LeaveRoom();
     }
 
     void endGame()
     {
         Time.timeScale = 1;
-        PhotonNetwork.CurrentRoom.IsOpen = true;
-        PhotonNetwork.CurrentRoom.IsVisible = true;
-        GameManager.Instance.ChangeScene(GameState.READY);
+        NetworkManager.Instance.EndGame();
     }
 }

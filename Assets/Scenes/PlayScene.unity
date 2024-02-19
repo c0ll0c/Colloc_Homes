@@ -7280,15 +7280,15 @@ RectTransform:
   m_GameObject: {fileID: 336249221}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.38883045, y: 1.8292738, z: 1.8292738}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 354389603}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 670, y: -65}
-  m_SizeDelta: {x: 184.1801, y: 22.2904}
+  m_AnchoredPosition: {x: 290.86227, y: -23.988403}
+  m_SizeDelta: {x: 860, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &336249223
 MonoBehaviour:
@@ -27082,12 +27082,12 @@ GameObject:
   - component: {fileID: 853743448}
   - component: {fileID: 853743447}
   m_Layer: 5
-  m_Name: Panel_OutBackground
+  m_Name: Panel_NoticeBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &853743446
 RectTransform:
   m_ObjectHideFlags: 0
@@ -37434,7 +37434,8 @@ MonoBehaviour:
   HomesInfo: {fileID: 627433107}
   ClueUI: {fileID: 1226026076}
   StartPanelObj: {fileID: 667460488}
-  OutPanelObj: {fileID: 853743445}
+  NoticePanelObj: {fileID: 853743445}
+  NoticeText: {fileID: 0}
   isColloc: 0
   gameIcon:
   - {fileID: 711644901}
@@ -63861,7 +63862,7 @@ GameObject:
   - component: {fileID: 1982815591}
   - component: {fileID: 1982815590}
   m_Layer: 5
-  m_Name: Text_Out
+  m_Name: Text_Notice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

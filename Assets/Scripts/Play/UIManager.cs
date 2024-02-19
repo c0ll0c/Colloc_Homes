@@ -15,7 +15,8 @@ public class UIManager : MonoBehaviour
     public Canvas ClueUI;
 
     public GameObject StartPanelObj;
-    public GameObject OutPanelObj;
+    public GameObject NoticePanelObj;
+    public Text NoticeText;
 
     private int i = 0;
     public bool isColloc;
@@ -64,8 +65,10 @@ public class UIManager : MonoBehaviour
         {
             CodeInfo.GetChild(i).gameObject.SetActive(false);
         }
+
+        NoticeText = NoticePanelObj.transform.GetChild(0).GetComponent<Text>();
+        NoticePanelObj.SetActive(false);
     }
-    
 
     public void SetGameUI(string _status)
     {
