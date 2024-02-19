@@ -84,7 +84,7 @@ public class GameManager : MonoSingleton<GameManager>
                 return;
             }
             clickedBefore = true;
-            ShowAndroidToastMessage("게임을 종료하려면 뒤로 가기를 한 번 더 눌러주세요");
+            StaticFuncs.ShowAndroidToastMessage("게임을 종료하려면 뒤로 가기를 한 번 더 눌러주세요");
             StartCoroutine(QuitTimer());
         }
     }
@@ -93,22 +93,6 @@ public class GameManager : MonoSingleton<GameManager>
     {
         yield return StaticFuncs.WaitForSeconds(3f);
         clickedBefore = false;
-    }
-
-    private void ShowAndroidToastMessage(string message)
-    {
-        AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        AndroidJavaObject unityActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-
-        if (unityActivity != null)
-        {
-            AndroidJavaClass toastClass = new AndroidJavaClass("android.widget.Toast");
-            unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
-            {
-                AndroidJavaObject toastObject = toastClass.CallStatic<AndroidJavaObject>("makeText", unityActivity, message, 0);
-                toastObject.Call("show");
-            }));
-        }
     }
     #endregion
 }

@@ -8,18 +8,17 @@ public class HandleDetox : MonoBehaviour
     private GameObject lightOnObj;
     private GameObject timer3Obj;
     private GameObject twinkleEffectObj;
-    private DetoxTimerUI detoxTimer;
 
     private bool isActive;
     private bool isUsing;
-    private bool isMe;
+    private bool localNeedsDetox;
     private int boothUser;
 
     private void Awake()
     {
         isActive = true;
         isUsing = false;
-        isMe = false;
+        localNeedsDetox = false;
         boothUser = 0;
 
         lightOffObj = transform.GetChild(0).GetChild(0).gameObject;
@@ -28,18 +27,17 @@ public class HandleDetox : MonoBehaviour
         timer3Obj = transform.GetChild(1).GetChild(0).gameObject;
         twinkleEffectObj = transform.GetChild(1).GetChild(1).gameObject;
 
-        detoxTimer = timer3Obj.GetComponent<DetoxTimerUI>();
-
         ActivateBooth(true);
     }
 
     public void DetoxUsed()
     {
-        if (isMe)
+        if (localNeedsDetox)
         {
             NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().ChangeStatus("Homes");
-            AudioManager.Instance.PlayEffect(EffectAudioType.DETOX);
             AudioManager.Instance.PauseEffect(EffectAudioType.COOLTIME);
+            AudioManager.Instance.PlayEffect(EffectAudioType.DETOX);
+            localNeedsDetox = false;
         }
         else
         {
@@ -49,67 +47,73 @@ public class HandleDetox : MonoBehaviour
         ActivateBooth(false);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D _collision)
     {
+        if (_collision.gameObject.name.StartsWith("Homes"))
+        {
+            _collision.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        }
+        else return;
+
+        if (!isActive || isUsing) return; 
+        if (isUsing) return;
+
         if (
-            collision.gameObject.CompareTag("Player") ||
-            collision.gameObject.CompareTag("Homes") ||
-            collision.gameObject.CompareTag("Colloc")
+            _collision.gameObject.TryGetComponent(out PhotonView _pv) &&
+            _pv.IsMine
             )
         {
-            isMe = false;
+            AudioManager.Instance.PlayEffect(EffectAudioType.COOLTIME);
+            
+            if (_collision.gameObject.CompareTag("Infect")) localNeedsDetox = true;
         }
-        else if (collision.gameObject.CompareTag("Infect")) { isMe = true; }
-        else { return; }
 
-        if (isActive && !isUsing)
-        {
-            boothUser = collision.gameObject.GetInstanceID();
-            if (collision.gameObject.GetComponent<PhotonView>().IsMine)
-            {
-                AudioManager.Instance.PlayEffect(EffectAudioType.COOLTIME);
-            }
+        boothUser = _collision.gameObject.GetInstanceID();
+        UseBooth(true);
 
-            UseBooth(true);
-        }
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnTriggerExit2D(Collider2D _collision)
     {
-        if (Equals(collision.gameObject.GetInstanceID(), boothUser))
+        if (_collision.gameObject.name.StartsWith("Homes"))
+        {
+            _collision.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 2;
+        }
+
+        if (Equals(_collision.gameObject.GetInstanceID(), boothUser))
         {
             boothUser = 0;
-            if (collision.gameObject.GetComponent<PhotonView>().IsMine)
+            if (_collision.gameObject.GetComponent<PhotonView>().IsMine)
             {
                 AudioManager.Instance.PauseEffect(EffectAudioType.COOLTIME);
+                localNeedsDetox = false;
             }
             UseBooth(false);
         }
     }
 
-    private void UseBooth(bool use)
+    private void UseBooth(bool _use)
     {
-        isUsing = use;
-        lightOnObj.SetActive(use);
-        lightOffObj.SetActive(!use);
-        timer3Obj.SetActive(use);
+        isUsing = _use;
+        lightOnObj.SetActive(_use);
+        lightOffObj.SetActive(!_use);
+        timer3Obj.SetActive(_use);
     }
 
-    private void ActivateBooth(bool activate)
+    private void ActivateBooth(bool _activate)
     {
-        isActive = activate;
+        isActive = _activate;
         UseBooth(false);
-        twinkleEffectObj.SetActive(activate);
-        if (!activate)
+        twinkleEffectObj.SetActive(_activate);
+        if (!_activate)
         {
             StartCoroutine(CountDeactivateTime());
         }
     }
 
-    private readonly WaitForSecondsRealtime waitSec = new WaitForSecondsRealtime(StaticVars.DETOX_DEACTIVE_TIME);
     IEnumerator CountDeactivateTime()
     {
-        yield return waitSec;
+        yield return StaticFuncs.WaitForSeconds(StaticVars.DETOX_DEACTIVE_TIME);
         AudioManager.Instance.PlayEffect(EffectAudioType.ACTIVE);
         ActivateBooth(true);
     }

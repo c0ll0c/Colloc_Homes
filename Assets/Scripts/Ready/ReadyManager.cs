@@ -21,8 +21,13 @@ public class ReadyManager : MonoBehaviour
 
     public bool FirstRendering = false;
 
-    public TMP_Text RoomTitle;
-    public TMP_Text RoomCode;
+    public Transform TitleObj;
+    public Transform CodeObj;
+    private TMP_Text titleTxt;
+    private TMP_Text codeTxt;
+    private Button titleBtn;
+    private Button codeBtn;
+    private string roomCodeStr = string.Empty;
 
     public GameObject PlayerSlotsObj;
     private HandlePlayerSlot[] playerSlots = new HandlePlayerSlot[6];
@@ -44,6 +49,20 @@ public class ReadyManager : MonoBehaviour
     {
         NetworkManager.Instance.ReadySceneManager = this;
         NetworkManager.Instance.SyncPlayersData();
+
+        titleTxt = TitleObj.GetChild(0).GetComponent<TMP_Text>();
+        titleBtn = TitleObj.GetComponent<Button>();
+        titleBtn.onClick.AddListener(delegate
+        {
+            //ShowTitleChange();
+        });
+
+        codeTxt = CodeObj.GetChild(0).GetComponent<TMP_Text>();
+        codeBtn = CodeObj.GetComponent<Button>();
+        codeBtn.onClick.AddListener(delegate
+        {
+            ClickCopyBtn();
+        });
     }
 
     private void OnDestroy()
@@ -74,8 +93,9 @@ public class ReadyManager : MonoBehaviour
         bool isMaster = false;
 
         // Title, RoomCode UI
-        RoomTitle.text = _title;
-        RoomCode.text = "방 코드 : " + _code;
+        titleTxt.text = _title;
+        codeTxt.text = "방 코드 : " + _code;
+        roomCodeStr = _code;
 
         // PlayerSlots UI
         int index = 0;
@@ -155,5 +175,17 @@ public class ReadyManager : MonoBehaviour
         {
             return playerSlots[_index].PlayerNum;
         }
+    }
+
+    private void ClickCopyBtn()
+    {
+        GUIUtility.systemCopyBuffer = roomCodeStr;
+        StaticFuncs.ShowAndroidToastMessage("방 참여 코드가 복사되었습니다.");
+        // [TODO] iOS toast message
+    }
+
+    private void ShowTitleChange()
+    {
+        // [TODO] after making panel prefab
     }
 }
