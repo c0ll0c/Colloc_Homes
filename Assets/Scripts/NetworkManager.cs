@@ -380,6 +380,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public void EndGame()
+    {
+        TimeManager.gameStart = false;
+
+        PhotonNetwork.CurrentRoom.IsOpen = true;
+        PhotonNetwork.CurrentRoom.IsVisible = true;
+
+        PhotonNetwork.LoadLevel("ReadyScene");
+
+        GameManager.Instance.ChangeScene(GameState.READY);
+    }
+
     // when player leave room
     public void LeaveRoom()
     {

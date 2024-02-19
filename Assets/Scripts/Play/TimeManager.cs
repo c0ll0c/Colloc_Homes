@@ -16,7 +16,7 @@ public class TimeManager : MonoBehaviour
     private int vaccineNum = 0;
     private bool notice = false;
 
-    private bool gameStart = false;
+    public static bool gameStart = false;
     public static bool NPCTime = false;
     public GameObject EndingCanvasObj;
     private EndingManager endingManager;
