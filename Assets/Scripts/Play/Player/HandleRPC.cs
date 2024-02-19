@@ -16,7 +16,6 @@ public class HandleRPC : MonoBehaviour
     private HomesController homesController;
     private Button infectBtn;
     private Button attackBtn;
-    private GameObject playerTrigger;
 
     private void Awake()
     {
@@ -35,7 +34,6 @@ public class HandleRPC : MonoBehaviour
         VaccineEffect.SetActive(false);
 
         homesController = NetworkManager.Instance.PlaySceneManager.gamePlayer.transform.GetChild(2).GetComponent<HomesController>();
-        playerTrigger = transform.GetChild(1).gameObject;
     }
 
     // sync player direction
@@ -65,14 +63,10 @@ public class HandleRPC : MonoBehaviour
             infectBtn.gameObject.SetActive(false);
             NetworkManager.Instance.PlaySceneManager.gamePlayer.tag = "Homes";
             UIManager.Instance.SetGameUI("Homes");
-            playerTrigger.GetComponent<CircleCollider2D>().radius = 2;
-            playerTrigger.transform.GetChild(0).localScale = new Vector3(2, 2, 2);
             StaticFuncs.StopEffect(NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect);
         }
         else
         {
-            playerTrigger.GetComponent<CircleCollider2D>().radius = 1.3f;
-            playerTrigger.transform.GetChild(0).localScale = new Vector3(1.3f, 1.3f, 1.3f);
             StartCoroutine(DelayInfect());
         }
     }
@@ -103,6 +97,8 @@ public class HandleRPC : MonoBehaviour
     public void Attack()
     {
         homesController.SetSpeed(0);
+        attackBtn.interactable = false;
+        infectBtn.interactable = false;
         AudioManager.Instance.PlayEffect(EffectAudioType.ATTACKED);
         StartCoroutine(StaticFuncs.SetEffect(NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().AttackEffect));
         StartCoroutine(ResetSpeed());
@@ -111,6 +107,8 @@ public class HandleRPC : MonoBehaviour
     private IEnumerator ResetSpeed()
     {
         yield return StaticFuncs.WaitForSeconds(StaticVars.DELAY_TIME);
+        attackBtn.interactable = true;
+        infectBtn.interactable = true;
         homesController.SetSpeed(StaticVars.HOMES_SPEED);
     }
 }
