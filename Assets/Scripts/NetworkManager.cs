@@ -10,10 +10,6 @@ using System.Linq;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField]
-    private byte maxPlayersPerRoom = StaticVars.MAX_PLAYERS_PER_ROOM;
-    private byte minPlayerPerRoom = StaticVars.MIN_PLAYERS_PER_ROOM;
-
     public PhotonView PV;
 
     static public int _currentPlayer;
@@ -62,7 +58,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        // Debug.LogErrorFormat("Disconnected from server cause of {0}", cause);   
+        // 갑자기 인트로로 튕기는 유저 이상 파악 위함
+        AlertManager.Instance.ShowAlert("서버 이상 감지", string.Format("Disconnected from server cause of {0}", cause));
         GameManager.Instance.ChangeScene(GameState.INTRO);
     }
 
@@ -111,7 +108,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         roomCustomProps.Add(StaticCodes.PHOTON_R_RNAME, _roomName);
         roomCustomProps.Add(StaticCodes.PHOTON_R_MODE, _isPrivate);
         roomCustomProps.Add(StaticCodes.PHOTON_R_STATE, "waiting");
-        roomCustomProps.Add(StaticCodes.PHOTON_R_SLOTS, 0b111111);
+        roomCustomProps.Add(StaticCodes.PHOTON_R_SLOTS, StaticVars.PLAYER_SLOTS);
 
         string[] customPropsForLobby = { StaticCodes.PHOTON_R_RNAME, StaticCodes.PHOTON_R_MODE, StaticCodes.PHOTON_R_STATE };
 
@@ -119,7 +116,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             IsOpen = true,
             IsVisible = true,
-            MaxPlayers = maxPlayersPerRoom,
+            MaxPlayers = StaticVars.MAX_PLAYERS_PER_ROOM,
             CustomRoomProperties = roomCustomProps,
             CustomRoomPropertiesForLobby = customPropsForLobby,
         };
@@ -331,9 +328,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.MasterClient.CustomProperties.TryGetValue(StaticCodes.PHOTON_P_COLOR, out object masterColor);
 
-        if (PhotonNetwork.CurrentRoom.PlayerCount < minPlayerPerRoom)
+        if (PhotonNetwork.CurrentRoom.PlayerCount < StaticVars.MIN_PLAYERS_PER_ROOM)
         {
-            AlertManager.Instance.ShowAlert("시작 불가", "4명 이상의 플레이어가 필요합니다.");
+            AlertManager.Instance.ShowAlert("시작 불가", "5명 이상의 플레이어가 필요합니다.");
             return;
         }
 
@@ -608,7 +605,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     IEnumerator OutRPC()
     {
         UIManager.Instance.OutPanelObj.SetActive(true);
-        yield return new WaitForSeconds(2.0f);
+        yield return StaticFuncs.WaitForSeconds(2f);
         UIManager.Instance.OutPanelObj.SetActive(false);
     }
     #endregion

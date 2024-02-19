@@ -5,16 +5,16 @@ public static class StaticVars
     // network variables
     public static string PREFS_NICKNAE = "nickname";
     public static byte MAX_PLAYERS_PER_ROOM = 6;
-    public static byte MIN_PLAYERS_PER_ROOM = 4;
-    public static int PLAYER_SLOTS = 0b111111; // 6���� players
-    public static int PLAYER_COLORS = 0b11111111; // 8����
+    public static byte MIN_PLAYERS_PER_ROOM = 2;
+    public static int PLAYER_SLOTS = 0b111111; // 6 max players
+    public static int PLAYER_COLORS = 0b111111111; // 9 colors
 
     // time variables
     public static double GAME_TIME = 300.0f; // 5m
     public static int START_PANEL_TIME = 3; // 3s
     public static double VACCINE_DROP_INTERVAL = 60.0f; // 1m
     public static float DETOX_USE_TIME = 3.0f; // 3s
-    public static float DETOX_DEACTIVE_TIME = 15.0f; // 15s
+    public static float DETOX_DEACTIVE_TIME = 30.0f; // 30s
     public static float ATTACK_TIME = 15.0f; // 15s
     public static float DELAY_TIME = 3.0f; // 3s
     public static readonly float ENUM_TIME = 0.25f; // 0.25s
