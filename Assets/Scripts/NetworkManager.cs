@@ -333,7 +333,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.CurrentRoom.PlayerCount < minPlayerPerRoom)
         {
-            AlertManager.Instance.ShowAlert("시작 불가", "4명 이상의 플레이어가 필요합니다.");
+            AlertManager.Instance.ShowAlert("시작 불가", "5명 이상의 플레이어가 필요합니다.");
             return;
         }
 
