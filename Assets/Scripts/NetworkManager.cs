@@ -365,6 +365,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         PhotonNetwork.LoadLevel("PlayScene");
+        GameManager.Instance.ChangeGameState(GameState.PLAY);
 
         PhotonNetwork.CurrentRoom.IsOpen = false;
         PhotonNetwork.CurrentRoom.IsVisible = false;
@@ -383,8 +384,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CurrentRoom.IsVisible = true;
 
         PhotonNetwork.LoadLevel("ReadyScene");
-
-        GameManager.Instance.ChangeScene(GameState.READY);
+        GameManager.Instance.ChangeGameState(GameState.READY);
     }
 
     // when player leave room

@@ -52,7 +52,6 @@ public class EndingUI : MonoBehaviour
 
         for (int i = 0; i < NetworkManager._currentPlayer; i++)
         {
-            Debug.Log(UIManager.Instance.HomesInfo.GetChild(i).GetChild(2).GetChild(0).GetComponent<Text>().text);
             if (UIManager.Instance.HomesInfo.GetChild(i).GetChild(2).GetChild(0).GetComponent<Text>().text.Equals(HomesName))
             {
                 HomesImage.sprite = UIManager.Instance.HomesInfo.GetChild(i).GetChild(1).GetChild(0).GetComponent<Image>().sprite;
@@ -61,7 +60,6 @@ public class EndingUI : MonoBehaviour
 
         if (TimeManager.NPCTime)
         {
-            Debug.Log(NetworkManager.Instance.GetServerTime());
             dialogText.GetComponent<Text>().text = dialogBody[0];
             FirstSelect.SetActive(false);
             SecondSelect.SetActive(false);
@@ -179,7 +177,6 @@ public class EndingUI : MonoBehaviour
     public void OnClickUserButton()     // 고발함
     {
         GameObject clickedButton = EventSystem.current.currentSelectedGameObject;
-        Debug.Log("클릭된 버튼: " + clickedButton.name);
 
         dialogText.GetComponent<Text>().text = dialogBody[3];
         SecondSelect.SetActive(false);

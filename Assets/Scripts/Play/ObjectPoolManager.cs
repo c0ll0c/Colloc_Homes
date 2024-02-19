@@ -34,7 +34,6 @@ public class ObjectPoolManager : MonoBehaviour
     // pool �⺻ ����
     private void Init()
     {
-        Debug.Log("INIT");
         for (int i = 0; i < objectInfos.Length; i++)
         {
             IObjectPool<GameObject> pool = new ObjectPool<GameObject>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool,

@@ -28,6 +28,14 @@ public class GameManager : MonoSingleton<GameManager>
         StartCoroutine(LoadAsyncScene());
     }
 
+    public void ChangeGameState(GameState _state)
+    {
+        if (gameState == _state) return;
+
+        gameState = _state;
+        AudioManager.Instance.ChangeBGM(_state);
+    }
+
     private IEnumerator LoadAsyncScene()
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync((int)gameState);
