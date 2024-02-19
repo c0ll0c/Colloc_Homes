@@ -701,7 +701,7 @@ PrefabInstance:
     - target: {fileID: 8257770008860391427, guid: cc5364c039b57ba44a2fbe0baba6a512,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -160
+      value: -100
       objectReference: {fileID: 0}
     - target: {fileID: 8257770008860391427, guid: cc5364c039b57ba44a2fbe0baba6a512,
         type: 3}
@@ -789,7 +789,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ef4420523a1d48b409982ad26cc13349, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4445859bd65a65842a3ebc28a6a72179, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1006,7 +1006,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f82e76cfb32b0b94fa6bce2f66c72258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxPlayersPerRoom: 6
   PV: {fileID: 312669034}
   LobbySceneManager: {fileID: 0}
   ReadySceneManager: {fileID: 0}
