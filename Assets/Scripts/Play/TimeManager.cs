@@ -74,6 +74,11 @@ public class TimeManager : MonoBehaviour
         vaccineNum++;
     }
 
+    public void InfectCooltime()
+    {
+        StartCoroutine(InfectCooltimeBar());
+    }
+
     public void AttackCooltime()
     {
         StartCoroutine(AttackCooltimeBar());
@@ -89,10 +94,22 @@ public class TimeManager : MonoBehaviour
         {
             yield return StaticFuncs.WaitForSeconds(incrementTime);
             prog += incrementProg;
-            InfectCoolTimeUI.SetCoolTimeBar(prog);
             AttackCoolTimeUI.SetCoolTimeBar(prog);
         }
 
         NetworkManager.Instance.PlaySceneManager.ActivateAttack();
+    }
+
+    private IEnumerator InfectCooltimeBar()
+    {
+        float prog = 0;
+        while (prog < 1)
+        {
+            yield return StaticFuncs.WaitForSeconds(incrementTime);
+            prog += incrementProg;
+            InfectCoolTimeUI.SetCoolTimeBar(prog);
+        }
+
+        NetworkManager.Instance.PlaySceneManager.ActivateInfect();
     }
 }

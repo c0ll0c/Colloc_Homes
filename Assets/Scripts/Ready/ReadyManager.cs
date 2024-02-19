@@ -114,7 +114,6 @@ public class ReadyManager : MonoBehaviour
 
     private void SetMasterUI()
     {
-        Debug.Log("im the master");
         for(int index=0; index<StaticVars.MAX_PLAYERS_PER_ROOM; index++)
         {
             // 자신의 슬롯은 toggle 키지 않기
