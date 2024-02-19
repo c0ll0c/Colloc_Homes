@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 
@@ -13,8 +14,9 @@ public class TimeManager : MonoBehaviour
     private double gameLeftTime = 0;
     private double vaccineDropTime;
     private int vaccineNum = 0;
+    private bool notice = false;
 
-    private bool gameStart = false;
+    public static bool gameStart = false;
     public static bool NPCTime = false;
     public GameObject EndingCanvasObj;
     private EndingManager endingManager;
@@ -43,6 +45,11 @@ public class TimeManager : MonoBehaviour
         if (gameLeftTime < StaticVars.NPC_TIME)
             NPCTime = true;
 
+        if(NPCTime && !notice)
+        {
+            StartCoroutine(NpcTime());
+        }
+
         gameLeftTime -= Time.deltaTime;
         timerUI.SetTime(gameLeftTime);
 
@@ -52,6 +59,15 @@ public class TimeManager : MonoBehaviour
             DropVaccine();
             vaccineDropTime += StaticVars.VACCINE_DROP_INTERVAL;
         }
+    }
+
+    IEnumerator NpcTime()
+    {
+        notice = true;
+        UIManager.Instance.NoticeText.text = "지금부터 고발이 가능합니다!";
+        UIManager.Instance.NoticePanelObj.SetActive(true);
+        yield return new WaitForSeconds(2.0f);
+        UIManager.Instance.NoticePanelObj.SetActive(false);
     }
 
     public void SetDropTime(double _dropTime)
@@ -74,6 +90,11 @@ public class TimeManager : MonoBehaviour
         vaccineNum++;
     }
 
+    public void InfectCooltime()
+    {
+        StartCoroutine(InfectCooltimeBar());
+    }
+
     public void AttackCooltime()
     {
         StartCoroutine(AttackCooltimeBar());
@@ -89,10 +110,22 @@ public class TimeManager : MonoBehaviour
         {
             yield return StaticFuncs.WaitForSeconds(incrementTime);
             prog += incrementProg;
-            InfectCoolTimeUI.SetCoolTimeBar(prog);
             AttackCoolTimeUI.SetCoolTimeBar(prog);
         }
 
         NetworkManager.Instance.PlaySceneManager.ActivateAttack();
+    }
+
+    private IEnumerator InfectCooltimeBar()
+    {
+        float prog = 0;
+        while (prog < 1)
+        {
+            yield return StaticFuncs.WaitForSeconds(incrementTime);
+            prog += incrementProg;
+            InfectCoolTimeUI.SetCoolTimeBar(prog);
+        }
+
+        NetworkManager.Instance.PlaySceneManager.ActivateInfect();
     }
 }

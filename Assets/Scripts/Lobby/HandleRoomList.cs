@@ -8,6 +8,12 @@ public class HandleRoomList : MonoBehaviour
     public TextMeshProUGUI RoomName;
     public TextMeshProUGUI RoomPlayers;
     public RoomInfo RoomInfo { get; private set; }
+    private HandleCodeCheck roomCodeCheckUI;
+
+    private void Start()
+    {
+        roomCodeCheckUI = NetworkManager.Instance.LobbySceneManager.RoomCodeCheckUI.GetComponent<HandleCodeCheck>();
+    }
 
     public void SetRoomInfo(RoomInfo _roomInfo)
     {
@@ -24,13 +30,13 @@ public class HandleRoomList : MonoBehaviour
     {
         if ((bool)RoomInfo.CustomProperties[StaticCodes.PHOTON_R_MODE])
         {
-            NetworkManager.Instance.LobbySceneManager.RoomCodeCheckUI.GetComponent<HandleCodeCheck>().RoomButton = this.gameObject;
-            NetworkManager.Instance.LobbySceneManager.RoomCodeCheckUI.SetActive(true);
+            roomCodeCheckUI.RoomButton = this.gameObject;
+            roomCodeCheckUI.gameObject.SetActive(true);
         }
         else
         {
             NetworkManager.Instance.JoinRoom(RoomInfo.Name);
-            transform.GetComponent<Button>().interactable = false;
+            transform.GetComponentInChildren<Button>().interactable = false;
         }
     }
 
@@ -43,6 +49,13 @@ public class HandleRoomList : MonoBehaviour
         else
         {
             AlertManager.Instance.WarnAlert("코드를 다시 확인해주세요");
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (Equals(roomCodeCheckUI.RoomButton, this.gameObject)) {
+            roomCodeCheckUI.gameObject.SetActive(false);
         }
     }
 }

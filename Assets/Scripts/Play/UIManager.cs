@@ -13,10 +13,10 @@ public class UIManager : MonoBehaviour
     public Transform CodeInfo;
     public Transform HomesInfo;
     public Canvas ClueUI;
-    public GameObject CoolTimeText;
 
     public GameObject StartPanelObj;
-    public GameObject OutPanelObj;
+    public GameObject NoticePanelObj;
+    public Text NoticeText;
 
     private int i = 0;
     public bool isColloc;
@@ -55,7 +55,6 @@ public class UIManager : MonoBehaviour
         }
 
         ClueUI.gameObject.SetActive(false);
-        CoolTimeText.SetActive(false);
 
         for (int i = 0; i < gameIcon.Length - 1; i++)
         {
@@ -66,8 +65,10 @@ public class UIManager : MonoBehaviour
         {
             CodeInfo.GetChild(i).gameObject.SetActive(false);
         }
+
+        NoticeText = NoticePanelObj.transform.GetChild(0).GetComponent<Text>();
+        NoticePanelObj.SetActive(false);
     }
-    
 
     public void SetGameUI(string _status)
     {

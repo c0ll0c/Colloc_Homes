@@ -37,9 +37,9 @@ public class ObjectPoolManager : MonoBehaviour
         Debug.Log("INIT");
         for (int i = 0; i < objectInfos.Length; i++)
         {
-            IObjectPool<GameObject> pool = new ObjectPool<GameObject>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, 
+            IObjectPool<GameObject> pool = new ObjectPool<GameObject>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool,
                 OnDestroyPoolObject, true, defaultCapacity, maxPoolSize);
-            
+
             objectDic.Add(objectInfos[i].name, objectInfos[i].prefab);
             poolDic.Add(objectInfos[i].name, pool);
 

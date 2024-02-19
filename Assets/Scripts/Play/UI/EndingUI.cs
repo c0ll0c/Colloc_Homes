@@ -95,6 +95,8 @@ public class EndingUI : MonoBehaviour
         }
         else if (dialogText.GetComponent<Text>().text.Equals(dialogBody[2]))
         {
+            NetworkManager.Instance.PV.RPC("StartNPC", RpcTarget.Others);
+
             SecondSelect.SetActive(true);
             for (int i = 0; i < 6; i++)
                 UIManager.Instance.HomesInfo.GetChild(i).gameObject.SetActive(false);

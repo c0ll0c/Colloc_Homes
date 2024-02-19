@@ -30,7 +30,7 @@ public class AttackBtnOnClick : MonoBehaviour
     {
         if (colliderList.Count < 1) return;
 
-        if (!NetworkManager.Instance.PlaySceneManager.TryAttack()) return;
+        if (!NetworkManager.Instance.PlaySceneManager.TryInfect()) return;
 
         StartCoroutine(StaticFuncs.SetEffect(colliderList[0].collider.GetComponent<HandleRPC>().InfectEffect));
         targetPlayer = colliderList[0].collider.GetComponent<PhotonView>().Owner;

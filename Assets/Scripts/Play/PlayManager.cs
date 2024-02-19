@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -18,6 +19,7 @@ public class PlayManager : MonoBehaviour
     public GameObject[] ClueInstances = new GameObject[16];
 
     private PhotonView PlayerPV;
+    private GameObject vaccineEffect;
 
     public Vector3[] RandomDropPos;
     public bool isVaccinated = false;
@@ -79,6 +81,7 @@ public class PlayManager : MonoBehaviour
     }
 
     private bool canAttack = true;
+    private bool canInfect = true;
     public bool TryAttack()
     {
         if (!canAttack) return false;
@@ -88,7 +91,17 @@ public class PlayManager : MonoBehaviour
         return true;
     }
 
+    public bool TryInfect()
+    {
+        if (!canInfect) return false;
+        // attack success -> attack cooltime activate
+        canInfect = false;
+        timeManager.InfectCooltime();
+        return true;
+    }
+
     public void ActivateAttack() { canAttack = true; }
+    public void ActivateInfect() { canInfect = true; }
 
     public void SpawnHomes(bool _isColloc, Vector2 _spawnPos, string _color)
     {
@@ -96,10 +109,8 @@ public class PlayManager : MonoBehaviour
         if (_isColloc)
         {
             gamePlayer.tag = "Colloc";
-            AttackBtn.gameObject.SetActive(false);
+            AttackBtn.GetComponent<RectTransform>().anchoredPosition = new Vector3(-120, 280, 0);
             UIManager.Instance.SetGameUI("Colloc");
-            gamePlayer.transform.GetChild(1).GetComponent<CircleCollider2D>().radius = 1.3f;
-            gamePlayer.transform.GetChild(1).GetChild(0).localScale = new Vector3(1.3f, 1.3f, 1.3f);
         }
         else
         {
@@ -108,7 +119,7 @@ public class PlayManager : MonoBehaviour
             UIManager.Instance.SetGameUI("Homes");
         }
         PlayerPV = gamePlayer.GetComponent<PhotonView>();
-
+        vaccineEffect = gamePlayer.GetComponent<HandleRPC>().VaccineEffect;
         AttackBtn.GetComponent<AttackBtnOnClick>().PV = gamePlayer.GetComponent<PhotonView>();
         InfectBtn.GetComponent<AttackBtnOnClick>().PV = gamePlayer.GetComponent<PhotonView>();
 
@@ -176,5 +187,23 @@ public class PlayManager : MonoBehaviour
         index++;
 
         CheckReady(GameSettings.READY_USERCLUE);
+    }
+
+    public void StartVaccine()
+    {
+        isVaccinated = true;
+        vaccineEffect.SetActive(true);
+        vaccineEffect.GetComponent<SpriteRenderer>().sortingLayerID = gamePlayer.GetComponent<SpriteRenderer>().sortingLayerID;
+        AudioManager.Instance.PlayEffect(EffectAudioType.VACCINE);
+        StartCoroutine(EndVaccine());
+    }
+
+    private readonly WaitForSecondsRealtime waitSec = new WaitForSecondsRealtime(StaticVars.VACCINE_TIME);
+    IEnumerator EndVaccine()
+    {
+        yield return waitSec;
+        isVaccinated = false;
+        vaccineEffect.SetActive(false);
+        AudioManager.Instance.PlayEffect(EffectAudioType.VACCINE);
     }
 }

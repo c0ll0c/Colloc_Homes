@@ -375,6 +375,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public void EndGame()
+    {
+        TimeManager.gameStart = false;
+
+        PhotonNetwork.CurrentRoom.IsOpen = true;
+        PhotonNetwork.CurrentRoom.IsVisible = true;
+
+        PhotonNetwork.LoadLevel("ReadyScene");
+
+        GameManager.Instance.ChangeScene(GameState.READY);
+    }
+
     // when player leave room
     public void LeaveRoom()
     {
@@ -604,9 +616,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [PunRPC]
     IEnumerator OutRPC()
     {
-        UIManager.Instance.OutPanelObj.SetActive(true);
+        UIManager.Instance.NoticeText.text = "무능력한 홈즈가 실직되었습니다.";
+        UIManager.Instance.NoticePanelObj.SetActive(true);
         yield return StaticFuncs.WaitForSeconds(2f);
-        UIManager.Instance.OutPanelObj.SetActive(false);
+        UIManager.Instance.NoticePanelObj.SetActive(false);
+    }
+
+    [PunRPC]
+    IEnumerator StartNPC()
+    {
+        UIManager.Instance.NoticeText.text = "누군가가 콜록을 고발 중입니다.";
+        UIManager.Instance.NoticePanelObj.SetActive(true);
+        yield return StaticFuncs.WaitForSeconds(2f);
+        UIManager.Instance.NoticePanelObj.SetActive(false);
     }
     #endregion
     #region SERVER UTILS

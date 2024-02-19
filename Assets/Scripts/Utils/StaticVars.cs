@@ -18,9 +18,10 @@ public static class StaticVars
     public static float ATTACK_TIME = 15.0f; // 15s
     public static float DELAY_TIME = 3.0f; // 3s
     public static readonly float ENUM_TIME = 0.25f; // 0.25s
-    public static float NPC_TIME = 180.0f;  // 3m
+    public static float NPC_TIME = 120.0f;  // 2m
     public static float Hidden_TIME = 25.0f;
     public static float Ending_TIME = 6.0f;
+    public static float VACCINE_TIME = 50.0f; // 50s
 
     // item variables
     public static float PLANE_SPEED = 5.0f; 

@@ -17,11 +17,7 @@ public class HandleVaccine : PoolAble
 
         if (collision.collider.GetComponent<PhotonView>().IsMine && collision.collider.gameObject.CompareTag("Homes"))
         {
-            NetworkManager.Instance.PlaySceneManager.isVaccinated = true;
-            effect = NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().VaccineEffect;
-            effect.SetActive(true);
-            effect.GetComponent<SpriteRenderer>().sortingLayerID = effect.transform.parent.GetComponentInParent<SpriteRenderer>().sortingLayerID;
-            AudioManager.Instance.PlayEffect(EffectAudioType.VACCINE);
+            NetworkManager.Instance.PlaySceneManager.StartVaccine();
         }
         else
         {
