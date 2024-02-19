@@ -21,12 +21,10 @@ public class ReadyManager : MonoBehaviour
 
     public bool FirstRendering = false;
 
-    public Transform TitleObj;
-    public Transform CodeObj;
-    private TMP_Text titleTxt;
-    private TMP_Text codeTxt;
-    private Button titleBtn;
-    private Button codeBtn;
+    public TMP_Text TitleTxt;
+    public TMP_Text CodeTxt;
+    public Button TitleBtn;
+    public Button CodeBtn;
     private string roomCodeStr = string.Empty;
 
     public GameObject PlayerSlotsObj;
@@ -50,16 +48,12 @@ public class ReadyManager : MonoBehaviour
         NetworkManager.Instance.ReadySceneManager = this;
         NetworkManager.Instance.SyncPlayersData();
 
-        titleTxt = TitleObj.GetChild(0).GetComponent<TMP_Text>();
-        titleBtn = TitleObj.GetComponent<Button>();
-        titleBtn.onClick.AddListener(delegate
+        TitleBtn.onClick.AddListener(delegate
         {
             //ShowTitleChange();
         });
 
-        codeTxt = CodeObj.GetChild(0).GetComponent<TMP_Text>();
-        codeBtn = CodeObj.GetComponent<Button>();
-        codeBtn.onClick.AddListener(delegate
+        CodeBtn.onClick.AddListener(delegate
         {
             ClickCopyBtn();
         });
@@ -93,8 +87,8 @@ public class ReadyManager : MonoBehaviour
         bool isMaster = false;
 
         // Title, RoomCode UI
-        titleTxt.text = _title;
-        codeTxt.text = "规 内靛 : " + _code;
+        TitleTxt.text = _title;
+        CodeTxt.text = "规 内靛 : " + _code;
         roomCodeStr = _code;
 
         // PlayerSlots UI
