@@ -11,7 +11,7 @@ public class TimeManager : MonoBehaviour
     private CoolTimeUI InfectCoolTimeUI;
     private CoolTimeUI AttackCoolTimeUI;
 
-    private double gameLeftTime = 0;
+    private double gameLeftTime = StaticVars.GAME_TIME;
     private double vaccineDropTime;
     private int vaccineNum = 0;
     private bool notice = false;
@@ -33,6 +33,8 @@ public class TimeManager : MonoBehaviour
 
     private void Update()
     {
+        if (!gameStart) return;
+
         if (gameLeftTime <= 0)
         {
             if (!EndingCanvasObj.activeSelf && gameStart)
