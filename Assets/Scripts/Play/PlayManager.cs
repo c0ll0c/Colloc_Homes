@@ -12,15 +12,11 @@ public class PlayManager : MonoBehaviour
     public Button AttackBtn;
     public Button InfectBtn;
     public GameObject ObjectManager;
-    public GameObject gamePlayer;
     public Tilemap[] LayerGrass;
     public Tilemap[] LayerWall;
     public GameObject CluePrefab;
     public GameObject[] ClueInstances = new GameObject[16];
     public InfectProgressUI InfectProgressUI;
-
-    private GameObject vaccineEffect;
-
     public Vector3[] RandomDropPos;
     public bool isVaccinated = false;
     public List<HandleCollider> ColliderList = new List<HandleCollider>();
@@ -36,7 +32,13 @@ public class PlayManager : MonoBehaviour
     private int fakeIndex = 0;
 
     private TimeManager timeManager;
-    
+
+    // player info
+    private GameObject localPlayer;
+    public HandleRPC LocalRPC;
+    public PhotonView LocalPV;
+    public string LocalColor;
+
     // GameSetting
     public enum GameSettings
     {
@@ -105,22 +107,24 @@ public class PlayManager : MonoBehaviour
 
     public void SpawnHomes(bool _isColloc, Vector2 _spawnPos, string _color)
     {
-        gamePlayer = PhotonNetwork.Instantiate("Homes_" + _color, _spawnPos, Quaternion.identity);
+        localPlayer = PhotonNetwork.Instantiate("Homes_" + _color, _spawnPos, Quaternion.identity);
+        LocalColor = _color;
         if (_isColloc)
         {
-            gamePlayer.tag = "Colloc";
+            localPlayer.tag = StaticVars.TAG_COLLOC;
             AttackBtn.GetComponent<RectTransform>().anchoredPosition = new Vector3(-120, 280, 0);
-            UIManager.Instance.SetGameUI("Colloc");
+            UIManager.Instance.SetGameUI(StaticVars.TAG_COLLOC);
         }
         else
         {
-            gamePlayer.tag = "Homes";
+            localPlayer.tag = StaticVars.TAG_HOLMES;
             InfectBtn.gameObject.SetActive(false);
-            UIManager.Instance.SetGameUI("Homes");
+            UIManager.Instance.SetGameUI(StaticVars.TAG_HOLMES);
         }
-        vaccineEffect = gamePlayer.GetComponent<HandleRPC>().VaccineEffect;
-        AttackBtn.GetComponent<AttackBtnOnClick>().PV = gamePlayer.GetComponent<PhotonView>();
-        InfectBtn.GetComponent<AttackBtnOnClick>().PV = gamePlayer.GetComponent<PhotonView>();
+        LocalPV = localPlayer.GetComponent<PhotonView>();
+        LocalRPC = localPlayer.GetComponent<HandleRPC>();
+        AttackBtn.GetComponent<AttackBtnOnClick>().PV = LocalPV;
+        InfectBtn.GetComponent<AttackBtnOnClick>().PV = LocalPV;
 
         UIManager.Instance.LoadStartPanel(_isColloc);
         CheckReady(GameSettings.READY_PLAYER);
@@ -191,8 +195,8 @@ public class PlayManager : MonoBehaviour
     public void StartVaccine()
     {
         isVaccinated = true;
-        vaccineEffect.SetActive(true);
-        vaccineEffect.GetComponent<SpriteRenderer>().sortingLayerID = gamePlayer.GetComponent<SpriteRenderer>().sortingLayerID;
+        LocalRPC.VaccineEffect.SetActive(true);
+        LocalRPC.VaccineEffect.GetComponent<SpriteRenderer>().sortingLayerID = localPlayer.GetComponent<SpriteRenderer>().sortingLayerID;
         AudioManager.Instance.PlayEffect(EffectAudioType.VACCINE);
         StartCoroutine(EndVaccine());
     }
@@ -202,7 +206,22 @@ public class PlayManager : MonoBehaviour
     {
         yield return waitSec;
         isVaccinated = false;
-        vaccineEffect.SetActive(false);
+        LocalRPC.VaccineEffect.SetActive(false);
         AudioManager.Instance.PlayEffect(EffectAudioType.VACCINE);
     }
+
+    #region Manage Local Player
+    public void ChangePlayerTag(string _tag)
+    {
+        localPlayer.tag = _tag;
+    }
+    public HomesController GetLocalController()
+    {
+        return localPlayer.transform.GetChild(2).GetComponent<HomesController>();
+    }
+    public bool CompareLocalTag(string _tag)
+    {
+        return localPlayer.CompareTag(_tag);
+    }
+    #endregion
 }

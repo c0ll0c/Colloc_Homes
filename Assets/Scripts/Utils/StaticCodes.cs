@@ -11,6 +11,7 @@ public static class StaticCodes
     public static string PHOTON_R_SLOTS = "r_slt";
     public static string PHOTON_R_CCODE = "r_ccd";
     public static string PHOTON_R_CNAME = "r_cnm";
+    public static string PHOTON_R_CCOLR = "r_clr";
     public static string PHOTON_R_RNAME = "r_nnm";
     public static string PHOTON_R_MODE = "r_mod";
     public static string PHOTON_R_STATE = "r_ste";
