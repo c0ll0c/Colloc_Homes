@@ -17,9 +17,6 @@ public class PlayManager : MonoBehaviour
     public GameObject CluePrefab;
     public GameObject[] ClueInstances = new GameObject[16];
     public InfectProgressUI InfectProgressUI;
-
-    private GameObject vaccineEffect;
-
     public Vector3[] RandomDropPos;
     public bool isVaccinated = false;
     public List<HandleCollider> ColliderList = new List<HandleCollider>();
@@ -126,7 +123,6 @@ public class PlayManager : MonoBehaviour
         }
         LocalPV = localPlayer.GetComponent<PhotonView>();
         LocalRPC = localPlayer.GetComponent<HandleRPC>();
-        vaccineEffect = gamePlayer.GetComponent<HandleRPC>().VaccineEffect;
         AttackBtn.GetComponent<AttackBtnOnClick>().PV = LocalPV;
         InfectBtn.GetComponent<AttackBtnOnClick>().PV = LocalPV;
 

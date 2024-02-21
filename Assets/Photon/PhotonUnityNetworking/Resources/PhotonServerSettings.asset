@@ -64,7 +64,6 @@ MonoBehaviour:
   - SyncPlayerSlots
   - NpcTimeRPC
   - StartNPC
-  - SetWinnerHolmes
   - UpdateInfectProgress
   DisableAutoOpenWizard: 1
   ShowSettings: 0
