@@ -70,6 +70,7 @@ public class HandleClue : MonoBehaviour
                 UIManager.Instance.ChangeCodeClueUIText(collocCode[clue.TypeIndex]);
             }
 
+            NetworkManager.Instance.PV.RPC("SyncHiddenCode", RpcTarget.Others, clue.Index);
             StartCoroutine(IsGotTrue());
         }
 
@@ -79,7 +80,7 @@ public class HandleClue : MonoBehaviour
         }
         else if (clue.IsHidden)
         {
-            UIManager.Instance.ChangeClueStatusUIText("숨겨진 단서!");
+            UIManager.Instance.ChangeClueStatusUIText(StaticFuncs.RandomIndex(StaticVars.hideClueMessage));
         }
     }
 
