@@ -29,7 +29,7 @@ public class EndingManager : MonoBehaviour
 
     public void Awake()
     {
-        NetworkManager.Instance.EndingManager = GetComponent<EndingManager>();
+        NetworkManager.Instance.EndingManager = this;
         winLoseImg = transform.GetChild(1).GetComponent<Image>();
         resultImg = transform.GetChild(2).GetComponent<Image>();
         resultTxt = transform.GetChild(3).GetComponent<TMP_Text>();
@@ -39,6 +39,11 @@ public class EndingManager : MonoBehaviour
     public void OnDisable()
     {
         Time.timeScale = 1;
+    }
+
+    private void OnDestroy()
+    {
+        NetworkManager.Instance.EndingManager = null;
     }
 
     public void ShowResult(EndingType _endType, bool _invoker, string _winnerHolmes)
@@ -138,10 +143,10 @@ public class EndingManager : MonoBehaviour
         gameObject.SetActive(true);
 
         // 2ÃÊ µÚ¿¡ end
-        StartCoroutine(goTo(_endType));
+        StartCoroutine(GoTo(_endType));
     }
 
-    public IEnumerator goTo(EndingType _endType)
+    public IEnumerator GoTo(EndingType _endType)
     {
         AudioManager.Instance.PauseEffect(EffectAudioType.COOLTIME);
         AudioManager.Instance.PauseEffect(EffectAudioType.PLANE);

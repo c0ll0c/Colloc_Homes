@@ -1,7 +1,6 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CollocWinTimeUI : MonoBehaviour
 {
@@ -16,7 +15,7 @@ public class CollocWinTimeUI : MonoBehaviour
 
     private void OnEnable()
     {
-        timer.text = "30";
+        timer.text = string.Empty;
         time = StaticVars.COLLOC_WIN_TIME;
         StartCoroutine(CountCollocWinTime());
     }
@@ -30,5 +29,6 @@ public class CollocWinTimeUI : MonoBehaviour
             yield return waitSec;
             time--;
         }
+        NetworkManager.Instance.EndingManager.ShowResult(EndingType.TimeOver, true, string.Empty);
     }
 }
