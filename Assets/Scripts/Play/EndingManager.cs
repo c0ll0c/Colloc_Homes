@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using Photon.Pun;
 using System.Collections;
+using System.Text;
 
 public enum EndingType
 {
@@ -19,8 +20,9 @@ public enum EndingType
 public class EndingManager : MonoBehaviour
 {
     private bool result;
-    private Image resultText;
+    private Image winLoseImg;
     private Image resultImg;
+    private TMP_Text resultTxt;
     public Sprite[] EndingImage;
     public Sprite[] ResultImage;
     public GameObject falseEnding;
@@ -28,8 +30,9 @@ public class EndingManager : MonoBehaviour
     public void Awake()
     {
         NetworkManager.Instance.EndingManager = GetComponent<EndingManager>();
-        resultText = transform.GetChild(1).GetComponent<Image>();
+        winLoseImg = transform.GetChild(1).GetComponent<Image>();
         resultImg = transform.GetChild(2).GetComponent<Image>();
+        resultTxt = transform.GetChild(3).GetComponent<TMP_Text>();
         gameObject.SetActive(false);
         falseEnding.SetActive(false);
     }
@@ -38,16 +41,25 @@ public class EndingManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
-    public void ShowResult(EndingType _endType, bool invoker)
+    public void ShowResult(EndingType _endType, bool _invoker, string _winnerHolmes)
     {
         Time.timeScale = 0;
-        bool isHomes = !NetworkManager.Instance.PlaySceneManager.gamePlayer.CompareTag("Colloc");
+        bool isHomes = !NetworkManager.Instance.PlaySceneManager.CompareLocalTag(StaticVars.TAG_COLLOC);
+
+        // format colloc name and color
+        string color = StaticFuncs.GetColorName((int)PhotonNetwork.CurrentRoom.CustomProperties[StaticCodes.PHOTON_R_CCOLR]);
+        string collocString = StaticFuncs.WrapNameWithColor(
+            color, 
+            (string)PhotonNetwork.CurrentRoom.CustomProperties[StaticCodes.PHOTON_R_CNAME]
+        );
+
+        StringBuilder sb = new StringBuilder();
         switch (_endType)
         {
             case EndingType.CatchColloc:
                 if (isHomes)
                 {
-                    if (invoker)
+                    if (_invoker)
                     {
                         // win _ founder homes
                         result = true;
@@ -69,6 +81,12 @@ public class EndingManager : MonoBehaviour
                     resultImg.sprite = EndingImage[3];
                     AudioManager.Instance.ChangeBGM(GameState.LOSE);
                 }
+                sb.Append(_winnerHolmes);
+                sb.Append(" 홈즈가 ");
+                sb.Append(collocString);
+                sb.Append(" 콜록을 밝혀냈습니다!");
+                resultTxt.text = sb.ToString();
+
                 break;
             case EndingType.FalseAlarm:
                 // homes 일 수밖에 없다!
@@ -77,6 +95,12 @@ public class EndingManager : MonoBehaviour
                 resultImg.sprite = EndingImage[4];
                 AudioManager.Instance.ChangeBGM(GameState.LOSE);
                 // falseEnding.SetActive(true);
+
+                sb.Append("당신은 무고한 홈즈를 고발했어요.. 콜록의 정체는 ");
+                sb.Append(collocString);
+                sb.Append("이었습니다!");
+                resultTxt.text = sb.ToString();
+
                 break;
             case EndingType.TimeOver:
                 if (isHomes)
@@ -93,6 +117,11 @@ public class EndingManager : MonoBehaviour
                     resultImg.sprite = EndingImage[0];
                     AudioManager.Instance.ChangeBGM(GameState.WIN);
                 }
+
+                sb.Append(collocString);
+                sb.Append(" 콜록의 바이러스에 모두가 감염되었습니다");
+                resultTxt.text = sb.ToString();
+
                 break;
             case EndingType.Error:
                 // TODO Error type 세분화
@@ -101,10 +130,11 @@ public class EndingManager : MonoBehaviour
                 result = true;
                 resultImg.sprite = EndingImage[1];
                 AudioManager.Instance.ChangeBGM(GameState.WIN);
+                resultTxt.text = "혼자 남은 플레이어가 되어 승리합니다!";
                 break;
         }
 
-        resultText.sprite = (result) ? ResultImage[0] : ResultImage[1];
+        winLoseImg.sprite = (result) ? ResultImage[0] : ResultImage[1];
         gameObject.SetActive(true);
 
         // 2초 뒤에 end
@@ -121,29 +151,29 @@ public class EndingManager : MonoBehaviour
         switch (_endType)
         {
             case EndingType.CatchColloc: 
-                endGame();
+                EndGame();
                 break;
             case EndingType.FalseAlarm:            // 관전 or 로비 -> 버튼 뜨기
                                                    // TODO: 버튼 뜨는 걸로 바꿔야 함, 관전하기 구현
-                leaveRoom();
+                LeaveRoom();
                 break;
             case EndingType.TimeOver:  
-                endGame();
+                EndGame();
                 break;
             case EndingType.Error:
                 // TODO Error type 세분화
-                endGame();
+                EndGame();
                 break;
         }
     }
 
-    void leaveRoom()
+    void LeaveRoom()
     {
         Time.timeScale = 1;
         NetworkManager.Instance.LeaveRoom();
     }
 
-    void endGame()
+    void EndGame()
     {
         Time.timeScale = 1;
         NetworkManager.Instance.EndGame();

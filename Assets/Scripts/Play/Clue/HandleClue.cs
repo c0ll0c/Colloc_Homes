@@ -18,7 +18,7 @@ public class HandleClue : MonoBehaviour
     {
         isMine = collision.gameObject.GetComponent<PhotonView>().IsMine;
 
-        if (collision.gameObject.CompareTag("Homes") && clue.ClueType != ClueType.FAKE)
+        if (collision.gameObject.CompareTag(StaticVars.TAG_HOLMES) && clue.ClueType != ClueType.FAKE)
         {
             if (isMine)
             {
@@ -27,7 +27,7 @@ public class HandleClue : MonoBehaviour
             }
         }
 
-        if (collision.gameObject.CompareTag("Colloc") && clue.ClueType != ClueType.FAKE)
+        if (collision.gameObject.CompareTag(StaticVars.TAG_COLLOC) && clue.ClueType != ClueType.FAKE)
         {
             if (isMine)
             {

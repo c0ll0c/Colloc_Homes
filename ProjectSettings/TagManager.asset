@@ -4,12 +4,12 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Colloc
-  - Homes
-  - Infect
   - Clue
   - NPC
   - MinimapCamera
+  - T_H
+  - T_I
+  - T_C
   layers:
   - Default
   - TransparentFX

@@ -35,6 +35,6 @@ public class AttackBtnOnClick : MonoBehaviour
         StartCoroutine(StaticFuncs.SetEffect(colliderList[0].collider.GetComponent<HandleRPC>().InfectEffect));
         targetPlayer = colliderList[0].collider.GetComponent<PhotonView>().Owner;
         AudioManager.Instance.PlayEffect(EffectAudioType.ATTACK);
-        PV.RPC("ChangeStatus", targetPlayer, "Infect");
+        PV.RPC("ChangeStatus", targetPlayer, StaticVars.TAG_INFECT);
     }
 }
