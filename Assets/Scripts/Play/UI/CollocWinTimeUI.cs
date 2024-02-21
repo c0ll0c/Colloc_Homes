@@ -18,11 +18,11 @@ public class CollocWinTimeUI : MonoBehaviour
     {
         timer.text = "30";
         time = StaticVars.COLLOC_WIN_TIME;
-        StartCoroutine(CountDetoxTime());
+        StartCoroutine(CountCollocWinTime());
     }
 
     private readonly WaitForSecondsRealtime waitSec = new WaitForSecondsRealtime(1.0f);
-    IEnumerator CountDetoxTime()
+    IEnumerator CountCollocWinTime()
     {
         while (time >= 0)
         {
