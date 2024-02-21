@@ -74,18 +74,26 @@ public class UIManager : MonoBehaviour
     {
         if (_status.Equals(StaticVars.TAG_COLLOC))
         {
+            gameIcon[0].SetActive(false);
+            gameIcon[1].SetActive(false);
             gameIcon[2].SetActive(true);
             gameIcon[3].SetActive(false);
         }
         else if (_status.Equals(StaticVars.TAG_HOLMES))
         {
             gameIcon[0].SetActive(true);
-            gameIcon[3].SetActive(true);
+            gameIcon[1].SetActive(false);
+            gameIcon[2].SetActive(false);
+            gameIcon[3].SetActive(true); ;
+            gameIcon[3].GetComponent<Image>().color = Color.white;
+            gameIcon[3].GetComponent<Button>().enabled = true;
         }
         else if (_status.Equals(StaticVars.TAG_INFECT))
         {
             gameIcon[0].SetActive(false);
             gameIcon[1].SetActive(true);
+            gameIcon[2].SetActive(false);
+            gameIcon[3].SetActive(true);
             gameIcon[3].GetComponent<Image>().color = Color.gray;
             gameIcon[3].GetComponent<Button>().enabled = false;
         }
