@@ -22,11 +22,13 @@ public static class StaticVars
     public static float DETOX_DEACTIVE_TIME = 30.0f; // 30s
     public static float ATTACK_TIME = 15.0f; // 15s
     public static float DELAY_TIME = 3.0f; // 3s
+    public static float INFECT_DELAY_TIME = 6.0f; // 6S
     public static readonly float ENUM_TIME = 0.25f; // 0.25s
     public static float NPC_TIME = 280.0f;  // 2m
     public static float Hidden_TIME = 25.0f;
     public static float Ending_TIME = 6.0f;
     public static float VACCINE_TIME = 50.0f; // 50s
+    public static int COLLOC_WIN_TIME = 30; //30s
 
     // item variables
     public static float PLANE_SPEED = 5.0f; 
@@ -36,12 +38,12 @@ public static class StaticVars
 
     public static Vector2[] SpawnPosition =
     {
-        new Vector2(-9.0f, -6.0f),
-        new Vector2(-3.0f, 15.0f),
-        new Vector2(14.5f, 1.5f),
-        new Vector2(9.0f, 12.5f),
-        new Vector2(7.0f, 6.0f),
-        new Vector2(-2.0f, 0),
+        new Vector2(1.8f, 1.3f),
+        new Vector2(3.0f, 2.0f),
+        new Vector2(4.2f, 1.3f),
+        new Vector2(4.2f, -0.3f),
+        new Vector2(3.0f, -1.0f),
+        new Vector2(1.8f, -0.3f),
     };
 
     public static Vector2[] CluePosition = {

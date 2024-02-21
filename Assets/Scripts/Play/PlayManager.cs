@@ -16,7 +16,7 @@ public class PlayManager : MonoBehaviour
     public Tilemap[] LayerWall;
     public GameObject CluePrefab;
     public GameObject[] ClueInstances = new GameObject[16];
-
+    public InfectProgressUI InfectProgressUI;
     public Vector3[] RandomDropPos;
     public bool isVaccinated = false;
     public List<HandleCollider> ColliderList = new List<HandleCollider>();
@@ -123,7 +123,6 @@ public class PlayManager : MonoBehaviour
         }
         LocalPV = localPlayer.GetComponent<PhotonView>();
         LocalRPC = localPlayer.GetComponent<HandleRPC>();
-
         AttackBtn.GetComponent<AttackBtnOnClick>().PV = LocalPV;
         InfectBtn.GetComponent<AttackBtnOnClick>().PV = LocalPV;
 

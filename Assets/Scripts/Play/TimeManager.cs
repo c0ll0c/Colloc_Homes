@@ -45,7 +45,11 @@ public class TimeManager : MonoBehaviour
         }
 
         if (gameLeftTime < StaticVars.NPC_TIME)
+        {
             NPCTime = true;
+            NetworkManager.Instance.PlaySceneManager.InfectProgressUI.CollocWinAble = true;
+            NetworkManager.Instance.PlaySceneManager.InfectProgressUI.StartCollocTimer();
+        }
 
         if(NPCTime && !notice)
         {

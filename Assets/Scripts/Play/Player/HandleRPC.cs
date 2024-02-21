@@ -64,6 +64,7 @@ public class HandleRPC : MonoBehaviour
             NetworkManager.Instance.PlaySceneManager.ChangePlayerTag(StaticVars.TAG_HOLMES);
             UIManager.Instance.SetGameUI(StaticVars.TAG_HOLMES);
             StaticFuncs.StopEffect(NetworkManager.Instance.PlaySceneManager.LocalRPC.InfectEffect);
+            pv.RPC("UpdateInfectProgress", RpcTarget.All, false);
         }
         else
         {
@@ -73,7 +74,7 @@ public class HandleRPC : MonoBehaviour
 
     private IEnumerator DelayInfect()
     {
-        yield return StaticFuncs.WaitForSeconds(StaticVars.DELAY_TIME);
+        yield return StaticFuncs.WaitForSeconds(StaticVars.INFECT_DELAY_TIME);
 
         if (NetworkManager.Instance.PlaySceneManager.isVaccinated)
         {
@@ -110,5 +111,11 @@ public class HandleRPC : MonoBehaviour
         attackBtn.interactable = true;
         infectBtn.interactable = true;
         homesController.SetSpeed(StaticVars.HOMES_SPEED);
+    }
+
+    [PunRPC]
+    public void UpdateInfectProgress(bool infect)
+    {
+        NetworkManager.Instance.PlaySceneManager.InfectProgressUI.UpdateProgress(infect);
     }
 }
