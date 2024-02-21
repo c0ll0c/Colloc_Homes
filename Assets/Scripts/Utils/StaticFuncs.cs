@@ -6,7 +6,6 @@ using UnityEngine.Tilemaps;
 
 public static class StaticFuncs 
 {
-    // just shuffle...
     public static string ShuffleString(string _characters)
     {
         System.Random rand = new System.Random();
@@ -23,6 +22,19 @@ public static class StaticFuncs
         }
 
         return result.ToString();
+    }
+
+    public static string RandomIndex(string[] _message)
+    {
+        int min = 0;
+        int max = _message.Length - 1;
+        System.Random rand = new System.Random();
+
+        int randomNum = rand.Next(min, max);
+
+        string result = _message[randomNum];
+
+        return result;
     }
 
     public static string GeneratePlayerCode(string _commoncharacters)

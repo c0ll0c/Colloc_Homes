@@ -1,6 +1,8 @@
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -16,6 +18,11 @@ public class PlayManager : MonoBehaviour
     public Tilemap[] LayerWall;
     public GameObject CluePrefab;
     public GameObject[] ClueInstances = new GameObject[16];
+    public TMP_Text Tip;
+
+    private PhotonView PlayerPV;
+    private GameObject vaccineEffect;
+
     public InfectProgressUI InfectProgressUI;
     public Vector3[] RandomDropPos;
     public bool isVaccinated = false;
@@ -63,6 +70,16 @@ public class PlayManager : MonoBehaviour
         {
             NetworkManager.Instance.GameSetting();
         }
+    }
+
+    private void Start()
+    {
+        var builder = new StringBuilder();
+
+        string tip = StaticFuncs.RandomIndex(StaticVars.tipMessage);
+        builder.Append("Tip: ");
+        builder.Append(tip);
+        Tip.text = builder.ToString();
     }
 
     private void OnDestroy()
