@@ -1,3 +1,4 @@
+using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
@@ -7,13 +8,8 @@ public class HandleRoomList : MonoBehaviour
 {
     public TextMeshProUGUI RoomName;
     public TextMeshProUGUI RoomPlayers;
+    public Button RoomButton;
     public RoomInfo RoomInfo { get; private set; }
-    private HandleCodeCheck roomCodeCheckUI;
-
-    private void Start()
-    {
-        roomCodeCheckUI = NetworkManager.Instance.LobbySceneManager.RoomCodeCheckUI.GetComponent<HandleCodeCheck>();
-    }
 
     public void SetRoomInfo(RoomInfo _roomInfo)
     {
@@ -22,43 +18,55 @@ public class HandleRoomList : MonoBehaviour
         RoomInfo = _roomInfo;
         if ((bool)RoomInfo.CustomProperties[StaticCodes.PHOTON_R_MODE])
         {
-            transform.GetChild(1).gameObject.SetActive(true);
+            transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
         }
     }
 
-    public void JoinRoom()
+    bool joinRoom = false;
+    public void OnRoomListClick()
     {
-        if ((bool)RoomInfo.CustomProperties[StaticCodes.PHOTON_R_MODE])
-        {
-            roomCodeCheckUI.RoomButton = this.gameObject;
-            roomCodeCheckUI.gameObject.SetActive(true);
-        }
-        else
-        {
-            NetworkManager.Instance.JoinRoom(RoomInfo.Name);
-            if (RoomInfo.IsOpen)
+        if (!PhotonNetwork.InLobby) return;
+
+        NetworkManager.Instance.LobbySceneManager.SelectedRoom = this;
+        if ((bool)RoomInfo.CustomProperties[StaticCodes.PHOTON_R_MODE]) {
+            NetworkManager.Instance.LobbySceneManager.CodeCheckPanel.SetTextAndOpen(string.Empty);
+            NetworkManager.Instance.LobbySceneManager.CodeCheckPanel.SaveBtn.onClick.AddListener(() =>
             {
-                transform.GetComponentInChildren<Button>().interactable = false;
-            }
-        }
-    }
+                string code = NetworkManager.Instance.LobbySceneManager.CodeCheckPanel.ReturnTextAndClose();
+                if (string.IsNullOrEmpty(code)) return;
 
-    public void CheckCode(string _codefield)
-    {
-        if (Equals(string.Compare(RoomInfo.Name, _codefield, true), 0))
-        {
-            NetworkManager.Instance.JoinRoom(RoomInfo.Name);
+                if (Equals(string.Compare(RoomInfo.Name, code, true), 0))
+                {
+                    NetworkManager.Instance.JoinRoom(RoomInfo.Name);
+                    joinRoom = true;
+                }
+                else
+                {
+                    AlertManager.Instance.WarnAlert("코드를 다시 확인해주세요");
+                }
+            });
         }
         else
         {
-            AlertManager.Instance.WarnAlert("코드를 다시 확인해주세요");
+            NetworkManager.Instance.JoinRoom(RoomInfo.Name);
+            joinRoom = true;
+        }
+
+        if (joinRoom)
+        {
+            // btn interactable = false
+            RoomButton.interactable = false;
         }
     }
 
     private void OnDestroy()
     {
-        if (Equals(roomCodeCheckUI.RoomButton, this.gameObject)) {
-            roomCodeCheckUI.gameObject.SetActive(false);
+        if (
+            NetworkManager.Instance.LobbySceneManager != null &&
+            NetworkManager.Instance.LobbySceneManager.SelectedRoom == this
+        )
+        {
+            NetworkManager.Instance.LobbySceneManager.SelectedRoom = null;
         }
     }
 }

@@ -140,6 +140,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             AlertManager.Instance.WarnAlert("이미 게임이 시작된 방입니다");
         }
+
+        if (LobbySceneManager != null)
+        {
+            LobbySceneManager.SelectedRoom.RoomButton.interactable = true;
+        }
     }
     #endregion
     #region SET READY SCENE
