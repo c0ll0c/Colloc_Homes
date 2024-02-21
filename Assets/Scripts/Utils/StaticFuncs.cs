@@ -111,7 +111,7 @@ public static class StaticFuncs
         effect.SetActive(true);
         effect.GetComponent<SpriteRenderer>().sortingLayerID = effect.transform.parent.GetComponentInParent<SpriteRenderer>().sortingLayerID;
 
-        if (effect != NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect)
+        if (effect != NetworkManager.Instance.PlaySceneManager.LocalRPC.InfectEffect)
         {
             yield return WaitForSeconds(StaticVars.DELAY_TIME);
             StopEffect(effect);
@@ -138,6 +138,29 @@ public static class StaticFuncs
             0b100000000 => "Purple",
             _ => "",
         };
+    }
+
+    public static string WrapNameWithColor(string _color, string _name)
+    {
+        string colorHex = _color switch {
+            "Brown" => "#7B5220FF",
+            "Gray" => "#928FB6FF",
+            "Pink" => "#FC4780FF",
+            "Red" => "#AE0C0CFF",
+            "Orange" => "#F48859FF",
+            "Yellow" => "#F5CC50FF",
+            "Green" => "#28C175FF",
+            "Blue" => "#498BD3FF",
+            "Purple" => "#925CFFFF",
+            _ => "",
+        };
+
+        StringBuilder sb = new StringBuilder("<color=");
+        sb.Append(colorHex);
+        sb.Append(">");
+        sb.Append(_name);
+        sb.Append("</color>");
+        return sb.ToString();
     }
 
     public static void ShowAndroidToastMessage(string message)

@@ -10,7 +10,7 @@ public class CollisionController : MonoBehaviour
     private List<HandleCollider> colliderList;
     private int index;
 
-    private void Start()
+    private void Awake()
     {
         player = transform.parent.gameObject;
         pv = player.GetComponent<PhotonView>();
@@ -24,7 +24,7 @@ public class CollisionController : MonoBehaviour
     {
         if (!collider.gameObject.CompareTag("Player")) return;
 
-        if (player.CompareTag("Homes"))
+        if (player.CompareTag(StaticVars.TAG_HOLMES))
         {
             spriter.color = Color.blue;
         }

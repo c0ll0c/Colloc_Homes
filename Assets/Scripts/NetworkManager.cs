@@ -419,7 +419,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.PlayerList.Length == 1)
             {
-                EndingManager.ShowResult(EndingType.Error, true);
+                EndingManager.ShowResult(EndingType.Error, true, string.Empty);
             }
         }
     }
@@ -453,6 +453,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 ExitGames.Client.Photon.Hashtable properties = new ExitGames.Client.Photon.Hashtable();
                 properties.Add(StaticCodes.PHOTON_R_CCODE, code);
                 properties.Add(StaticCodes.PHOTON_R_CNAME, player.NickName);
+                properties.Add(StaticCodes.PHOTON_R_CCOLR, player.CustomProperties[StaticCodes.PHOTON_P_COLOR]);
                 PhotonNetwork.CurrentRoom.SetCustomProperties(properties);
             }
             player.CustomProperties.TryGetValue(StaticCodes.PHOTON_P_COLOR, out object color);
@@ -613,9 +614,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 
     [PunRPC]
-    public void ShowResultRPC(EndingType _endType, bool invoker)
+    public void ShowResultRPC(EndingType _endType, bool invoker, string _winnerHolmes)
     {
-        EndingManager.ShowResult(_endType, invoker);
+        EndingManager.ShowResult(_endType, invoker, _winnerHolmes);
     }
 
     [PunRPC]

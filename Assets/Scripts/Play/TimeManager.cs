@@ -39,13 +39,17 @@ public class TimeManager : MonoBehaviour
         {
             if (!EndingCanvasObj.activeSelf && gameStart)
             {
-                endingManager.ShowResult(EndingType.TimeOver, true);
+                endingManager.ShowResult(EndingType.TimeOver, true, string.Empty);
             }
             return;
         }
 
         if (gameLeftTime < StaticVars.NPC_TIME)
+        {
             NPCTime = true;
+            NetworkManager.Instance.PlaySceneManager.InfectProgressUI.CollocWinAble = true;
+            NetworkManager.Instance.PlaySceneManager.InfectProgressUI.StartCollocTimer();
+        }
 
         if(NPCTime && !notice)
         {
