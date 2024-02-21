@@ -33,7 +33,7 @@ public class HandleRPC : MonoBehaviour
         InfectEffect.SetActive(false);
         VaccineEffect.SetActive(false);
 
-        homesController = NetworkManager.Instance.PlaySceneManager.gamePlayer.transform.GetChild(2).GetComponent<HomesController>();
+        homesController = NetworkManager.Instance.PlaySceneManager.GetLocalController();
     }
 
     // sync player direction
@@ -54,16 +54,16 @@ public class HandleRPC : MonoBehaviour
     [PunRPC]
     public void ChangeStatus(string _status)
     {
-        if (NetworkManager.Instance.PlaySceneManager.gamePlayer.CompareTag(_status)) return;
-        if (NetworkManager.Instance.PlaySceneManager.gamePlayer.CompareTag("Colloc")) return;
+        if (NetworkManager.Instance.PlaySceneManager.CompareLocalTag(_status)) return;
+        if (NetworkManager.Instance.PlaySceneManager.CompareLocalTag(StaticVars.TAG_COLLOC)) return;
 
-        if (Equals(string.Compare(_status, "Homes", true), 0))
+        if (Equals(string.Compare(_status, StaticVars.TAG_HOLMES, true), 0))
         {
             attackBtn.gameObject.SetActive(true);
             infectBtn.gameObject.SetActive(false);
-            NetworkManager.Instance.PlaySceneManager.gamePlayer.tag = "Homes";
-            UIManager.Instance.SetGameUI("Homes");
-            StaticFuncs.StopEffect(NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect);
+            NetworkManager.Instance.PlaySceneManager.ChangePlayerTag(StaticVars.TAG_HOLMES);
+            UIManager.Instance.SetGameUI(StaticVars.TAG_HOLMES);
+            StaticFuncs.StopEffect(NetworkManager.Instance.PlaySceneManager.LocalRPC.InfectEffect);
             pv.RPC("UpdateInfectProgress", RpcTarget.All, false);
         }
         else
@@ -78,7 +78,7 @@ public class HandleRPC : MonoBehaviour
 
         if (NetworkManager.Instance.PlaySceneManager.isVaccinated)
         {
-            NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().VaccineEffect.SetActive(false);
+            NetworkManager.Instance.PlaySceneManager.LocalRPC.VaccineEffect.SetActive(false);
             NetworkManager.Instance.PlaySceneManager.isVaccinated = false;
             AudioManager.Instance.PlayEffect(EffectAudioType.VACCINE);
         }
@@ -86,11 +86,10 @@ public class HandleRPC : MonoBehaviour
         {
             infectBtn.gameObject.SetActive(true);
             attackBtn.gameObject.SetActive(false);
-            NetworkManager.Instance.PlaySceneManager.gamePlayer.tag = "Infect";
-            UIManager.Instance.SetGameUI("Infect");
+            NetworkManager.Instance.PlaySceneManager.ChangePlayerTag(StaticVars.TAG_INFECT);
+            UIManager.Instance.SetGameUI(StaticVars.TAG_INFECT);
             AudioManager.Instance.PlayEffect(EffectAudioType.INFECT);
             StartCoroutine(StaticFuncs.SetEffect(NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect));
-            pv.RPC("UpdateInfectProgress", RpcTarget.All, true);
         }
     }
 
@@ -102,7 +101,7 @@ public class HandleRPC : MonoBehaviour
         attackBtn.interactable = false;
         infectBtn.interactable = false;
         AudioManager.Instance.PlayEffect(EffectAudioType.ATTACKED);
-        StartCoroutine(StaticFuncs.SetEffect(NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().AttackEffect));
+        StartCoroutine(StaticFuncs.SetEffect(NetworkManager.Instance.PlaySceneManager.LocalRPC.AttackEffect));
         StartCoroutine(ResetSpeed());
     }
 

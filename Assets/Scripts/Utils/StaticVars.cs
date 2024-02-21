@@ -2,6 +2,11 @@ using UnityEngine;
 
 public static class StaticVars
 {
+    // player tags
+    public static string TAG_COLLOC = "T_C";
+    public static string TAG_HOLMES = "T_H";
+    public static string TAG_INFECT = "T_I";
+
     // network variables
     public static string PREFS_NICKNAE = "nickname";
     public static byte MAX_PLAYERS_PER_ROOM = 6;
@@ -19,7 +24,7 @@ public static class StaticVars
     public static float DELAY_TIME = 3.0f; // 3s
     public static float INFECT_DELAY_TIME = 6.0f; // 6S
     public static readonly float ENUM_TIME = 0.25f; // 0.25s
-    public static float NPC_TIME = 120.0f;  // 2m
+    public static float NPC_TIME = 280.0f;  // 2m
     public static float Hidden_TIME = 25.0f;
     public static float Ending_TIME = 6.0f;
     public static float VACCINE_TIME = 50.0f; // 50s

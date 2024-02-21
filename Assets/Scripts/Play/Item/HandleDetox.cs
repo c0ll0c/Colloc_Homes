@@ -34,7 +34,7 @@ public class HandleDetox : MonoBehaviour
     {
         if (localNeedsDetox)
         {
-            NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().ChangeStatus("Homes");
+            NetworkManager.Instance.PlaySceneManager.LocalRPC.ChangeStatus(StaticVars.TAG_HOLMES);
             AudioManager.Instance.PauseEffect(EffectAudioType.COOLTIME);
             AudioManager.Instance.PlayEffect(EffectAudioType.DETOX);
             localNeedsDetox = false;
@@ -65,7 +65,7 @@ public class HandleDetox : MonoBehaviour
         {
             AudioManager.Instance.PlayEffect(EffectAudioType.COOLTIME);
             
-            if (_collision.gameObject.CompareTag("Infect")) localNeedsDetox = true;
+            if (_collision.gameObject.CompareTag(StaticVars.TAG_INFECT)) localNeedsDetox = true;
         }
 
         boothUser = _collision.gameObject.GetInstanceID();
