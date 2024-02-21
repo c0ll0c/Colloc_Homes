@@ -79,8 +79,8 @@ public class UIManager : MonoBehaviour
         }
         else if (_status.Equals(StaticVars.TAG_HOLMES))
         {
-            gameIcon[2].SetActive(true);
-            gameIcon[3].SetActive(false);
+            gameIcon[0].SetActive(true);
+            gameIcon[3].SetActive(true);
         }
         else if (_status.Equals(StaticVars.TAG_INFECT))
         {
