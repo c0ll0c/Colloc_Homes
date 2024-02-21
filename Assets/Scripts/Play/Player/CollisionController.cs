@@ -10,7 +10,7 @@ public class CollisionController : MonoBehaviour
     private List<HandleCollider> colliderList;
     private int index;
 
-    private void Start()
+    private void Awake()
     {
         player = transform.parent.gameObject;
         pv = player.GetComponent<PhotonView>();

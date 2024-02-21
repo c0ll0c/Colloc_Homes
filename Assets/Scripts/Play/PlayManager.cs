@@ -17,8 +17,8 @@ public class PlayManager : MonoBehaviour
     public Tilemap[] LayerWall;
     public GameObject CluePrefab;
     public GameObject[] ClueInstances = new GameObject[16];
+    public InfectProgressUI InfectProgressUI;
 
-    private PhotonView PlayerPV;
     private GameObject vaccineEffect;
 
     public Vector3[] RandomDropPos;
@@ -118,7 +118,6 @@ public class PlayManager : MonoBehaviour
             InfectBtn.gameObject.SetActive(false);
             UIManager.Instance.SetGameUI("Homes");
         }
-        PlayerPV = gamePlayer.GetComponent<PhotonView>();
         vaccineEffect = gamePlayer.GetComponent<HandleRPC>().VaccineEffect;
         AttackBtn.GetComponent<AttackBtnOnClick>().PV = gamePlayer.GetComponent<PhotonView>();
         InfectBtn.GetComponent<AttackBtnOnClick>().PV = gamePlayer.GetComponent<PhotonView>();

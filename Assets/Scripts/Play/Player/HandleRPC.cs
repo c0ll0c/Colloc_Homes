@@ -64,6 +64,7 @@ public class HandleRPC : MonoBehaviour
             NetworkManager.Instance.PlaySceneManager.gamePlayer.tag = "Homes";
             UIManager.Instance.SetGameUI("Homes");
             StaticFuncs.StopEffect(NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect);
+            pv.RPC("UpdateInfectProgress", RpcTarget.All, false);
         }
         else
         {
@@ -73,7 +74,7 @@ public class HandleRPC : MonoBehaviour
 
     private IEnumerator DelayInfect()
     {
-        yield return StaticFuncs.WaitForSeconds(StaticVars.DELAY_TIME);
+        yield return StaticFuncs.WaitForSeconds(StaticVars.INFECT_DELAY_TIME);
 
         if (NetworkManager.Instance.PlaySceneManager.isVaccinated)
         {
@@ -89,6 +90,7 @@ public class HandleRPC : MonoBehaviour
             UIManager.Instance.SetGameUI("Infect");
             AudioManager.Instance.PlayEffect(EffectAudioType.INFECT);
             StartCoroutine(StaticFuncs.SetEffect(NetworkManager.Instance.PlaySceneManager.gamePlayer.GetComponent<HandleRPC>().InfectEffect));
+            pv.RPC("UpdateInfectProgress", RpcTarget.All, true);
         }
     }
 
@@ -110,5 +112,11 @@ public class HandleRPC : MonoBehaviour
         attackBtn.interactable = true;
         infectBtn.interactable = true;
         homesController.SetSpeed(StaticVars.HOMES_SPEED);
+    }
+
+    [PunRPC]
+    public void UpdateInfectProgress(bool infect)
+    {
+        NetworkManager.Instance.PlaySceneManager.InfectProgressUI.UpdateProgress(infect);
     }
 }
