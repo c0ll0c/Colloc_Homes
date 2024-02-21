@@ -72,27 +72,22 @@ public class UIManager : MonoBehaviour
 
     public void SetGameUI(string _status)
     {
-        switch (_status)
+        if (_status.Equals(StaticVars.TAG_COLLOC))
         {
-            case "Colloc":
-                gameIcon[2].SetActive(true);
-                gameIcon[3].SetActive(false);
-                break;
-
-            case "Homes":
-                gameIcon[0].SetActive(true);
-                gameIcon[1].SetActive(false);
-                gameIcon[3].SetActive(true);
-                gameIcon[3].GetComponent<Image>().color = Color.white;
-                gameIcon[3].GetComponent<Button>().enabled = true;
-                break;
-
-            case "Infect":
-                gameIcon[0].SetActive(false);
-                gameIcon[1].SetActive(true);
-                gameIcon[3].GetComponent<Image>().color = Color.gray;
-                gameIcon[3].GetComponent<Button>().enabled = false;
-                break;
+            gameIcon[2].SetActive(true);
+            gameIcon[3].SetActive(false);
+        }
+        else if (_status.Equals(StaticVars.TAG_HOLMES))
+        {
+            gameIcon[2].SetActive(true);
+            gameIcon[3].SetActive(false);
+        }
+        else if (_status.Equals(StaticVars.TAG_INFECT))
+        {
+            gameIcon[0].SetActive(false);
+            gameIcon[1].SetActive(true);
+            gameIcon[3].GetComponent<Image>().color = Color.gray;
+            gameIcon[3].GetComponent<Button>().enabled = false;
         }
     }
 
@@ -121,7 +116,7 @@ public class UIManager : MonoBehaviour
             yield return StaticFuncs.WaitForSeconds(1);
             count--;
         }
-        countText.text = "";
+        countText.text = string.Empty;
 
         StartPanelObj.transform.GetChild(1).GetChild(0).gameObject.SetActive(false);
         StartPanelObj.transform.GetChild(2).GetChild(0).gameObject.SetActive(false);

@@ -15,7 +15,7 @@ public class HandleVaccine : PoolAble
     {
         if (collision.collider.CompareTag("Untagged")) return;
 
-        if (collision.collider.GetComponent<PhotonView>().IsMine && collision.collider.gameObject.CompareTag("Homes"))
+        if (collision.collider.GetComponent<PhotonView>().IsMine && collision.collider.gameObject.CompareTag(StaticVars.TAG_HOLMES))
         {
             NetworkManager.Instance.PlaySceneManager.StartVaccine();
         }

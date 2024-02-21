@@ -39,7 +39,7 @@ public class TimeManager : MonoBehaviour
         {
             if (!EndingCanvasObj.activeSelf && gameStart)
             {
-                endingManager.ShowResult(EndingType.TimeOver, true);
+                endingManager.ShowResult(EndingType.TimeOver, true, string.Empty);
             }
             return;
         }

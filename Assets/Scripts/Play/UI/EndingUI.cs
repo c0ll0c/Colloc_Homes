@@ -1,4 +1,3 @@
-using ExitGames.Client.Photon;
 using Photon.Pun;
 using System.Collections;
 using System.Text;
@@ -8,7 +7,7 @@ using UnityEngine.UI;
 
 public class EndingUI : MonoBehaviour
 {
-    public GameObject dialogText;
+    public Text dialogText;
     private string[] dialogBody = StaticVars.dialogBody;
     public GameObject FirstSelect;
     public GameObject SecondSelect;
@@ -37,7 +36,6 @@ public class EndingUI : MonoBehaviour
 
         HomesName = PhotonNetwork.LocalPlayer.NickName;
 
-
         dialogBody[0] = ", 범인을 찾은 건가?";
         builder.Append(HomesName);
         builder.Append(dialogBody[0]);
@@ -60,38 +58,38 @@ public class EndingUI : MonoBehaviour
 
         if (TimeManager.NPCTime)
         {
-            dialogText.GetComponent<Text>().text = dialogBody[0];
+            dialogText.text = dialogBody[0];
             FirstSelect.SetActive(false);
             SecondSelect.SetActive(false);
         }
         else
         {
-            dialogText.GetComponent<Text>().text = dialogBody[6];
+            dialogText.text = dialogBody[6];
         }
     }
 
     public void onClickNo()
     {
-        dialogText.GetComponent<Text>().text = dialogBody[1];
+        dialogText.text = dialogBody[1];
         FirstSelect.SetActive(false);
     }
 
     // next 버튼 눌럿을 때, 
     public void OnClickNextButton()
     {
-        if (dialogText.GetComponent<Text>().text.Equals(dialogBody[0]))
+        if (dialogText.text.Equals(dialogBody[0]))
         {
             FirstSelect.SetActive(true);
         }
-        else if (dialogText.GetComponent<Text>().text.Equals(dialogBody[6]))
+        else if (dialogText.text.Equals(dialogBody[6]))
         {
             gameObject.SetActive(false);
         }
-        else if (dialogText.GetComponent<Text>().text.Equals(dialogBody[1]))
+        else if (dialogText.text.Equals(dialogBody[1]))
         {
             gameObject.SetActive(false);
         }
-        else if (dialogText.GetComponent<Text>().text.Equals(dialogBody[2]))
+        else if (dialogText.text.Equals(dialogBody[2]))
         {
             NetworkManager.Instance.PV.RPC("StartNPC", RpcTarget.Others);
 
@@ -170,7 +168,7 @@ public class EndingUI : MonoBehaviour
 
     public void OnClickFound()          // 찾았어요 누름
     {
-        dialogText.GetComponent<Text>().text = dialogBody[2];
+        dialogText.text = dialogBody[2];
         FirstSelect.SetActive(false);
     }
 
@@ -178,7 +176,7 @@ public class EndingUI : MonoBehaviour
     {
         GameObject clickedButton = EventSystem.current.currentSelectedGameObject;
 
-        dialogText.GetComponent<Text>().text = dialogBody[3];
+        dialogText.text = dialogBody[3];
         SecondSelect.SetActive(false);
 
         StartCoroutine(ShowResult(clickedButton.transform.GetChild(0).GetComponent<Text>().text));
@@ -187,21 +185,23 @@ public class EndingUI : MonoBehaviour
     // TODO: win, lose로 넘어가게
     public IEnumerator ShowResult(string _name)
     {
-        yield return new WaitForSeconds(2f);               // 결과를 말하고 나서 2초 뒤에 win, lose가 뜨도록!
+        yield return StaticFuncs.WaitForSeconds(2f);               // 결과를 말하고 나서 2초 뒤에 win, lose가 뜨도록!
 
         if (_name == PhotonNetwork.CurrentRoom.CustomProperties[StaticCodes.PHOTON_R_CNAME].ToString())       // 맞았음
         {
-            dialogText.GetComponent<Text>().text = dialogBody[5];
-            yield return new WaitForSeconds(2f);
-            endingManager.ShowResult(EndingType.CatchColloc, true);
-            NetworkManager.Instance.PV.RPC("ShowResultRPC", RpcTarget.Others, EndingType.CatchColloc, false);
+            dialogText.text = dialogBody[5];
+            yield return StaticFuncs.WaitForSeconds(2f);
+
+            string winnerHolmes = StaticFuncs.WrapNameWithColor(NetworkManager.Instance.PlaySceneManager.LocalColor, PhotonNetwork.LocalPlayer.NickName);
+            endingManager.ShowResult(EndingType.CatchColloc, true, winnerHolmes);
+            NetworkManager.Instance.PV.RPC("ShowResultRPC", RpcTarget.Others, EndingType.CatchColloc, false, winnerHolmes);
         }
 
         else                // 틀렸음
         {
-            dialogText.GetComponent<Text>().text = dialogBody[4];
-            yield return new WaitForSeconds(2f);
-            endingManager.ShowResult(EndingType.FalseAlarm, true);
+            dialogText.text = dialogBody[4];
+            yield return StaticFuncs.WaitForSeconds(2f);
+            endingManager.ShowResult(EndingType.FalseAlarm, true, string.Empty);
             NetworkManager.Instance.PV.RPC("OutRPC", RpcTarget.Others);
         }
     }
