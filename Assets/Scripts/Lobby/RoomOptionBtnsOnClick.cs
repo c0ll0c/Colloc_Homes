@@ -1,13 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public enum RoomOptionBtnType
 {
     PUBLIC,
     PRIVATE,
 }
-
 
 public class RoomOptionBtnsOnClick : MonoBehaviour
 {

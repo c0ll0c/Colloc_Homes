@@ -1,22 +1,28 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Photon.Realtime;
-using Photon.Pun;
-using System.Linq;
+using TMPro;
 
 public class LobbyManager : MonoBehaviour
 {
     public Transform Content;
-    public HandleRoomList RoomList;
-    public GameObject RoomCodeCheckUI;
+
+    public HandleRoomList RoomListPrefab;
+
+    public PanelTextFieldUI CodeCheckPanel;
+    public HandleRoomList SelectedRoom;
 
     private List<HandleRoomList> roomCollection = new List<HandleRoomList>();
     private int index;
+
+    public TMP_Text UserNicknameText;
 
     private void Start()
     {
         NetworkManager.Instance.LobbySceneManager = this;
         NetworkManager.Instance.SetupRoomList();
+
+        UserNicknameText.text = GameManager.Instance.PlayerName;
     }
 
     public void RefreshRoom(List<RoomInfo> _roomInfos)
@@ -24,7 +30,7 @@ public class LobbyManager : MonoBehaviour
         roomCollection.Clear(); 
         foreach (RoomInfo roomInfo in _roomInfos)
         {
-            HandleRoomList newRoom = Instantiate(RoomList, Content);
+            HandleRoomList newRoom = Instantiate(RoomListPrefab, Content);
             if (!Equals(newRoom, null))
             {
                 newRoom.SetRoomInfo(roomInfo);
@@ -42,7 +48,7 @@ public class LobbyManager : MonoBehaviour
             return;
         }
 
-        HandleRoomList newRoom = Instantiate(RoomList, Content);
+        HandleRoomList newRoom = Instantiate(RoomListPrefab, Content);
         if (!Equals(newRoom, null))
         {
             newRoom.SetRoomInfo(_roomInfo);
