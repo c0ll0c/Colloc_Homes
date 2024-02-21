@@ -84,7 +84,7 @@ public class UIManager : MonoBehaviour
             gameIcon[0].SetActive(true);
             gameIcon[1].SetActive(false);
             gameIcon[2].SetActive(false);
-            gameIcon[3].SetActive(true); ;
+            gameIcon[3].SetActive(true);
             gameIcon[3].GetComponent<Image>().color = Color.white;
             gameIcon[3].GetComponent<Button>().enabled = true;
         }
