@@ -281,6 +281,16 @@ PrefabInstance:
       propertyPath: m_text
       value: "\uBC29 \uCF54\uB4DC \uC785\uB825"
       objectReference: {fileID: 0}
+    - target: {fileID: 6216292705147287858, guid: 7ff2649b7d3f5924ba13187e0830b944,
+        type: 3}
+      propertyPath: m_ContentType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6216292705147287858, guid: 7ff2649b7d3f5924ba13187e0830b944,
+        type: 3}
+      propertyPath: m_CharacterValidation
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6463502750038226294, guid: 7ff2649b7d3f5924ba13187e0830b944,
         type: 3}
       propertyPath: m_Name
@@ -721,6 +731,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_text
       value: "\uBC29 \uCF54\uB4DC \uC785\uB825"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6216292705147287858, guid: 7ff2649b7d3f5924ba13187e0830b944,
+        type: 3}
+      propertyPath: m_ContentType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6216292705147287858, guid: 7ff2649b7d3f5924ba13187e0830b944,
+        type: 3}
+      propertyPath: m_CharacterValidation
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6463502750038226294, guid: 7ff2649b7d3f5924ba13187e0830b944,
         type: 3}
@@ -1953,7 +1973,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1910107269}
   m_HandleRect: {fileID: 1910107268}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3989,11 +4009,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 642083742}
     m_Modifications:
-    - target: {fileID: 3518318115334708246, guid: 72dccfdd37bae474aa046998c96c94f3,
-        type: 3}
-      propertyPath: BtnType
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 3598878212982249446, guid: cc5364c039b57ba44a2fbe0baba6a512,
         type: 3}
       propertyPath: m_text
@@ -4133,6 +4148,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3518318115334708246, guid: 72dccfdd37bae474aa046998c96c94f3,
+        type: 3}
+      propertyPath: BtnType
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

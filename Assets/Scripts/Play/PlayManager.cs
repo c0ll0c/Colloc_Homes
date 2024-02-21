@@ -131,12 +131,14 @@ public class PlayManager : MonoBehaviour
             localPlayer.tag = StaticVars.TAG_COLLOC;
             AttackBtn.GetComponent<RectTransform>().anchoredPosition = new Vector3(-120, 280, 0);
             UIManager.Instance.SetGameUI(StaticVars.TAG_COLLOC);
+            Camera.main.orthographicSize = 3.5f;
         }
         else
         {
             localPlayer.tag = StaticVars.TAG_HOLMES;
             InfectBtn.gameObject.SetActive(false);
             UIManager.Instance.SetGameUI(StaticVars.TAG_HOLMES);
+            Camera.main.orthographicSize = 3.0f;
         }
         LocalPV = localPlayer.GetComponent<PhotonView>();
         LocalRPC = localPlayer.GetComponent<HandleRPC>();
