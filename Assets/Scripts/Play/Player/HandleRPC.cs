@@ -90,6 +90,7 @@ public class HandleRPC : MonoBehaviour
             UIManager.Instance.SetGameUI(StaticVars.TAG_INFECT);
             AudioManager.Instance.PlayEffect(EffectAudioType.INFECT);
             StartCoroutine(StaticFuncs.SetEffect(NetworkManager.Instance.PlaySceneManager.LocalRPC.InfectEffect));
+            pv.RPC("UpdateInfectProgress", RpcTarget.All, true);
         }
     }
 
