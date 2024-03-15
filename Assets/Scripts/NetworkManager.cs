@@ -635,24 +635,22 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void SelectEvent()
     {
         if (!PhotonNetwork.IsMasterClient) return;
-        int randomNumber = UnityEngine.Random.Range(0, 4);
 
-        IPlayEvent playEvent = randomNumber switch
+        int randomNumber = UnityEngine.Random.Range(0, 4);
+        PV.RPC("StartPlayEvent", RpcTarget.All, randomNumber);
+    }
+    [PunRPC]
+    public void StartPlayEvent(int _playEvent)
+    {
+        if (PlaySceneManager == null) return;
+
+        EventToPlay = _playEvent switch
         {
             0 => new EventHungry(),
             1 => new EventFog(),
             2 => new EventElec(),
             _ => new EventSaveNPC(),
         };
-
-        PV.RPC("StartPlayEvent", RpcTarget.All, playEvent);
-    }
-    [PunRPC]
-    public void StartPlayEvent(IPlayEvent _playEvent)
-    {
-        if (PlaySceneManager == null) return;
-
-        EventToPlay = _playEvent;
         EventToPlay.SetDistractionController(PlaySceneManager.DistractionControllerObj);
         UIManager.Instance.ShowNotice(EventToPlay.Play());
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DistractionController : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class DistractionController : MonoBehaviour
 
     private void Start()
     {
-        pointerController = transform.GetChild(0).GetChild(0).GetComponent<PointerController>();
+        pointerController = transform.GetChild(0).GetChild(4).GetComponent<PointerController>();
     }
 
     #region Distractions
@@ -31,7 +32,7 @@ public class DistractionController : MonoBehaviour
     {
         HungryDistraction.SetActive(true);
 
-        SpriteRenderer hungrySprite = HungryDistraction.GetComponent<SpriteRenderer>();
+        Image hungrySprite = HungryDistraction.GetComponent<Image>();
         float alpha = 0f;
         float fadeSpeed = 0.5f;
         while (true)

@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class PointerController : MonoBehaviour
 {
-    private Camera UICamera;
-
     private Vector3 targetPosition;
     private RectTransform pointerTransform;
     private float borderSize;
@@ -22,12 +20,14 @@ public class PointerController : MonoBehaviour
         borderSize = Screen.height * 0.1f;
     }
 
+    Vector3 targetScreenPosition;
     private void Update()
     {
-        if (targetPosition.x <= borderSize ||
-            targetPosition.x >= Screen.width - borderSize ||
-            targetPosition.y <= borderSize ||
-            targetPosition.y >= Screen.height - borderSize
+        targetScreenPosition = Camera.main.WorldToScreenPoint(targetPosition);
+        if (targetScreenPosition.x <= borderSize ||
+            targetScreenPosition.x >= Screen.width - borderSize ||
+            targetScreenPosition.y <= borderSize ||
+            targetScreenPosition.y >= Screen.height - borderSize
             )
         {
             pointerImg.sprite = ArrowSprite;
@@ -36,13 +36,13 @@ public class PointerController : MonoBehaviour
             RotatePointer();
 
             // set position
-            Vector3 pointerPosition = targetPosition;
+            Vector3 pointerPosition = targetScreenPosition;
             if (pointerPosition.x <= borderSize) pointerPosition.x = borderSize;
             if (pointerPosition.x >= Screen.width - borderSize) pointerPosition.x = Screen.width - borderSize;
             if (pointerPosition.y <= borderSize) pointerPosition.y = borderSize;
             if (pointerPosition.y >= Screen.height - borderSize) pointerPosition.y = Screen.height - borderSize;
 
-            pointerTransform.position = UICamera.ScreenToWorldPoint(pointerPosition);
+            pointerTransform.position = pointerPosition;
             pointerTransform.localPosition = new Vector3(pointerTransform.localPosition.x, pointerTransform.localPosition.y, 0f);
         }
         else
@@ -53,14 +53,14 @@ public class PointerController : MonoBehaviour
             pointerTransform.localEulerAngles = Vector3.zero;
 
             // set position
-            pointerTransform.position = UICamera.ScreenToWorldPoint(targetPosition);
+            pointerTransform.position = targetScreenPosition;
             pointerTransform.localPosition = new Vector3(pointerTransform.localPosition.x, pointerTransform.localPosition.y, 0f);
         }
     }
 
     private void RotatePointer()
     {
-        Vector3 dir = targetPosition - Camera.main.transform.position;
+        Vector3 dir = targetScreenPosition - Camera.main.WorldToScreenPoint(Camera.main.transform.position);
         dir = dir.normalized;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         if (angle < 0) angle += 360;
@@ -75,7 +75,7 @@ public class PointerController : MonoBehaviour
 
     public void Show(Vector3 _target)
     {
-        targetPosition = Camera.main.WorldToScreenPoint(_target);
+        targetPosition = _target;
         gameObject.SetActive(true);
     }
 }

@@ -10,7 +10,7 @@ public static class StaticVars
     // network variables
     public static string PREFS_NICKNAE = "nickname";
     public static byte MAX_PLAYERS_PER_ROOM = 6;
-    public static byte MIN_PLAYERS_PER_ROOM = 5;
+    public static byte MIN_PLAYERS_PER_ROOM = 1;
     public static int PLAYER_SLOTS = 0b111111; // 6 max players
     public static int PLAYER_COLORS = 0b111111111; // 9 colors
 
@@ -29,7 +29,7 @@ public static class StaticVars
     public static float Ending_TIME = 6.0f;
     public static float VACCINE_TIME = 50.0f; // 50s
     public static int COLLOC_WIN_TIME = 30; //30s
-    public static float EVENT_OCCUR_TIME = 200f; // event happens at 1m 40s
+    public static float EVENT_OCCUR_TIME = 295f; // 200f // event happens at 1m 40s
 
     // item variables
     public static float PLANE_SPEED = 5.0f; 
