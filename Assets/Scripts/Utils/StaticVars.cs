@@ -24,11 +24,12 @@ public static class StaticVars
     public static float DELAY_TIME = 3.0f; // 3s
     public static float INFECT_DELAY_TIME = 6.0f; // 6S
     public static readonly float ENUM_TIME = 0.25f; // 0.25s
-    public static float NPC_TIME = 120.0f;  // 2m
+    public static float NPC_TIME = 120.0f;  // can talk to npc at 3m
     public static float Hidden_TIME = 20.0f;
     public static float Ending_TIME = 6.0f;
     public static float VACCINE_TIME = 50.0f; // 50s
     public static int COLLOC_WIN_TIME = 30; //30s
+    public static float EVENT_OCCUR_TIME = 200f; // event happens at 1m 40s
 
     // item variables
     public static float PLANE_SPEED = 5.0f; 

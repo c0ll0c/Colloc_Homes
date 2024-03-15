@@ -14,10 +14,10 @@ public class TimeManager : MonoBehaviour
     private double gameLeftTime = StaticVars.GAME_TIME;
     private double vaccineDropTime;
     private int vaccineNum = 0;
-    private bool notice = false;
 
     public static bool gameStart = false;
     public static bool NPCTime = false;
+    private bool isEventDone = false;
     public GameObject EndingCanvasObj;
     private EndingManager endingManager;
 
@@ -44,16 +44,18 @@ public class TimeManager : MonoBehaviour
             return;
         }
 
-        if (gameLeftTime < StaticVars.NPC_TIME)
+        if (!NPCTime && gameLeftTime < StaticVars.NPC_TIME)
         {
             NPCTime = true;
             NetworkManager.Instance.PlaySceneManager.InfectProgressUI.CollocWinAble = true;
             NetworkManager.Instance.PlaySceneManager.InfectProgressUI.StartCollocTimer();
+            UIManager.Instance.ShowNotice("지금부터 고발이 가능합니다!");
         }
 
-        if(NPCTime && !notice)
+        if (!isEventDone && gameLeftTime < StaticVars.EVENT_OCCUR_TIME)
         {
-            StartCoroutine(NpcTime());
+            isEventDone = true;
+            NetworkManager.Instance.SelectEvent();
         }
 
         gameLeftTime -= Time.deltaTime;
@@ -65,15 +67,6 @@ public class TimeManager : MonoBehaviour
             DropVaccine();
             vaccineDropTime += StaticVars.VACCINE_DROP_INTERVAL;
         }
-    }
-
-    IEnumerator NpcTime()
-    {
-        notice = true;
-        UIManager.Instance.NoticeText.text = "지금부터 고발이 가능합니다!";
-        UIManager.Instance.NoticePanelObj.SetActive(true);
-        yield return new WaitForSeconds(2.0f);
-        UIManager.Instance.NoticePanelObj.SetActive(false);
     }
 
     public void SetDropTime(double _dropTime)

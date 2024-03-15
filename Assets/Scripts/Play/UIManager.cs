@@ -211,4 +211,16 @@ public class UIManager : MonoBehaviour
     {
         ClueUI.gameObject.SetActive(false);
     }
+
+    public void ShowNotice(string _noticeText)
+    {
+        NoticeText.text = _noticeText;
+        StartCoroutine(ShowNoticeFor2Secs());
+    }
+    IEnumerator ShowNoticeFor2Secs()
+    {
+        NoticePanelObj.SetActive(true);
+        yield return StaticFuncs.WaitForSeconds(2f);
+        NoticePanelObj.SetActive(false);
+    }
 }

@@ -46,6 +46,9 @@ public class PlayManager : MonoBehaviour
     public PhotonView LocalPV;
     public string LocalColor;
 
+    // events
+    public DistractionController DistractionControllerObj;
+
     // GameSetting
     public enum GameSettings
     {

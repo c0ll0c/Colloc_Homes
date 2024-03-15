@@ -620,22 +620,43 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    IEnumerator OutRPC()
+    public void OutRPC()
     {
-        UIManager.Instance.NoticeText.text = "무능력한 홈즈가 실직되었습니다.";
-        UIManager.Instance.NoticePanelObj.SetActive(true);
-        yield return StaticFuncs.WaitForSeconds(2f);
-        UIManager.Instance.NoticePanelObj.SetActive(false);
+        UIManager.Instance.ShowNotice("무능력한 홈즈가 실직되었습니다.");
     }
 
     [PunRPC]
-    IEnumerator StartNPC()
+    public void StartNPC()
     {
-        UIManager.Instance.NoticeText.text = "누군가가 콜록을 고발 중입니다.";
-        UIManager.Instance.NoticePanelObj.SetActive(true);
-        yield return StaticFuncs.WaitForSeconds(2f);
-        UIManager.Instance.NoticePanelObj.SetActive(false);
+        UIManager.Instance.ShowNotice("누군가가 콜록을 고발 중입니다.");
     }
+
+    public IPlayEvent EventToPlay = null;
+    public void SelectEvent()
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+        int randomNumber = UnityEngine.Random.Range(0, 4);
+
+        IPlayEvent playEvent = randomNumber switch
+        {
+            0 => new EventHungry(),
+            1 => new EventFog(),
+            2 => new EventElec(),
+            _ => new EventSaveNPC(),
+        };
+
+        PV.RPC("StartPlayEvent", RpcTarget.All, playEvent);
+    }
+    [PunRPC]
+    public void StartPlayEvent(IPlayEvent _playEvent)
+    {
+        if (PlaySceneManager == null) return;
+
+        EventToPlay = _playEvent;
+        EventToPlay.SetDistractionController(PlaySceneManager.DistractionControllerObj);
+        UIManager.Instance.ShowNotice(EventToPlay.Play());
+    }
+
     #endregion
     #region SERVER UTILS
     public double GetServerTime()
