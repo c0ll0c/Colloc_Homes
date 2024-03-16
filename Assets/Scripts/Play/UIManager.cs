@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using UnityEngine.U2D.Animation;
+using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
@@ -16,7 +17,8 @@ public class UIManager : MonoBehaviour
 
     public GameObject StartPanelObj;
     public GameObject NoticePanelObj;
-    public Text NoticeText;
+    private RectTransform noticeTextTransform;
+    private TMP_Text noticeText;
 
     private int i = 0;
     public bool isColloc;
@@ -66,7 +68,8 @@ public class UIManager : MonoBehaviour
             CodeInfo.GetChild(i).gameObject.SetActive(false);
         }
 
-        NoticeText = NoticePanelObj.transform.GetChild(0).GetComponent<Text>();
+        noticeTextTransform = NoticePanelObj.transform.GetChild(0).GetChild(0).GetComponent<RectTransform>();
+        noticeText = noticeTextTransform.gameObject.GetComponent<TMP_Text>();
         NoticePanelObj.SetActive(false);
     }
 
@@ -212,15 +215,57 @@ public class UIManager : MonoBehaviour
         ClueUI.gameObject.SetActive(false);
     }
 
+
+    private Queue<string> noticeQueue = new();
     public void ShowNotice(string _noticeText)
     {
-        NoticeText.text = _noticeText;
-        StartCoroutine(ShowNoticeFor2Secs());
+        noticeQueue.Enqueue(_noticeText);
+        if (!NoticePanelObj.activeSelf) ActivateNotice();
+    }
+
+    private void ActivateNotice()
+    {
+        if (NoticePanelObj.activeSelf) return;
+        if (noticeQueue.Count > 0)
+        {
+            noticeText.text = noticeQueue.Dequeue();
+            if (noticeText.preferredWidth > noticeTextTransform.rect.width)
+            {
+                StartCoroutine(ScrollNotice());
+            }
+            else
+            {
+                StartCoroutine(ShowNoticeFor2Secs());
+            }
+        }
+    }
+
+    IEnumerator ScrollNotice()
+    {
+        NoticePanelObj.SetActive(true);
+        yield return StaticFuncs.WaitForSeconds(1f);
+
+        float cnt = noticeText.preferredWidth - noticeTextTransform.rect.width;
+        Vector3 originalPosition = noticeTextTransform.localPosition;
+        Vector3 scrollPosition = noticeTextTransform.localPosition;
+        while (cnt >= 0)
+        {
+            cnt--;
+            scrollPosition.x -= 1;
+            noticeTextTransform.localPosition = scrollPosition;
+            yield return null;
+        }
+
+        yield return StaticFuncs.WaitForSeconds(2f);
+        NoticePanelObj.SetActive(false);
+        noticeTextTransform.transform.localPosition = originalPosition;
+        ActivateNotice();
     }
     IEnumerator ShowNoticeFor2Secs()
     {
         NoticePanelObj.SetActive(true);
         yield return StaticFuncs.WaitForSeconds(2f);
         NoticePanelObj.SetActive(false);
+        ActivateNotice();
     }
 }
