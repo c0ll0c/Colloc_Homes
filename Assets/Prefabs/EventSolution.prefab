@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6735173783773037231
 RectTransform:
   m_ObjectHideFlags: 0
@@ -252,7 +252,7 @@ GameObject:
   - component: {fileID: 1900034078111089907}
   - component: {fileID: 888878072293819771}
   m_Layer: 7
-  m_Name: Image
+  m_Name: Image_Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -545,7 +545,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 700}
+  m_SizeDelta: {x: 1000, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8532398945745983577
 CanvasRenderer:
@@ -584,7 +584,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 0.1
+  m_PixelsPerUnitMultiplier: 0.01
 --- !u!1 &8729241294887698253
 GameObject:
   m_ObjectHideFlags: 0
@@ -786,12 +786,12 @@ PrefabInstance:
     - target: {fileID: 8257770008860391427, guid: cc5364c039b57ba44a2fbe0baba6a512,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 420
+      value: 450
       objectReference: {fileID: 0}
     - target: {fileID: 8257770008860391427, guid: cc5364c039b57ba44a2fbe0baba6a512,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 270
+      value: 252
       objectReference: {fileID: 0}
     - target: {fileID: 8257770008860391427, guid: cc5364c039b57ba44a2fbe0baba6a512,
         type: 3}
@@ -931,12 +931,12 @@ PrefabInstance:
     - target: {fileID: 8257770008860391427, guid: cc5364c039b57ba44a2fbe0baba6a512,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 260
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 8257770008860391427, guid: cc5364c039b57ba44a2fbe0baba6a512,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 270
+      value: 252.00005
       objectReference: {fileID: 0}
     - target: {fileID: 8257770008860391427, guid: cc5364c039b57ba44a2fbe0baba6a512,
         type: 3}
