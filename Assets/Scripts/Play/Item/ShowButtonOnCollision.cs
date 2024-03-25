@@ -19,6 +19,7 @@ public class ShowButtonOnCollision : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (!enabled) return;
         if ((checkHomes && collision.gameObject.CompareTag(StaticVars.TAG_HOLMES)) ||
             (checkColloc && collision.gameObject.CompareTag(StaticVars.TAG_COLLOC)) ||
             (checkInfect && collision.gameObject.CompareTag(StaticVars.TAG_INFECT))
