@@ -71,11 +71,6 @@ class EventElec : IPlayEvent
         Distraction.StartElec();
         return "[이벤트 발생!] 섬 내의 전기가 부족합니다. 발전소에서 전기를 생산해보아요!";
     }
-    public void MiniGame()
-    {
-        Distraction.gameObject.SetActive(false);
-        Solution.SolutionElec();
-    }
 
 }
 class EventSaveNPC : IPlayEvent
@@ -90,10 +85,4 @@ class EventSaveNPC : IPlayEvent
         Distraction.StartSaveNPC();
         return "[이벤트 발생!] 경감님이 돌무더기에 갇혔습니다. 경감님을 구하러 가세요!";
     }
-    public void MiniGame()
-    {
-        Distraction.gameObject.SetActive(false);
-        Solution.SolutionSaveNPC();
-    }
-
 }
