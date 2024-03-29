@@ -55,7 +55,7 @@ public class TimeManager : MonoBehaviour
         if (!isEventDone && gameLeftTime < StaticVars.EVENT_OCCUR_TIME)
         {
             isEventDone = true;
-            NetworkManager.Instance.SelectEvent();
+            NetworkManager.Instance.PlaySceneManager.TurnOnDistraction();
         }
 
         gameLeftTime -= Time.deltaTime;

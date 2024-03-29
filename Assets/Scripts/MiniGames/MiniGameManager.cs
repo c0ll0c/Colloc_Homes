@@ -8,8 +8,8 @@ public class MiniGameManager : MonoBehaviour
 
     public void OnCloseBtnClick()
     {
-        if (Solved) NetworkManager.Instance.EventToPlay.Solution.EventSolved();
-        else NetworkManager.Instance.EventToPlay.Solution.CloseGame();
+        if (Solved) NetworkManager.Instance.PlaySceneManager.EventToPlay.Solution.EventSolved();
+        else NetworkManager.Instance.PlaySceneManager.EventToPlay.Solution.CloseGame();
     }
 
     public void Solve()

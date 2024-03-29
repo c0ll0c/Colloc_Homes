@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
-using System.Text;
 
 public class LoadingTextUI : MonoBehaviour
 {

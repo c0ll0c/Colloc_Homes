@@ -475,7 +475,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             randomDropPos[i] = SetDropPos();
         }
-
         PV.RPC("SetItems", RpcTarget.AllBuffered, randomDropTime, randomDropPos);
     }
 
@@ -568,6 +567,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         double endTime = PhotonNetwork.Time + StaticVars.GAME_TIME + StaticVars.START_PANEL_TIME;
+        int randomEvent = UnityEngine.Random.Range(0, 4);
+
+        PV.RPC("SetEvent", RpcTarget.AllBuffered, randomEvent);
         PV.RPC("SetGameStart", RpcTarget.AllBuffered, endTime);
 
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
@@ -631,28 +633,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         UIManager.Instance.ShowNotice("누군가가 콜록을 고발 중입니다.");
     }
 
-    public IPlayEvent EventToPlay = null;
-    public void SelectEvent()
-    {
-        if (!PhotonNetwork.IsMasterClient) return;
 
-        int randomNumber = UnityEngine.Random.Range(0, 4);
-        PV.RPC("StartPlayEvent", RpcTarget.All, randomNumber);
-    }
     [PunRPC]
-    public void StartPlayEvent(int _playEvent)
+    public void SetEvent(int _playEvent)
     {
-        if (PlaySceneManager == null) return;
-
-        EventToPlay = _playEvent switch
-        {
-            0 => new EventHungry(),
-            1 => new EventFog(),
-            2 => new EventElec(),
-            _ => new EventSaveNPC(),
-        };
-        EventToPlay.SetDistractionController(PlaySceneManager.DistractionControllerObj);
-        UIManager.Instance.ShowNotice(EventToPlay.Play());
+        PlaySceneManager.SetAndLoadEvent(_playEvent);
     }
 
     #endregion

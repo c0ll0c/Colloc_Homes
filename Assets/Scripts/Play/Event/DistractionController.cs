@@ -24,7 +24,7 @@ public class DistractionController : MonoBehaviour
     public void StartHungry()
     {
         distractionLoop = StartCoroutine(HungryDistractionLoop());
-        NetworkManager.Instance.EventToPlay.SetSolutionController(EventSolutions.GetChild(0).GetComponent<EventSolutionHandler>());
+        NetworkManager.Instance.PlaySceneManager.EventToPlay.SetSolutionController(EventSolutions.GetChild(0).GetComponent<EventSolutionHandler>());
 
         pointerController.Show(EventSolutions.GetChild(0).position);
     }
@@ -51,7 +51,7 @@ public class DistractionController : MonoBehaviour
     public void StartFog()
     {
         FogDistraction.SetActive(true);
-        NetworkManager.Instance.EventToPlay.SetSolutionController(EventSolutions.GetChild(1).GetComponent<EventSolutionHandler>());
+        NetworkManager.Instance.PlaySceneManager.EventToPlay.SetSolutionController(EventSolutions.GetChild(1).GetComponent<EventSolutionHandler>());
 
         pointerController.Show(EventSolutions.GetChild(1).position);
     }
@@ -59,7 +59,7 @@ public class DistractionController : MonoBehaviour
     public void StartElec()
     {
         ElecDistraction.SetActive(true);
-        NetworkManager.Instance.EventToPlay.SetSolutionController(EventSolutions.GetChild(2).GetComponent<EventSolutionHandler>());
+        NetworkManager.Instance.PlaySceneManager.EventToPlay.SetSolutionController(EventSolutions.GetChild(2).GetComponent<EventSolutionHandler>());
 
         pointerController.Show(EventSolutions.GetChild(2).position);
     }
@@ -67,7 +67,7 @@ public class DistractionController : MonoBehaviour
     public void StartSaveNPC()
     {
         distractionLoop = StartCoroutine(SaveNPCDistractionLoop());
-        NetworkManager.Instance.EventToPlay.SetSolutionController(EventSolutions.GetChild(3).GetComponent<EventSolutionHandler>());
+        NetworkManager.Instance.PlaySceneManager.EventToPlay.SetSolutionController(EventSolutions.GetChild(3).GetComponent<EventSolutionHandler>());
         
         pointerController.Show(EventSolutions.GetChild(3).position);
     }
