@@ -10,6 +10,7 @@ TagManager:
   - T_H
   - T_I
   - T_C
+  - Touch
   layers:
   - Default
   - TransparentFX

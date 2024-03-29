@@ -1,9 +1,11 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class ElecManager : MonoBehaviour
+public class ElecManager : MonoBehaviour, IPointerClickHandler
 {
-    private Vector3 gameProgress = Vector3.zero;
+    private Vector3 gameProgress = Vector3.up;
 
     public GameObject MiniGameManagerObj;
     private MiniGameManager gameManager;
@@ -18,8 +20,9 @@ public class ElecManager : MonoBehaviour
 
         p_GageImg = ProgressBar.transform.GetChild(0).GetComponent<RectTransform>();
         p_GageText = ProgressBar.transform.GetChild(1).GetComponent<TMP_Text>();
-        p_GageImg.localScale = Vector3.zero;
+        p_GageImg.localScale = gameProgress;
         p_GageText.text = "0%";
+        StartCoroutine(GageDown());
     }
     private void Update()
     {
@@ -29,12 +32,32 @@ public class ElecManager : MonoBehaviour
             gameManager.Solve();
             p_GageImg.localScale = Vector3.one;
             p_GageText.text = "DONE!";
+            StopAllCoroutines();
         }
         else if (gameProgress.x > 0)
         {
-            gameProgress.x -= 0.01f;
             p_GageImg.localScale = gameProgress;
             p_GageText.text = $"{(int)(gameProgress.x*100)}%";
+        }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.pointerCurrentRaycast.gameObject.CompareTag("Touch"))
+        {
+            gameProgress.x += 0.03f;
+        }
+    }
+
+    IEnumerator GageDown()
+    {
+        while (true)
+        {
+            while (gameProgress.x > 0)
+            {
+                gameProgress.x -= 0.01f;
+                yield return StaticFuncs.WaitForSeconds(1f);
+            }
         }
     }
 }
