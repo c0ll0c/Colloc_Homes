@@ -234,22 +234,24 @@ public class PlayManager : MonoBehaviour
     #region Event Handling
     // events
     public DistractionController DistractionControllerObj;
-    private AsyncOperation eventSecneLoad;
+    public GameObject MiniGameSceneObj;
     public IPlayEvent EventToPlay = null;
 
     public void SetAndLoadEvent(int _playEvent)
     {
         EventToPlay = _playEvent switch
         {
+            _ => new EventElec(),
+            /*
             0 => new EventHungry(),
             1 => new EventFog(),
             2 => new EventElec(),
             _ => new EventSaveNPC(),
+            */
         };
         EventToPlay.Init();
         EventToPlay.SetDistractionController(DistractionControllerObj);
-        eventSecneLoad = SceneManager.LoadSceneAsync(EventToPlay.SceneName, mode: LoadSceneMode.Additive);
-        eventSecneLoad.allowSceneActivation = false;
+        SceneManager.LoadSceneAsync(EventToPlay.SceneName, mode: LoadSceneMode.Additive);
     }
     public void TurnOnDistraction()
     {
@@ -258,8 +260,8 @@ public class PlayManager : MonoBehaviour
     }
     public void TurnOnSolution()
     {
-        Debug.Log("SceneReady: " + eventSecneLoad.isDone);
-        eventSecneLoad.allowSceneActivation = true;
+        Debug.Log(MiniGameSceneObj);
+        if (MiniGameSceneObj != null) MiniGameSceneObj.SetActive(true);
     }
     #endregion
 

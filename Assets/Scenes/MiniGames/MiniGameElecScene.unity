@@ -474,7 +474,7 @@ MonoBehaviour:
   ProgressBar: {fileID: 1428093146}
 --- !u!1 &245616048 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 4610432072593618473, guid: 9e18ebd8c3a81b144ba915fde653a4cc,
+  m_CorrespondingSourceObject: {fileID: 8009619143082920383, guid: 9e18ebd8c3a81b144ba915fde653a4cc,
     type: 3}
   m_PrefabInstance: {fileID: 245616044}
   m_PrefabAsset: {fileID: 0}

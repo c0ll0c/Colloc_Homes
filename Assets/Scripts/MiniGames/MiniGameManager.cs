@@ -6,6 +6,11 @@ public class MiniGameManager : MonoBehaviour
     public bool Solved = false;
     public GameObject SolvedPanelObj;
 
+    private void Awake()
+    {
+        NetworkManager.Instance.PlaySceneManager.MiniGameSceneObj = transform.GetChild(0).gameObject;
+    }
+
     public void OnCloseBtnClick()
     {
         if (Solved) NetworkManager.Instance.PlaySceneManager.EventToPlay.Solution.EventSolved();

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class ElecManager : MonoBehaviour, IPointerClickHandler
 {
-    private Vector3 gameProgress = Vector3.up;
+    private Vector3 gameProgress;
 
     public GameObject MiniGameManagerObj;
     private MiniGameManager gameManager;
@@ -14,16 +14,23 @@ public class ElecManager : MonoBehaviour, IPointerClickHandler
     private RectTransform p_GageImg;
     private TMP_Text p_GageText;
 
-    private void Start()
+    private void Awake()
     {
         gameManager = MiniGameManagerObj.GetComponent<MiniGameManager>();
 
         p_GageImg = ProgressBar.transform.GetChild(0).GetComponent<RectTransform>();
         p_GageText = ProgressBar.transform.GetChild(1).GetComponent<TMP_Text>();
-        p_GageImg.localScale = gameProgress;
-        p_GageText.text = "0%";
+        
         StartCoroutine(GageDown());
     }
+
+    private void OnEnable()
+    {
+        gameProgress = Vector3.up;
+        p_GageImg.localScale = gameProgress;
+        p_GageText.text = "0%";
+    }
+
     private void Update()
     {
         if (gameManager.Solved) return;
