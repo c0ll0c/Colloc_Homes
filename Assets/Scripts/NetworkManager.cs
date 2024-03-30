@@ -475,7 +475,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             randomDropPos[i] = SetDropPos();
         }
-
         PV.RPC("SetItems", RpcTarget.AllBuffered, randomDropTime, randomDropPos);
     }
 
@@ -568,6 +567,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         double endTime = PhotonNetwork.Time + StaticVars.GAME_TIME + StaticVars.START_PANEL_TIME;
+        int randomEvent = UnityEngine.Random.Range(0, 4);
+
+        PV.RPC("SetEvent", RpcTarget.AllBuffered, randomEvent);
         PV.RPC("SetGameStart", RpcTarget.AllBuffered, endTime);
 
         foreach (Player player in PhotonNetwork.CurrentRoom.Players.Values)
@@ -620,22 +622,24 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    IEnumerator OutRPC()
+    public void OutRPC()
     {
-        UIManager.Instance.NoticeText.text = "무능력한 홈즈가 실직되었습니다.";
-        UIManager.Instance.NoticePanelObj.SetActive(true);
-        yield return StaticFuncs.WaitForSeconds(2f);
-        UIManager.Instance.NoticePanelObj.SetActive(false);
+        UIManager.Instance.ShowNotice("무능력한 홈즈가 실직되었습니다.");
     }
 
     [PunRPC]
-    IEnumerator StartNPC()
+    public void StartNPC()
     {
-        UIManager.Instance.NoticeText.text = "누군가가 콜록을 고발 중입니다.";
-        UIManager.Instance.NoticePanelObj.SetActive(true);
-        yield return StaticFuncs.WaitForSeconds(2f);
-        UIManager.Instance.NoticePanelObj.SetActive(false);
+        UIManager.Instance.ShowNotice("누군가가 콜록을 고발 중입니다.");
     }
+
+
+    [PunRPC]
+    public void SetEvent(int _playEvent)
+    {
+        PlaySceneManager.SetAndLoadEvent(_playEvent);
+    }
+
     #endregion
     #region SERVER UTILS
     public double GetServerTime()

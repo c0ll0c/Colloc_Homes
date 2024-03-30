@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
@@ -45,6 +46,7 @@ public class PlayManager : MonoBehaviour
     public HandleRPC LocalRPC;
     public PhotonView LocalPV;
     public string LocalColor;
+
 
     // GameSetting
     public enum GameSettings
@@ -228,6 +230,39 @@ public class PlayManager : MonoBehaviour
         LocalRPC.VaccineEffect.SetActive(false);
         AudioManager.Instance.PlayEffect(EffectAudioType.VACCINE);
     }
+
+    #region Event Handling
+    // events
+    public DistractionController DistractionControllerObj;
+    public GameObject MiniGameSceneObj;
+    public IPlayEvent EventToPlay = null;
+
+    public void SetAndLoadEvent(int _playEvent)
+    {
+        EventToPlay = _playEvent switch
+        {
+            _ => new EventElec(),
+            /*
+            0 => new EventHungry(),
+            1 => new EventFog(),
+            2 => new EventElec(),
+            _ => new EventSaveNPC(),
+            */
+        };
+        EventToPlay.Init();
+        EventToPlay.SetDistractionController(DistractionControllerObj);
+        SceneManager.LoadSceneAsync(EventToPlay.SceneName, mode: LoadSceneMode.Additive);
+    }
+    public void TurnOnDistraction()
+    {
+        string distractionMessage = EventToPlay.Play();
+        UIManager.Instance.ShowNotice(distractionMessage);
+    }
+    public void TurnOnSolution()
+    {
+        if (MiniGameSceneObj != null) MiniGameSceneObj.SetActive(true);
+    }
+    #endregion
 
     #region Manage Local Player
     public void ChangePlayerTag(string _tag)
