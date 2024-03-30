@@ -26,12 +26,12 @@ public interface IPlayEvent
     void CloseMiniGame(bool _clear)
     {
         NetworkManager.Instance.PlaySceneManager.MiniGameSceneObj.SetActive(false);
-        NetworkManager.Instance.PlaySceneManager.MiniGameSceneObj = null;
         Distraction.gameObject.SetActive(true);
         if (_clear) Clear();
     }
     void Clear()
     {
+        NetworkManager.Instance.PlaySceneManager.MiniGameSceneObj = null;
         SceneManager.UnloadSceneAsync(SceneName);
         Distraction.StopEvent();
     }

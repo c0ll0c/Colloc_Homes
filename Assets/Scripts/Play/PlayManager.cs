@@ -260,7 +260,6 @@ public class PlayManager : MonoBehaviour
     }
     public void TurnOnSolution()
     {
-        Debug.Log(MiniGameSceneObj);
         if (MiniGameSceneObj != null) MiniGameSceneObj.SetActive(true);
     }
     #endregion

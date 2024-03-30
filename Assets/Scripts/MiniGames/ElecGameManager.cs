@@ -20,8 +20,6 @@ public class ElecManager : MonoBehaviour, IPointerClickHandler
 
         p_GageImg = ProgressBar.transform.GetChild(0).GetComponent<RectTransform>();
         p_GageText = ProgressBar.transform.GetChild(1).GetComponent<TMP_Text>();
-        
-        StartCoroutine(GageDown());
     }
 
     private void OnEnable()
@@ -53,18 +51,6 @@ public class ElecManager : MonoBehaviour, IPointerClickHandler
         if (eventData.pointerCurrentRaycast.gameObject.CompareTag("Touch"))
         {
             gameProgress.x += 0.03f;
-        }
-    }
-
-    IEnumerator GageDown()
-    {
-        while (true)
-        {
-            while (gameProgress.x > 0)
-            {
-                gameProgress.x -= 0.01f;
-                yield return StaticFuncs.WaitForSeconds(1f);
-            }
         }
     }
 }
