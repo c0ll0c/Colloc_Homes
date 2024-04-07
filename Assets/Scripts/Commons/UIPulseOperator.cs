@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class UIPulseHandler : MonoBehaviour
+public class UIPulseOperator : MonoBehaviour
 {
     private RectTransform uiToHandle;
     [SerializeField] float growthBound = 1.1f;
